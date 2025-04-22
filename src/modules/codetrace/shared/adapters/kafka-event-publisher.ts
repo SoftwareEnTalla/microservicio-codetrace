@@ -1,0 +1,54 @@
+/*
+ * Copyright (c) 2025 SoftwarEnTalla
+ * Licencia: MIT
+ * Contacto: softwarentalla@gmail.com
+ * CEOs: 
+ *       Persy Morell Guerra      Email: pmorellpersi@gmail.com  Phone : +53-5336-4654 Linkedin: https://www.linkedin.com/in/persy-morell-guerra-288943357/
+ *       Dailyn García Domínguez  Email: dailyngd@gmail.com      Phone : +53-5432-0312 Linkedin: https://www.linkedin.com/in/dailyn-dominguez-3150799b/
+ *
+ * CTO: Persy Morell Guerra
+ * COO: Dailyn García Domínguez and Persy Morell Guerra
+ * CFO: Dailyn García Domínguez and Persy Morell Guerra
+ *
+ * Repositories: 
+ *               https://github.com/SoftwareEnTalla 
+ *
+ *               https://github.com/apokaliptolesamale?tab=repositories
+ *
+ *
+ * Social Networks:
+ *
+ *              https://x.com/SoftwarEnTalla
+ *
+ *              https://www.facebook.com/profile.php?id=61572625716568
+ *              
+ *
+ *
+ */
+
+import { Injectable } from '@nestjs/common';
+import { IEvent, IEventPublisher } from '@nestjs/cqrs';
+import { KafkaService } from '../messaging/kafka.service';
+
+@Injectable()
+export class KafkaEventPublisher implements IEventPublisher {
+  constructor(private readonly kafkaService: KafkaService) {}
+
+  async publish<T extends IEvent>(event: T) {
+    const topic = this.resolveTopic(event);
+    await this.kafkaService.sendMessage(topic, event);
+  }
+
+  async publishAll(events: IEvent[]) {
+    await Promise.all(events.map(event => this.publish(event)));
+  }
+
+  private resolveTopic(event: IEvent): string {
+    // Ejemplo: OrderCreatedEvent -> 'order-created'
+    return event.constructor.name
+      .replace(/Event$/, '')
+      .replace(/([a-z])([A-Z])/g, '$1-$2')
+      .toLowerCase();
+  }
+}
+
