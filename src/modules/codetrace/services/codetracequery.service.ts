@@ -45,6 +45,8 @@ import { LoggerClient } from "src/common/logger/logger.client";
 import { ModuleRef } from "@nestjs/core";
 import { logger } from '@core/logs/logger';
 
+
+
 @Injectable()
 export class CodetraceQueryService implements OnModuleInit{
   // Private properties

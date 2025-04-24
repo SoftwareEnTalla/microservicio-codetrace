@@ -32,6 +32,7 @@
 import { Injectable, OnModuleDestroy, Logger } from "@nestjs/common";
 import { Kafka, Producer, Consumer, Admin } from "kafkajs";
 import { KafkaMessageCallback } from "../../../../interfaces/kafka";
+import { logger } from '@core/logs/logger';
 
 @Injectable()
 export class KafkaService implements OnModuleDestroy {
