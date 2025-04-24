@@ -455,7 +455,7 @@ export class CodetraceCommandRepository implements IEventHandler<BaseEvent>{
     logger.info('Already deleted '+ids.length+' entities on repository:', result);
     logger.info('Ready to publish/fire CodetraceDeletedEvent on repository:', result);
     this.eventPublisher.publishAll(ids.map(async (id) => {
-        const entity = await this.codetrace.findOne({ id });
+        const entity = await this.codetraceRepository.findOne({ id });
         if(!entity){
           throw new NotFoundException(`No se encontro el id: ${id}`);
         }
