@@ -23,27 +23,27 @@ export class LoggerService implements OnModuleInit {
     return this.levels[level] <= this.levels[this.level];
   }
 
-  log(message: any): void {
+  log(message: any, ...optionalParams: any[]): void {
     if (this.shouldLog("log")) {
-      console.log(`🔊 [${this.environment}] ${message}`);
+      console.log(`🔊 [${this.environment}] ${message}`, optionalParams);
     }
   }
 
-  error(message: any, trace: string): void {
+  error(message: any, ...optionalParams: any[]): void {
     if (this.shouldLog("error")) {
-      console.error(`❌[${this.environment}] ${message} ${trace}`);
+      console.error(`❌[${this.environment}] ${message}`, optionalParams);
     }
   }
 
-  warning(message: any): void {
+  warning(message: any, ...optionalParams: any[]): void {
     if (this.shouldLog("warning")) {
-      console.warn(`⚠️[${this.environment}] ${message}`);
+      console.warn(`⚠️[${this.environment}] ${message}`, optionalParams);
     }
   }
 
-  info(message: any): void {
+  info(message: any, ...optionalParams: any[]): void {
     if (this.shouldLog("info")) {
-      console.info(`ℹ️[${this.environment}] ${message}`);
+      console.info(`ℹ️[${this.environment}] ${message}`, optionalParams);
     }
   }
 }
