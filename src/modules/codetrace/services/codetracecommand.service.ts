@@ -48,9 +48,10 @@ import { LoggerClient } from "src/common/logger/logger.client";
 import { CommandBus } from "@nestjs/cqrs";
 import { EventStoreService } from "../shared/event-store/event-store.service";
 import { KafkaEventPublisher } from "../shared/adapters/kafka-event-publisher";
+import { ModuleRef } from "@nestjs/core";
 
 @Injectable()
-export class CodetraceCommandService {
+export class CodetraceCommandService implements OnModuleInit {
   // Private properties
   readonly #logger = new Logger(CodetraceCommandService.name);
   //Constructo del servicio CodetraceCommandService
@@ -59,7 +60,8 @@ export class CodetraceCommandService {
     private readonly queryRepository: CodetraceQueryRepository,
     private readonly commandBus: CommandBus,
     private readonly eventStore: EventStoreService,
-    private readonly eventPublisher: KafkaEventPublisher
+    private readonly eventPublisher: KafkaEventPublisher,
+    private moduleRef: ModuleRef
   ) {
     //Inicialice aquí propiedades o atributos
   }
@@ -70,12 +72,34 @@ export class CodetraceCommandService {
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
-        console.info([logData,client]);
+        logger.info([logData,client]);
         return await client.send(logData);
       }
       catch(error){
-        console.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        console.info('ERROR-LOG: ', error);
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
+        throw error;
+      }
+    },
+    client: new LoggerClient()
+      .registerClient(CodetraceQueryService.name)
+      .get(CodetraceQueryService.name),
+  })
+  onModuleInit() {
+    //Se ejecuta en la inicialización del módulo
+  }
+
+  @LogExecutionTime({
+    layer: "service",
+    callback: async (logData, client) => {
+      // Puedes usar el cliente proporcionado o ignorarlo y usar otro
+      try{
+        logger.info([logData,client]);
+        return await client.send(logData);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -92,11 +116,11 @@ export class CodetraceCommandService {
     createCodetraceDtoInput: CreateCodetraceDto
   ): Promise<CodetraceResponse<Codetrace>> {
     try {
-      console.info("Receiving in service:", createCodetraceDtoInput);
+      logger.info("Receiving in service:", createCodetraceDtoInput);
       const entity = await this.repository.create(
         Codetrace.fromDto(createCodetraceDtoInput)
       );
-      console.info("Entity created on service:", entity);
+      logger.info("Entity created on service:", entity);
       // Respuesta si el codetrace no existe
       if (!entity)
         throw new NotFoundException("Entidad Codetrace no encontrada.");
@@ -107,7 +131,7 @@ export class CodetraceCommandService {
         data: entity,
       };
     } catch (error) {
-      console.info("Error creating entity on service:", error);
+      logger.info("Error creating entity on service:", error);
       // Imprimir error
       this.#logger.error(error);
       // Lanzar error
@@ -121,12 +145,12 @@ export class CodetraceCommandService {
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
-        console.info([logData,client]);
+        logger.info([logData,client]);
         return await client.send(logData);
       }
       catch(error){
-        console.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        console.info('ERROR-LOG: ', error);
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -171,12 +195,12 @@ export class CodetraceCommandService {
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
-        console.info([logData,client]);
+        logger.info([logData,client]);
         return await client.send(logData);
       }
       catch(error){
-        console.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        console.info('ERROR-LOG: ', error);
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -221,12 +245,12 @@ export class CodetraceCommandService {
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
-        console.info([logData,client]);
+        logger.info([logData,client]);
         return await client.send(logData);
       }
       catch(error){
-        console.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        console.info('ERROR-LOG: ', error);
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -269,12 +293,12 @@ export class CodetraceCommandService {
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
-        console.info([logData,client]);
+        logger.info([logData,client]);
         return await client.send(logData);
       }
       catch(error){
-        console.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        console.info('ERROR-LOG: ', error);
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -314,12 +338,12 @@ export class CodetraceCommandService {
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
-        console.info([logData,client]);
+        logger.info([logData,client]);
         return await client.send(logData);
       }
       catch(error){
-        console.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        console.info('ERROR-LOG: ', error);
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },

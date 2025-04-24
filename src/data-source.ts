@@ -87,7 +87,7 @@ export async function createDatabaseIfNotExists(
     const dbExists = await client.query(checkDbQuery, [dbName]);
 
     if (dbExists.rows.length === 0) {
-      console.log(`🛠 Creando base de datos ${dbName}...`);
+      logger.log(`🛠 Creando base de datos ${dbName}...`);
 
         const createDbQuery = `
             CREATE DATABASE "${dbName}"
@@ -102,15 +102,15 @@ export async function createDatabaseIfNotExists(
           // Crear la BD con el owner especificado
           await client.query(createDbQuery);
 
-      console.log(`✅ Base de datos ${dbName} creada con éxito`);
+      logger.log(`✅ Base de datos ${dbName} creada con éxito`);
 
       // Otorgar todos los privilegios al owner
       await client.query(`GRANT ALL PRIVILEGES ON DATABASE "${dbName}" TO "${owner}";`);
     } else {
-      console.log(`ℹ️ La base de datos ${dbName} ya existe`);
+      logger.log(`ℹ️ La base de datos ${dbName} ya existe`);
     }
   } catch (error) {
-    console.error(
+    logger.error(
       `❌ Error al verificar/crear la base de datos ${dbName}:`,
       error
     );
@@ -141,9 +141,9 @@ async function checkPostgreSQLExtensions() {
         [ext]
       );
       if (res.rows.length === 0) {
-        console.warn(`⚠️ Extensión '' no disponible`);
+        logger.warn(`⚠️ Extensión '' no disponible`);
       } else {
-        console.log(`✅ Extensión '' instalada`);
+        logger.log(`✅ Extensión '' instalada`);
         await codetrace.query(`CREATE EXTENSION IF NOT EXISTS ""`);
       }
     }
@@ -155,7 +155,7 @@ async function checkPostgreSQLExtensions() {
 
 export async function initializeDatabase() {
   try {
-    console.info("Data Source Object: ",AppDataSource);
+    logger.info("Data Source Object: ",AppDataSource);
     if (!AppDataSource.isInitialized) {
       // Primero verificar/crear la BD
       await createDatabaseIfNotExists(
@@ -165,11 +165,11 @@ export async function initializeDatabase() {
       // Luego el resto de la inicialización
       await checkPostgreSQLExtensions();
       await AppDataSource.initialize();
-      console.log("📦 DataSource inicializado correctamente");
+      logger.log("📦 DataSource inicializado correctamente");
     }
     return AppDataSource;
   } catch (error) {
-    console.error("❌ Error durante la inicialización:", error);
+    logger.error("❌ Error durante la inicialización:", error);
     throw error;
   }
 }

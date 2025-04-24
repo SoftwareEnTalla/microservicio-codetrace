@@ -48,13 +48,13 @@ export class CodetraceLoggingInterceptor implements NestInterceptor {
     const request = ctx.getRequest();
 
     // Logging pre-ejecución
-    console.log(`Incoming request: ${request.method} ${request.url}`);
+    logger.log(`Incoming request: ${request.method} ${request.url}`);
 
     const now = Date.now();
     return next.handle().pipe(
       tap(() => {
         // Logging post-ejecución
-        console.log(`Request completed in ${Date.now() - now}ms`);
+        logger.log(`Request completed in ${Date.now() - now}ms`);
 
         // Ejemplo: Publicar evento de auditoría
         // this.eventBus.publish(new RequestCompletedEvent(context));

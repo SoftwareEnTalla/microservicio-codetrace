@@ -63,12 +63,12 @@ import { LoggerClient } from 'src/common/logger/logger.client';
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
-        console.info([logData,client]);
+        logger.info([logData,client]);
         return await client.send(logData);
       }
       catch(error){
-        console.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        console.info('ERROR-LOG: ', error);
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -93,12 +93,12 @@ import { LoggerClient } from 'src/common/logger/logger.client';
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
-        console.info([logData,client]);
+        logger.info([logData,client]);
         return await client.send(logData);
       }
       catch(error){
-        console.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        console.info('ERROR-LOG: ', error);
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -107,7 +107,7 @@ import { LoggerClient } from 'src/common/logger/logger.client';
       .get(CodetraceRepository.name),
     })
     async findAll(options?: FindManyOptions<Codetrace>): Promise<Codetrace[]> {
-      console.info('Ready to findAll Codetrace on repository:',options);
+      logger.info('Ready to findAll Codetrace on repository:',options);
       return this.repository.find(options);
     }
 
@@ -117,12 +117,12 @@ import { LoggerClient } from 'src/common/logger/logger.client';
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
-        console.info([logData,client]);
+        logger.info([logData,client]);
         return await client.send(logData);
       }
       catch(error){
-        console.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        console.info('ERROR-LOG: ', error);
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -132,7 +132,7 @@ import { LoggerClient } from 'src/common/logger/logger.client';
     })
     async findById(id: string): Promise<Codetrace | null> {
       const tmp: FindOptionsWhere<Codetrace> = { id } as FindOptionsWhere<Codetrace>;
-      console.info('Ready to findById Codetrace on repository:',tmp);
+      logger.info('Ready to findById Codetrace on repository:',tmp);
       return this.repository.findOneBy(tmp);
     }
 
@@ -142,12 +142,12 @@ import { LoggerClient } from 'src/common/logger/logger.client';
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
-        console.info([logData,client]);
+        logger.info([logData,client]);
         return await client.send(logData);
       }
       catch(error){
-        console.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        console.info('ERROR-LOG: ', error);
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -166,7 +166,7 @@ import { LoggerClient } from 'src/common/logger/logger.client';
         skip: (page - 1) * limit,
         take: limit,
       };
-      console.info('Ready to findByField Codetrace on repository:',options);
+      logger.info('Ready to findByField Codetrace on repository:',options);
       const [entities] = await this.repository.findAndCount(options);
       return entities;
     }
@@ -177,12 +177,12 @@ import { LoggerClient } from 'src/common/logger/logger.client';
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
-        console.info([logData,client]);
+        logger.info([logData,client]);
         return await client.send(logData);
       }
       catch(error){
-        console.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        console.info('ERROR-LOG: ', error);
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -197,7 +197,7 @@ import { LoggerClient } from 'src/common/logger/logger.client';
     ): Promise<Codetrace[]> {
       const skip = (page - 1) * limit;
       options={ ...options, skip, take: limit };
-      console.info('Ready to findByField Codetrace on repository:',options);
+      logger.info('Ready to findByField Codetrace on repository:',options);
       return this.repository.find(options);
     }
 
@@ -206,12 +206,12 @@ import { LoggerClient } from 'src/common/logger/logger.client';
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
-        console.info([logData,client]);
+        logger.info([logData,client]);
         return await client.send(logData);
       }
       catch(error){
-        console.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        console.info('ERROR-LOG: ', error);
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -220,9 +220,9 @@ import { LoggerClient } from 'src/common/logger/logger.client';
       .get(CodetraceRepository.name),
     })
     async count(): Promise<number> {
-      console.info('Ready to count Codetrace on repository...');
+      logger.info('Ready to count Codetrace on repository...');
       let result= this.repository.count();
-      console.info('Was counted  instances of Codetrace on repository:');
+      logger.info('Was counted  instances of Codetrace on repository:');
       return result;
     }
 
@@ -233,12 +233,12 @@ import { LoggerClient } from 'src/common/logger/logger.client';
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
-        console.info([logData,client]);
+        logger.info([logData,client]);
         return await client.send(logData);
       }
       catch(error){
-        console.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        console.info('ERROR-LOG: ', error);
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -247,7 +247,7 @@ import { LoggerClient } from 'src/common/logger/logger.client';
       .get(CodetraceRepository.name),
     })
     async findAndCount(where?: Record<string, any>): Promise<[Codetrace[], number]> {
-      console.info('Ready to findByField Codetrace on repository:',where);
+      logger.info('Ready to findByField Codetrace on repository:',where);
       let result = await this.repository.findAndCount(where);
       return result;
     }
@@ -258,12 +258,12 @@ import { LoggerClient } from 'src/common/logger/logger.client';
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
-        console.info([logData,client]);
+        logger.info([logData,client]);
         return await client.send(logData);
       }
       catch(error){
-        console.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        console.info('ERROR-LOG: ', error);
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -273,13 +273,13 @@ import { LoggerClient } from 'src/common/logger/logger.client';
     })
     async findOne(where?: Record<string, any>): Promise<Codetrace | null> {
       const tmp: FindOptionsWhere<Codetrace> = where as FindOptionsWhere<Codetrace>;
-      console.info('Ready to findOneBy Codetrace on repository with conditions:', tmp);
+      logger.info('Ready to findOneBy Codetrace on repository with conditions:', tmp);
       // Si 'where' es undefined o null, puedes manejarlo según tu lógica
       if (!where) {
-        console.warn('No conditions provided for finding Codetrace.');
+        logger.warn('No conditions provided for finding Codetrace.');
         return null; // O maneja el caso como prefieras
       }
-      console.info('Ready to findOneBy Codetrace on repository:',tmp);
+      logger.info('Ready to findOneBy Codetrace on repository:',tmp);
       return this.repository.findOneBy(tmp);
     }
 
@@ -289,12 +289,12 @@ import { LoggerClient } from 'src/common/logger/logger.client';
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
-        console.info([logData,client]);
+        logger.info([logData,client]);
         return await client.send(logData);
       }
       catch(error){
-        console.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        console.info('ERROR-LOG: ', error);
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -303,7 +303,7 @@ import { LoggerClient } from 'src/common/logger/logger.client';
       .get(CodetraceRepository.name),
     })
     async findOneOrFail(where?: Record<string, any>): Promise<Codetrace> {
-      console.info('Ready to findOneOrFail Codetrace on repository:',where);
+      logger.info('Ready to findOneOrFail Codetrace on repository:',where);
       const entity = await this.repository.findOne({
         where: where,
       });
@@ -319,12 +319,12 @@ import { LoggerClient } from 'src/common/logger/logger.client';
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
-        console.info([logData,client]);
+        logger.info([logData,client]);
         return await client.send(logData);
       }
       catch(error){
-        console.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        console.info('ERROR-LOG: ', error);
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -335,9 +335,9 @@ import { LoggerClient } from 'src/common/logger/logger.client';
     //Funciones de Command-Repositories
     @Cacheable({ key: (args) => generateCacheKey<Codetrace>('createCodetrace',args[0], args[1]), ttl: 60 })
     async create(entity: Codetrace): Promise<Codetrace> {
-        console.info('Ready to create Codetrace on repository:', entity);
+        logger.info('Ready to create Codetrace on repository:', entity);
         const result = await this.repository.save(entity);
-        console.info('New instance of Codetrace was created with id:'+ result.id+' on repository:', result);         
+        logger.info('New instance of Codetrace was created with id:'+ result.id+' on repository:', result);         
         return result;
     }
 
@@ -347,12 +347,12 @@ import { LoggerClient } from 'src/common/logger/logger.client';
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
-        console.info([logData,client]);
+        logger.info([logData,client]);
         return await client.send(logData);
       }
       catch(error){
-        console.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        console.info('ERROR-LOG: ', error);
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -362,9 +362,9 @@ import { LoggerClient } from 'src/common/logger/logger.client';
     })
     @Cacheable({ key: (args) => generateCacheKey<Codetrace[]>('createCodetraces',args[0], args[1]), ttl: 60 })
     async bulkCreate(entities: Codetrace[]): Promise<Codetrace[]> {
-      console.info('Ready to create Codetrace on repository:', entities);
+      logger.info('Ready to create Codetrace on repository:', entities);
       const result = await this.repository.save(entities);
-      console.info('New '+entities.length+' instances of Codetrace was created on repository:', result);      
+      logger.info('New '+entities.length+' instances of Codetrace was created on repository:', result);      
       return result;
     }
 
@@ -375,12 +375,12 @@ import { LoggerClient } from 'src/common/logger/logger.client';
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
-        console.info([logData,client]);
+        logger.info([logData,client]);
         return await client.send(logData);
       }
       catch(error){
-        console.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        console.info('ERROR-LOG: ', error);
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -393,11 +393,11 @@ import { LoggerClient } from 'src/common/logger/logger.client';
         id: string,
         partialEntity: Partial<Codetrace>
       ): Promise<Codetrace | null> {
-        console.info('Ready to update Codetrace on repository:', partialEntity);
+        logger.info('Ready to update Codetrace on repository:', partialEntity);
         let result = await this.repository.update(id, partialEntity);
-        console.info('update Codetrace on repository was successfully :', partialEntity);
+        logger.info('update Codetrace on repository was successfully :', partialEntity);
         let instance=await this.repository.findOneBy({ id: id });
-        console.info('Updated instance of Codetrace with id:  was finded on repository:', instance);
+        logger.info('Updated instance of Codetrace with id:  was finded on repository:', instance);
         return this.repository.findOneBy({ id: id });
     }
 
@@ -407,12 +407,12 @@ import { LoggerClient } from 'src/common/logger/logger.client';
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
-        console.info([logData,client]);
+        logger.info([logData,client]);
         return await client.send(logData);
       }
       catch(error){
-        console.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        console.info('ERROR-LOG: ', error);
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -423,7 +423,7 @@ import { LoggerClient } from 'src/common/logger/logger.client';
     @Cacheable({ key: (args) => generateCacheKey<Codetrace[]>('updateCodetraces',args[0], args[1]), ttl: 60 })
     async bulkUpdate(entities: Partial<Codetrace>[]): Promise<Codetrace[]> {
         const updatedEntities: Codetrace[] = [];
-        console.info('Ready to update '+entities.length+' entities on repository:', entities);
+        logger.info('Ready to update '+entities.length+' entities on repository:', entities);
         for (const entity of entities) {
           if (entity.id) {
             const updatedEntity = await this.update(entity.id, entity);
@@ -432,7 +432,7 @@ import { LoggerClient } from 'src/common/logger/logger.client';
             }
           }
         }
-        console.info('Already updated '+updatedEntities.length+' entities on repository:', updatedEntities);
+        logger.info('Already updated '+updatedEntities.length+' entities on repository:', updatedEntities);
         return updatedEntities;
     }
 
@@ -442,12 +442,12 @@ import { LoggerClient } from 'src/common/logger/logger.client';
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
-        console.info([logData,client]);
+        logger.info([logData,client]);
         return await client.send(logData);
       }
       catch(error){
-        console.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        console.info('ERROR-LOG: ', error);
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -457,9 +457,9 @@ import { LoggerClient } from 'src/common/logger/logger.client';
     })
     @Cacheable({ key: (args) => generateCacheKey<string>('deleteCodetrace',args[0]), ttl: 60 })
     async delete(id: string): Promise<DeleteResult> {
-        console.info('Ready to delete  entity with id:  on repository:', id);
+        logger.info('Ready to delete  entity with id:  on repository:', id);
         const result = await this.repository.delete({ id });
-        console.info('Entity deleted with id:  on repository:', result);
+        logger.info('Entity deleted with id:  on repository:', result);
         return result;
     }
 
@@ -468,12 +468,12 @@ import { LoggerClient } from 'src/common/logger/logger.client';
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
-        console.info([logData,client]);
+        logger.info([logData,client]);
         return await client.send(logData);
       }
       catch(error){
-        console.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        console.info('ERROR-LOG: ', error);
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -483,9 +483,9 @@ import { LoggerClient } from 'src/common/logger/logger.client';
     })
     @Cacheable({ key: (args) => generateCacheKey<string[]>('deleteCodetraces',args[0]), ttl: 60 })
     async bulkDelete(ids: string[]): Promise<DeleteResult> {
-        console.info('Ready to delete '+ids.length+' entities on repository:', ids);
+        logger.info('Ready to delete '+ids.length+' entities on repository:', ids);
         const result = await this.repository.delete(ids);
-        console.info('Already deleted '+ids.length+' entities on repository:', result);
+        logger.info('Already deleted '+ids.length+' entities on repository:', result);
         return result;
     }
   }

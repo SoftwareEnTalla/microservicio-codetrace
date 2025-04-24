@@ -2,7 +2,7 @@
  * Copyright (c) 2025 SoftwarEnTalla
  * Licencia: MIT
  * Contacto: softwarentalla@gmail.com
- * CEOs:
+ * CEOs: 
  *       Persy Morell Guerra      Email: pmorellpersi@gmail.com  Phone : +53-5336-4654 Linkedin: https://www.linkedin.com/in/persy-morell-guerra-288943357/
  *       Dailyn García Domínguez  Email: dailyngd@gmail.com      Phone : +53-5432-0312 Linkedin: https://www.linkedin.com/in/dailyn-dominguez-3150799b/
  *
@@ -10,8 +10,8 @@
  * COO: Dailyn García Domínguez and Persy Morell Guerra
  * CFO: Dailyn García Domínguez and Persy Morell Guerra
  *
- * Repositories:
- *               https://github.com/SoftwareEnTalla
+ * Repositories: 
+ *               https://github.com/SoftwareEnTalla 
  *
  *               https://github.com/apokaliptolesamale?tab=repositories
  *
@@ -23,12 +23,13 @@
  *              https://www.facebook.com/profile.php?id=61572625716568
  *
  *              https://www.instagram.com/softwarentalla/
- *
+ *              
  *
  *
  */
 
-import { DynamicModule, Module, OnModuleInit } from "@nestjs/common";
+
+import { DynamicModule, Module } from "@nestjs/common";
 import { DataSource } from "typeorm";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule } from "@nestjs/config";
@@ -45,7 +46,6 @@ import { CacheModule } from "@nestjs/cache-manager";
 import { LoggingModule } from "./modules/codetrace/modules/logger.module";
 import { ModuleRef } from "@nestjs/core";
 import { ServiceRegistry } from "@core/service-registry";
-import LoggerService from "@core/logs/logger";
 //import GraphQLJSON from "graphql-type-json";
 
 /*
@@ -57,6 +57,7 @@ import { TranslocoService } from "@jsverse/transloco";
 import { HeaderResolver, AcceptLanguageResolver } from "nestjs-i18n";
 import { TranslocoWrapperService } from "./core/services/transloco-wrapper.service";
 import { TranslocoModule } from "@ngneat/transloco";
+import LoggerService from "@core/logs/logger";
 
 */
 
@@ -126,8 +127,8 @@ import { TranslocoModule } from "@ngneat/transloco";
    * Registro de controladores a nivel de aplicación.
    */
   controllers: [
-    //No se recomienda habilitar los controladores si ya fueron declarados en el módulo: CodetraceModule
-    /*
+  //No se recomienda habilitar los controladores si ya fueron declarados en el módulo: CodetraceModule
+  /*
   
   CodetraceCommandController, 
   CodetraceQueryController
@@ -153,7 +154,7 @@ import { TranslocoModule } from "@ngneat/transloco";
     // Se importan los servicios del módulo
     CodetraceCommandService,
     CodetraceQueryService,
-    LoggerService,
+    LoggerService
   ],
 
   /**
@@ -161,7 +162,7 @@ import { TranslocoModule } from "@ngneat/transloco";
    *
    * Hace disponibles módulos y servicios para otros módulos que importen este módulo.
    */
-  exports: [CodetraceCommandService, CodetraceQueryService, LoggerService],
+  exports: [CodetraceCommandService, CodetraceQueryService,LoggerService],
 })
 export class CodetraceAppModule implements OnModuleInit {
   /**
@@ -182,7 +183,6 @@ export class CodetraceAppModule implements OnModuleInit {
     //Inicializar servicios del microservicio
     ServiceRegistry.getInstance().setModuleRef(this.moduleRef);
     ServiceRegistry.getInstance().registryAll([
-      LoggerService,
       CodetraceCommandService,
       CodetraceQueryService,
     ]);
@@ -200,9 +200,9 @@ export class CodetraceAppModule implements OnModuleInit {
   private async checkDatabaseConnection() {
     try {
       await this.dataSource.query("SELECT 1");
-      console.log("✅ Conexión a la base de datos verificada correctamente");
+      logger.log("✅ Conexión a la base de datos verificada correctamente");
     } catch (error) {
-      console.error(
+      logger.error(
         "❌ Error crítico: No se pudo conectar a la base de datos",
         error
       );
@@ -217,3 +217,5 @@ export class CodetraceAppModule implements OnModuleInit {
    */
   private setupLanguageChangeHandling() {}
 }
+
+

@@ -130,7 +130,7 @@ export class KafkaService implements OnModuleDestroy {
             timestamp: message.timestamp,
           });
         } catch (error) {
-          console.error("Error processing Kafka message:", error);
+          logger.error("Error processing Kafka message:", error);
           // Aquí puedes agregar lógica de reintento o dead-letter queue
         }
       },

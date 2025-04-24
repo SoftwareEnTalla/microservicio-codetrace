@@ -2,7 +2,7 @@
  * Copyright (c) 2025 SoftwarEnTalla
  * Licencia: MIT
  * Contacto: softwarentalla@gmail.com
- * CEOs:
+ * CEOs: 
  *       Persy Morell Guerra      Email: pmorellpersi@gmail.com  Phone : +53-5336-4654 Linkedin: https://www.linkedin.com/in/persy-morell-guerra-288943357/
  *       Dailyn García Domínguez  Email: dailyngd@gmail.com      Phone : +53-5432-0312 Linkedin: https://www.linkedin.com/in/dailyn-dominguez-3150799b/
  *
@@ -10,8 +10,8 @@
  * COO: Dailyn García Domínguez and Persy Morell Guerra
  * CFO: Dailyn García Domínguez and Persy Morell Guerra
  *
- * Repositories:
- *               https://github.com/SoftwareEnTalla
+ * Repositories: 
+ *               https://github.com/SoftwareEnTalla 
  *
  *               https://github.com/apokaliptolesamale?tab=repositories
  *
@@ -23,10 +23,11 @@
  *              https://www.facebook.com/profile.php?id=61572625716568
  *
  *              https://www.instagram.com/softwarentalla/
- *
+ *              
  *
  *
  */
+
 
 import { NestFactory } from "@nestjs/core";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
@@ -34,7 +35,7 @@ import { CodetraceAppModule } from "./app.module";
 import { AppDataSource, createDatabaseIfNotExists } from "./data-source";
 import { INestApplication, Logger } from "@nestjs/common";
 import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";
-import "tsconfig-paths/register";
+import 'tsconfig-paths/register';
 import { CodetraceModule } from "@modules/codetrace/modules/codetrace.module";
 import { setupSwagger } from "@config/swagger-config";
 import * as dotenv from "dotenv";
@@ -45,7 +46,7 @@ function printRoutes(app: INestApplication<any>) {
   const router = server._events.request._router;
 
   if (!router || !router.stack) {
-    console.warn("No se pudo acceder al router");
+    logger.warn("No se pudo acceder al router");
     return;
   }
 
@@ -56,65 +57,65 @@ function printRoutes(app: INestApplication<any>) {
       methods: (layer.route as any).methods as Record<string, boolean>,
     }));
 
-  console.log("=== Rutas Registradas ===");
+  logger.log("=== Rutas Registradas ===");
   routes.forEach((route) => {
     const methods = Object.keys(route.methods).filter((m) => route.methods[m]);
-    //
+    // 
   });
 }
 
 async function bootstrap() {
   dotenv.config();
   const logger = new Logger("Bootstrap");
+
   try {
     await createDatabaseIfNotExists(
-      process.env.DB_NAME || "entalla",
-      process.env.DB_USER || "entalla"
+        process.env.DB_NAME || "entalla",
+        process.env.DB_USER || "entalla"
     );
     if (!AppDataSource.isInitialized) {
       await AppDataSource.initialize();
       logger.log("✅ Database connection established");
     }
-    console.log(`ℹ️ Creando instancia del módulo CodetraceAppModule...`);
+    logger.log(`ℹ️ Creando instancia del módulo CodetraceAppModule...`);
     const app = await NestFactory.create(CodetraceAppModule, {
       // Configuración de logs
       bufferLogs: true, // Bufferiza logs hasta que el logger personalizado esté listo
-      logger:
-        process.env.NODE_ENV === "production"
-          ? ["error", "warn", "log"]
-          : ["error", "warn", "debug", "log", "verbose"],
-
+      logger: process.env.NODE_ENV === 'production' 
+        ? ['error', 'warn', 'log'] 
+        : ['error', 'warn', 'debug', 'log', 'verbose'],
+      
       // Configuración de rendimiento
-      snapshot: process.env.NODE_ENV !== "production", // Habilita snapshots en desarrollo
+      snapshot: process.env.NODE_ENV !== 'production', // Habilita snapshots en desarrollo
       abortOnError: false, // No abortar en errores de inicialización
-
+      
       // Configuración HTTP
       cors: {
-        origin: process.env.ALLOWED_ORIGINS?.split(",") || true,
-        methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+        origin: process.env.ALLOWED_ORIGINS?.split(',') || true,
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
         allowedHeaders: [
-          "Content-Type",
-          "Authorization",
-          "X-Requested-With",
-          "Accept",
-          "X-CSRF-Token",
+          'Content-Type',
+          'Authorization',
+          'X-Requested-With',
+          'Accept',
+          'X-CSRF-Token'
         ],
         credentials: true,
-        maxAge: 86400,
+        maxAge: 86400
       },
-
+      
       // Configuración de parser
       bodyParser: true,
-      rawBody: process.env.RAW_BODY === "true", // Para webhooks/stripe
-
+      rawBody: process.env.RAW_BODY === 'true', // Para webhooks/stripe
+      
       // Configuración avanzada
       forceCloseConnections: true, // Cierra conexiones limpiamente en shutdown
-      autoFlushLogs: true, // Envía logs inmediatamente
+      autoFlushLogs: true // Envía logs inmediatamente
     });
     app.enableShutdownHooks();
     const globalPrefix = "api";
     app.setGlobalPrefix(globalPrefix);
-
+    
     const swaggerPath = setupSwagger(
       app,
       "api-docs",
@@ -130,7 +131,7 @@ async function bootstrap() {
     await app.listen(port).then(() => {
       printRoutes(app);
     });
-    console.log(`ℹ️ Instancia de aplicación escuchando por el puerto:port `);
+    logger.log(`ℹ️ Instancia de aplicación escuchando por el puerto:port `);
     // Acceso seguro a las propiedades con type assertion
     const dbOptions = AppDataSource.options as PostgresConnectionOptions;
 
@@ -155,3 +156,5 @@ async function bootstrap() {
 }
 
 bootstrap();
+
+

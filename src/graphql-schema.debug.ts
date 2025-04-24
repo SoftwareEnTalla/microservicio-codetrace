@@ -46,7 +46,7 @@ async function debugSchema() {
 }
 
 debugSchema().catch((err) => {
-  console.error("Failed to generate schema:", err);
+  logger.error("Failed to generate schema:", err);
   process.exit(1);
 });
 
