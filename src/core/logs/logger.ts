@@ -41,6 +41,10 @@ export class LoggerService implements OnModuleInit {
     }
   }
 
+  warn(message: any, ...optionalParams: any[]): void {
+    this.warning(message, ...optionalParams);
+  }
+
   info(message: any, ...optionalParams: any[]): void {
     if (this.shouldLog("info")) {
       console.info(`ℹ️[${this.environment}] ${message}`, optionalParams);
