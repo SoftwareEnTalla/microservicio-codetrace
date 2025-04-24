@@ -2,7 +2,7 @@
  * Copyright (c) 2025 SoftwarEnTalla
  * Licencia: MIT
  * Contacto: softwarentalla@gmail.com
- * CEOs:
+ * CEOs: 
  *       Persy Morell Guerra      Email: pmorellpersi@gmail.com  Phone : +53-5336-4654 Linkedin: https://www.linkedin.com/in/persy-morell-guerra-288943357/
  *       Dailyn García Domínguez  Email: dailyngd@gmail.com      Phone : +53-5432-0312 Linkedin: https://www.linkedin.com/in/dailyn-dominguez-3150799b/
  *
@@ -10,8 +10,8 @@
  * COO: Dailyn García Domínguez and Persy Morell Guerra
  * CFO: Dailyn García Domínguez and Persy Morell Guerra
  *
- * Repositories:
- *               https://github.com/SoftwareEnTalla
+ * Repositories: 
+ *               https://github.com/SoftwareEnTalla 
  *
  *               https://github.com/apokaliptolesamale?tab=repositories
  *
@@ -23,10 +23,11 @@
  *              https://www.facebook.com/profile.php?id=61572625716568
  *
  *              https://www.instagram.com/softwarentalla/
- *
+ *              
  *
  *
  */
+
 
 import { DynamicModule, Module, OnModuleInit } from "@nestjs/common";
 import { DataSource } from "typeorm";
@@ -46,6 +47,7 @@ import { LoggingModule } from "./modules/codetrace/modules/logger.module";
 import { ModuleRef } from "@nestjs/core";
 import { ServiceRegistry } from "@core/service-registry";
 import LoggerService, { logger } from "@core/logs/logger";
+
 //import GraphQLJSON from "graphql-type-json";
 
 /*
@@ -127,8 +129,8 @@ import LoggerService, { logger } from "@core/logs/logger";
    * Registro de controladores a nivel de aplicación.
    */
   controllers: [
-    //No se recomienda habilitar los controladores si ya fueron declarados en el módulo: CodetraceModule
-    /*
+  //No se recomienda habilitar los controladores si ya fueron declarados en el módulo: CodetraceModule
+  /*
   
   CodetraceCommandController, 
   CodetraceQueryController
@@ -154,7 +156,7 @@ import LoggerService, { logger } from "@core/logs/logger";
     // Se importan los servicios del módulo
     CodetraceCommandService,
     CodetraceQueryService,
-    LoggerService,
+    LoggerService
   ],
 
   /**
@@ -162,7 +164,7 @@ import LoggerService, { logger } from "@core/logs/logger";
    *
    * Hace disponibles módulos y servicios para otros módulos que importen este módulo.
    */
-  exports: [CodetraceCommandService, CodetraceQueryService, LoggerService],
+  exports: [CodetraceCommandService, CodetraceQueryService,LoggerService],
 })
 export class CodetraceAppModule implements OnModuleInit {
   /**
@@ -217,3 +219,5 @@ export class CodetraceAppModule implements OnModuleInit {
    */
   private setupLanguageChangeHandling() {}
 }
+
+
