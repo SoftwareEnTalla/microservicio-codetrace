@@ -39,7 +39,7 @@ import 'tsconfig-paths/register';
 import { CodetraceModule } from "@modules/codetrace/modules/codetrace.module";
 import { setupSwagger } from "@config/swagger-config";
 import * as dotenv from "dotenv";
-import { logger } from "@core/logs/logger";
+import { logger } from '@core/logs/logger';
 
 // Método seguro para inspeccionar rutas
 function printRoutes(app: INestApplication<any>) {

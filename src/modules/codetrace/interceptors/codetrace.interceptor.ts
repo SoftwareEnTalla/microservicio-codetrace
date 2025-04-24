@@ -33,7 +33,7 @@ import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nes
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { EventBus } from '@nestjs/cqrs';
-import { logger } from "@core/logs/logger";
+import { logger } from '@core/logs/logger';
 
 @Injectable()
 export class CodetraceInterceptor implements NestInterceptor {

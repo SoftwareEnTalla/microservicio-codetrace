@@ -53,7 +53,7 @@ import { fromObject } from "src/utils/functions";
 //Logger
 import { LogExecutionTime } from "src/common/logger/loggers.functions";
 import { LoggerClient } from "src/common/logger/logger.client";
-import { logger } from "@core/logs/logger";
+import { logger } from '@core/logs/logger';
 
 import { v4 as uuidv4 } from "uuid";
 

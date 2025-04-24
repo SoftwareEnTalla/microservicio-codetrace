@@ -43,7 +43,7 @@ import { PaginationArgs } from "src/common/dto/args/pagination.args";
 import { LogExecutionTime } from "src/common/logger/loggers.functions";
 import { LoggerClient } from "src/common/logger/logger.client";
 import { ModuleRef } from "@nestjs/core";
-import { logger } from "@core/logs/logger";
+import { logger } from '@core/logs/logger';
 
 @Injectable()
 export class CodetraceQueryService implements OnModuleInit{

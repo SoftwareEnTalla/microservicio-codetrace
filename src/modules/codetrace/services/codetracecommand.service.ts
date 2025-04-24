@@ -44,7 +44,7 @@ import { Helper } from "src/common/helpers/helpers";
 //Logger
 import { LogExecutionTime } from "src/common/logger/loggers.functions";
 import { LoggerClient } from "src/common/logger/logger.client";
-import { logger } from "@core/logs/logger";
+import { logger } from '@core/logs/logger';
 
 import { CommandBus } from "@nestjs/cqrs";
 import { EventStoreService } from "../shared/event-store/event-store.service";

@@ -35,7 +35,7 @@ import { Pool, PoolConfig } from "pg";
 import path from "path";
 import "reflect-metadata";
 import { CustomPostgresOptions } from "./interfaces/typeorm.interface";
-import { logger } from "@core/logs/logger";
+import { logger } from '@core/logs/logger';
 
 dotenv.config();
 
