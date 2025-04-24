@@ -35,16 +35,17 @@ export function LogExecutionTime(options: LogExecutionTimeOptions) {
     propertyKey: string,
     descriptor: PropertyDescriptor
   ) {
-    const logger = new Logger(target.constructor.name);
-    const originalMethod = descriptor.value;
+    const enabled = process.env.LOG_EXECUTION_TIME === "true";
 
+    if (!enabled) return descriptor; // si no está habilitado
+    const logger = new Logger(target.constructor.name); // Nombre de la clase
+    const originalMethod = descriptor.value;
     descriptor.value = async function (...args: any[]) {
       const uuid = uuidv4();
       const start = performance.now();
       const startTime = new Date().toISOString();
       const context = getEnhancedContext();
 
-      // Destructuración con valores por defecto
       const {
         layer = "default",
         refuuid,
@@ -54,7 +55,7 @@ export function LogExecutionTime(options: LogExecutionTimeOptions) {
       } = options;
 
       logger.log(
-        `[${layer}] [${context.functionName}] [${uuid}] Inicio ejecución`
+        `[${layer}] [${target.constructor.name}.${propertyKey}] [${uuid}] Inicio ejecución` // Incluye el nombre de la clase
       );
 
       try {
@@ -65,10 +66,9 @@ export function LogExecutionTime(options: LogExecutionTimeOptions) {
         const duration = calculateDuration(durationMs, timeFormat);
 
         logger.log(
-          `[${layer}] [${context.functionName}] [${uuid}] Ejecución completada (${duration}${timeFormat})`
+          `[${layer}] [${target.constructor.name}.${propertyKey}] [${uuid}] Ejecución completada (${duration}${timeFormat})`
         );
 
-        // Preparar datos del log
         const logData: HttpLoggerApiRest = {
           endpoint: process.env.LOG_API_BASE_URL || "https://logs.api",
           method: "POST",
@@ -76,7 +76,8 @@ export function LogExecutionTime(options: LogExecutionTimeOptions) {
             layer,
             uuid,
             refuuid,
-            functionName: context.functionName,
+            className: target.constructor.name,
+            functionName: `${target.constructor.name}.${propertyKey}`, // Nombre de la clase y método
             startTime,
             endTime: new Date().toISOString(),
             duration: durationMs,
@@ -84,7 +85,7 @@ export function LogExecutionTime(options: LogExecutionTimeOptions) {
             status: "success",
           },
         };
-        // Manejo del envío
+
         if (client) await handleLogDelivery(client, logData, callback, logger);
 
         return result;
@@ -94,11 +95,10 @@ export function LogExecutionTime(options: LogExecutionTimeOptions) {
         const duration = calculateDuration(durationMs, timeFormat);
 
         logger.error(
-          `[${layer}] [${context.functionName}] [${uuid}] Error en ejecución (${duration}${timeFormat}): ${error.message}`,
+          `[${layer}] [${target.constructor.name}.${propertyKey}] [${uuid}] Error en ejecución (${duration}${timeFormat}): ${error.message}`,
           error.stack
         );
 
-        // Preparar datos del log de error
         const errorLogData: HttpLoggerApiRest = {
           endpoint: process.env.LOG_API_BASE_URL || "https://logs.api",
           method: "POST",
@@ -106,7 +106,8 @@ export function LogExecutionTime(options: LogExecutionTimeOptions) {
             layer,
             uuid,
             refuuid,
-            functionName: context.functionName,
+            className: target.constructor.name,
+            functionName: `${target.constructor.name}.${propertyKey}`, // Nombre de la clase y método
             startTime,
             endTime: new Date().toISOString(),
             duration: durationMs,
@@ -119,7 +120,6 @@ export function LogExecutionTime(options: LogExecutionTimeOptions) {
           },
         };
 
-        // Manejo del envío del error
         if (client)
           await handleLogDelivery(client, errorLogData, callback, logger);
 
@@ -131,6 +131,25 @@ export function LogExecutionTime(options: LogExecutionTimeOptions) {
   };
 }
 
+// Función para obtener información del archivo y línea
+function getFileInfo(): [string, number] {
+  const stack = new Error().stack;
+  if (!stack) return ["No se pudo obtener información del archivo", -1];
+
+  const stackLines = stack.split("\n");
+
+  // Buscamos la línea que contiene el nombre del método decorado
+  const methodCallIndex = 2; // Ajusta este índice según la posición en la pila
+  const match = stackLines[methodCallIndex]?.match(/\s*at\s+(.*?):(\d+):\d+/); // Captura el archivo y la línea
+
+  if (match) {
+    const filePath = match[1]; // Nombre del archivo
+    const lineNumber = parseInt(match[2], 10); // Número de línea
+    return [filePath, lineNumber];
+  }
+
+  return ["No se pudo obtener información del archivo", -1];
+}
 // Función auxiliar para manejar el envío de logs
 async function handleLogDelivery(
   client: ILoggerClient,
