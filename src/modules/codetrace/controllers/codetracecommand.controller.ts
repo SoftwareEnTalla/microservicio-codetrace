@@ -50,8 +50,10 @@ import { Codetrace } from "../entities/codetrace.entity";
 import { CodetraceResponse, CodetracesResponse } from "../types/codetrace.types";
 import { CreateCodetraceDto } from "../dtos/createcodetrace.dto";
 import { UpdateCodetraceDto } from "../dtos/updatecodetrace.dto";
+//Loggers
 import { LoggerClient } from "src/common/logger/logger.client";
 import { LogExecutionTime } from "src/common/logger/loggers.functions";
+import { logger } from '@core/logs/logger';
 
 import { BadRequestException } from "@nestjs/common";
 

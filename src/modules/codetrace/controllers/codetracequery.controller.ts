@@ -48,6 +48,8 @@ import { Order, PaginationArgs } from "src/common/dto/args/pagination.args";
 import { Helper } from "src/common/helpers/helpers";
 import { CodetraceDto } from "../dtos/createcodetrace.dto";
 
+import { logger } from '@core/logs/logger';
+
 @ApiTags("Codetrace Query")
 @Controller("codetraces/query")
 export class CodetraceQueryController {
@@ -81,7 +83,7 @@ export class CodetraceQueryController {
     try {
      
       const codetraces = await this.service.findAll(options);
-      logger.verbose("Retrieving all codetrace");
+      logger.info("Retrieving all codetrace");
       return codetraces;
     } catch (error) {
       logger.error(error);

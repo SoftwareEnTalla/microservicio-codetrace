@@ -46,7 +46,7 @@ import {CodetraceRepository} from './codetrace.repository';
 //Logger
 import { LogExecutionTime } from 'src/common/logger/loggers.functions';
 import { LoggerClient } from 'src/common/logger/logger.client';
-import { logger } from 'src/logs/logger';
+import { logger } from '@core/logs/logger';
 
 //Events and EventHandlers
 import { IEventHandler } from '@nestjs/cqrs';

@@ -29,7 +29,7 @@
  */
 
 
-import { Injectable, Logger, NotFoundException } from "@nestjs/common";
+import { Injectable, Logger, NotFoundException, OnModuleInit } from "@nestjs/common";
 import { DeleteResult, UpdateResult } from "typeorm";
 import { Codetrace } from "../entities/codetrace.entity";
 import { CreateCodetraceDto } from "../dtos/createcodetrace.dto";
