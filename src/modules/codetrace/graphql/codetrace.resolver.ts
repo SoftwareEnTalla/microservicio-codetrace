@@ -2,7 +2,7 @@
  * Copyright (c) 2025 SoftwarEnTalla
  * Licencia: MIT
  * Contacto: softwarentalla@gmail.com
- * CEOs:
+ * CEOs: 
  *       Persy Morell Guerra      Email: pmorellpersi@gmail.com  Phone : +53-5336-4654 Linkedin: https://www.linkedin.com/in/persy-morell-guerra-288943357/
  *       Dailyn García Domínguez  Email: dailyngd@gmail.com      Phone : +53-5432-0312 Linkedin: https://www.linkedin.com/in/dailyn-dominguez-3150799b/
  *
@@ -10,8 +10,8 @@
  * COO: Dailyn García Domínguez and Persy Morell Guerra
  * CFO: Dailyn García Domínguez and Persy Morell Guerra
  *
- * Repositories:
- *               https://github.com/SoftwareEnTalla
+ * Repositories: 
+ *               https://github.com/SoftwareEnTalla 
  *
  *               https://github.com/apokaliptolesamale?tab=repositories
  *
@@ -23,10 +23,11 @@
  *              https://www.facebook.com/profile.php?id=61572625716568
  *
  *              https://www.instagram.com/softwarentalla/
- *
+ *              
  *
  *
  */
+
 
 import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
 import {
@@ -45,10 +46,7 @@ import { CommandBus } from "@nestjs/cqrs";
 import { CodetraceQueryService } from "../services/codetracequery.service";
 
 import { UpdateCodetraceDto } from "../dtos/updatecodetrace.dto";
-import {
-  CodetraceResponse,
-  CodetracesResponse,
-} from "../types/codetrace.types";
+import { CodetraceResponse, CodetracesResponse } from "../types/codetrace.types";
 import { FindManyOptions } from "typeorm";
 import { PaginationArgs } from "src/common/dto/args/pagination.args";
 import { fromObject } from "src/utils/functions";
@@ -62,25 +60,24 @@ import { v4 as uuidv4 } from "uuid";
 //@UseGuards(JwtGraphQlAuthGuard)
 @Resolver(() => Codetrace)
 export class CodetraceResolver {
-  //Constructor del resolver de Codetrace
+
+   //Constructor del resolver de Codetrace
   constructor(
     private readonly service: CodetraceQueryService,
     private readonly commandBus: CommandBus
   ) {}
 
   @LogExecutionTime({
-    layer: "resolver",
+    layer: 'resolver',
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try {
-        logger.info([logData, client]);
+      try{
+        logger.info([logData,client]);
         return await client.send(logData);
-      } catch (error) {
-        logger.info(
-          "Ha ocurrido un error al enviar la traza de log: ",
-          logData
-        );
-        logger.info("ERROR-LOG: ", error);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -88,7 +85,7 @@ export class CodetraceResolver {
       .registerClient(CodetraceResolver.name)
 
       .get(CodetraceResolver.name),
-  })
+    })
   // Mutaciones
   @Mutation(() => CodetraceResponse<Codetrace>)
   async createCodetrace(
@@ -97,19 +94,18 @@ export class CodetraceResolver {
     return this.commandBus.execute(new CreateCodetraceCommand(input));
   }
 
-  @LogExecutionTime({
-    layer: "resolver",
+
+@LogExecutionTime({
+    layer: 'resolver',
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try {
-        logger.info([logData, client]);
+      try{
+        logger.info([logData,client]);
         return await client.send(logData);
-      } catch (error) {
-        logger.info(
-          "Ha ocurrido un error al enviar la traza de log: ",
-          logData
-        );
-        logger.info("ERROR-LOG: ", error);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -117,7 +113,7 @@ export class CodetraceResolver {
       .registerClient(CodetraceResolver.name)
 
       .get(CodetraceResolver.name),
-  })
+    })
   @Mutation(() => CodetraceResponse<Codetrace>)
   async updateCodetrace(
     @Args("id", { type: () => String }) id: string,
@@ -128,26 +124,25 @@ export class CodetraceResolver {
       new UpdateCodetraceCommand(payLoad, {
         instance: payLoad,
         metadata: {
-          initiatedBy: payLoad.createdBy || "system",
+          initiatedBy: payLoad.createdBy || 'system',
           correlationId: payLoad.id,
         },
       })
     );
   }
 
-  @LogExecutionTime({
-    layer: "resolver",
+
+@LogExecutionTime({
+    layer: 'resolver',
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try {
-        logger.info([logData, client]);
+      try{
+        logger.info([logData,client]);
         return await client.send(logData);
-      } catch (error) {
-        logger.info(
-          "Ha ocurrido un error al enviar la traza de log: ",
-          logData
-        );
-        logger.info("ERROR-LOG: ", error);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -155,7 +150,7 @@ export class CodetraceResolver {
       .registerClient(CodetraceResolver.name)
 
       .get(CodetraceResolver.name),
-  })
+    })
   @Mutation(() => CodetraceResponse<Codetrace>)
   async createOrUpdateCodetrace(
     @Args("data", { type: () => CreateOrUpdateCodetraceDto })
@@ -169,8 +164,8 @@ export class CodetraceResolver {
             instance: data,
             metadata: {
               initiatedBy:
-                (data.input as CreateCodetraceDto | UpdateCodetraceDto)
-                  .createdBy || "system",
+                (data.input as CreateCodetraceDto | UpdateCodetraceDto).createdBy ||
+                'system',
               correlationId: data.id,
             },
           })
@@ -183,26 +178,25 @@ export class CodetraceResolver {
         metadata: {
           initiatedBy:
             (data.input as CreateCodetraceDto | UpdateCodetraceDto).createdBy ||
-            "system",
+            'system',
           correlationId: data.id || uuidv4(),
         },
       })
     );
   }
 
-  @LogExecutionTime({
-    layer: "resolver",
+
+@LogExecutionTime({
+    layer: 'resolver',
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try {
-        logger.info([logData, client]);
+      try{
+        logger.info([logData,client]);
         return await client.send(logData);
-      } catch (error) {
-        logger.info(
-          "Ha ocurrido un error al enviar la traza de log: ",
-          logData
-        );
-        logger.info("ERROR-LOG: ", error);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -210,7 +204,7 @@ export class CodetraceResolver {
       .registerClient(CodetraceResolver.name)
 
       .get(CodetraceResolver.name),
-  })
+    })
   @Mutation(() => Boolean)
   async deleteCodetrace(
     @Args("id", { type: () => String }) id: string
@@ -218,19 +212,18 @@ export class CodetraceResolver {
     return this.commandBus.execute(new DeleteCodetraceCommand(id));
   }
 
-  @LogExecutionTime({
-    layer: "resolver",
+
+@LogExecutionTime({
+    layer: 'resolver',
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try {
-        logger.info([logData, client]);
+      try{
+        logger.info([logData,client]);
         return await client.send(logData);
-      } catch (error) {
-        logger.info(
-          "Ha ocurrido un error al enviar la traza de log: ",
-          logData
-        );
-        logger.info("ERROR-LOG: ", error);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -238,7 +231,7 @@ export class CodetraceResolver {
       .registerClient(CodetraceResolver.name)
 
       .get(CodetraceResolver.name),
-  })
+    })
   // Queries
   @Query(() => CodetracesResponse<Codetrace>)
   async codetraces(
@@ -248,19 +241,18 @@ export class CodetraceResolver {
     return this.service.findAll(options, paginationArgs);
   }
 
-  @LogExecutionTime({
-    layer: "resolver",
+
+@LogExecutionTime({
+    layer: 'resolver',
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try {
-        logger.info([logData, client]);
+      try{
+        logger.info([logData,client]);
         return await client.send(logData);
-      } catch (error) {
-        logger.info(
-          "Ha ocurrido un error al enviar la traza de log: ",
-          logData
-        );
-        logger.info("ERROR-LOG: ", error);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -268,7 +260,7 @@ export class CodetraceResolver {
       .registerClient(CodetraceResolver.name)
 
       .get(CodetraceResolver.name),
-  })
+    })
   @Query(() => CodetracesResponse<Codetrace>)
   async codetrace(
     @Args("id", { type: () => String }) id: string
@@ -276,19 +268,18 @@ export class CodetraceResolver {
     return this.service.findById(id);
   }
 
-  @LogExecutionTime({
-    layer: "resolver",
+
+@LogExecutionTime({
+    layer: 'resolver',
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try {
-        logger.info([logData, client]);
+      try{
+        logger.info([logData,client]);
         return await client.send(logData);
-      } catch (error) {
-        logger.info(
-          "Ha ocurrido un error al enviar la traza de log: ",
-          logData
-        );
-        logger.info("ERROR-LOG: ", error);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -296,12 +287,11 @@ export class CodetraceResolver {
       .registerClient(CodetraceResolver.name)
 
       .get(CodetraceResolver.name),
-  })
+    })
   @Query(() => CodetracesResponse<Codetrace>)
   async codetracesByField(
     @Args("field", { type: () => String }) field: string,
-    @Args("value", { type: () => CodetraceValueInput })
-    value: CodetraceValueInput,
+    @Args("value", { type: () => CodetraceValueInput }) value: CodetraceValueInput,
     @Args("page", { type: () => Number, defaultValue: 1 }) page: number,
     @Args("limit", { type: () => Number, defaultValue: 10 }) limit: number
   ): Promise<CodetracesResponse<Codetrace>> {
@@ -312,19 +302,18 @@ export class CodetraceResolver {
     );
   }
 
-  @LogExecutionTime({
-    layer: "resolver",
+
+@LogExecutionTime({
+    layer: 'resolver',
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try {
-        logger.info([logData, client]);
+      try{
+        logger.info([logData,client]);
         return await client.send(logData);
-      } catch (error) {
-        logger.info(
-          "Ha ocurrido un error al enviar la traza de log: ",
-          logData
-        );
-        logger.info("ERROR-LOG: ", error);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -332,7 +321,7 @@ export class CodetraceResolver {
       .registerClient(CodetraceResolver.name)
 
       .get(CodetraceResolver.name),
-  })
+    })
   @Query(() => CodetracesResponse<Codetrace>)
   async codetracesWithPagination(
     @Args("page", { type: () => Number, defaultValue: 1 }) page: number,
@@ -345,19 +334,18 @@ export class CodetraceResolver {
     return this.service.findWithPagination({}, paginationArgs);
   }
 
-  @LogExecutionTime({
-    layer: "resolver",
+
+@LogExecutionTime({
+    layer: 'resolver',
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try {
-        logger.info([logData, client]);
+      try{
+        logger.info([logData,client]);
         return await client.send(logData);
-      } catch (error) {
-        logger.info(
-          "Ha ocurrido un error al enviar la traza de log: ",
-          logData
-        );
-        logger.info("ERROR-LOG: ", error);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -365,25 +353,24 @@ export class CodetraceResolver {
       .registerClient(CodetraceResolver.name)
 
       .get(CodetraceResolver.name),
-  })
+    })
   @Query(() => Number)
   async totalCodetraces(): Promise<number> {
     return this.service.count();
   }
 
-  @LogExecutionTime({
-    layer: "resolver",
+
+@LogExecutionTime({
+    layer: 'resolver',
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try {
-        logger.info([logData, client]);
+      try{
+        logger.info([logData,client]);
         return await client.send(logData);
-      } catch (error) {
-        logger.info(
-          "Ha ocurrido un error al enviar la traza de log: ",
-          logData
-        );
-        logger.info("ERROR-LOG: ", error);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -391,7 +378,7 @@ export class CodetraceResolver {
       .registerClient(CodetraceResolver.name)
 
       .get(CodetraceResolver.name),
-  })
+    })
   @Query(() => CodetracesResponse<Codetrace>)
   async searchCodetraces(
     @Args("where", { type: () => CodetraceDto, nullable: false })
@@ -401,19 +388,18 @@ export class CodetraceResolver {
     return codetraces;
   }
 
-  @LogExecutionTime({
-    layer: "resolver",
+
+@LogExecutionTime({
+    layer: 'resolver',
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try {
-        logger.info([logData, client]);
+      try{
+        logger.info([logData,client]);
         return await client.send(logData);
-      } catch (error) {
-        logger.info(
-          "Ha ocurrido un error al enviar la traza de log: ",
-          logData
-        );
-        logger.info("ERROR-LOG: ", error);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -421,7 +407,7 @@ export class CodetraceResolver {
       .registerClient(CodetraceResolver.name)
 
       .get(CodetraceResolver.name),
-  })
+    })
   @Query(() => CodetraceResponse<Codetrace>, { nullable: true })
   async findOneCodetrace(
     @Args("where", { type: () => CodetraceDto, nullable: false })
@@ -430,19 +416,18 @@ export class CodetraceResolver {
     return this.service.findOne(where);
   }
 
-  @LogExecutionTime({
-    layer: "resolver",
+
+@LogExecutionTime({
+    layer: 'resolver',
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try {
-        logger.info([logData, client]);
+      try{
+        logger.info([logData,client]);
         return await client.send(logData);
-      } catch (error) {
-        logger.info(
-          "Ha ocurrido un error al enviar la traza de log: ",
-          logData
-        );
-        logger.info("ERROR-LOG: ", error);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -450,7 +435,7 @@ export class CodetraceResolver {
       .registerClient(CodetraceResolver.name)
 
       .get(CodetraceResolver.name),
-  })
+    })
   @Query(() => CodetraceResponse<Codetrace>)
   async findOneCodetraceOrFail(
     @Args("where", { type: () => CodetraceDto, nullable: false })
@@ -459,3 +444,4 @@ export class CodetraceResolver {
     return this.service.findOneOrFail(where);
   }
 }
+

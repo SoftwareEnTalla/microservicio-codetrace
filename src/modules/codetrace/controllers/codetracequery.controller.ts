@@ -81,10 +81,10 @@ export class CodetraceQueryController {
     try {
      
       const codetraces = await this.service.findAll(options);
-      this.#logger.verbose("Retrieving all codetrace");
+      logger.verbose("Retrieving all codetrace");
       return codetraces;
     } catch (error) {
-      this.#logger.error(error);
+      logger.error(error);
       return Helper.throwCachedError(error);
     }
   }
@@ -113,7 +113,7 @@ export class CodetraceQueryController {
       }
       return codetrace;
     } catch (error) {
-      this.#logger.error(error);
+      logger.error(error);
       return Helper.throwCachedError(error);
     }
   }
@@ -153,7 +153,7 @@ export class CodetraceQueryController {
       }
       return entities;
     } catch (error) {
-      this.#logger.error(error);
+      logger.error(error);
       return Helper.throwCachedError(error);
     }
   }
@@ -208,7 +208,7 @@ export class CodetraceQueryController {
       }
       return entities;
     } catch (error) {
-      this.#logger.error(error);
+      logger.error(error);
       return Helper.throwCachedError(error);
     }
   }
@@ -281,7 +281,7 @@ export class CodetraceQueryController {
       }
       return entities;
     } catch (error) {
-      this.#logger.error(error);
+      logger.error(error);
       return Helper.throwCachedError(error);
     }
   }
@@ -312,7 +312,7 @@ export class CodetraceQueryController {
       }
       return entity;
     } catch (error) {
-      this.#logger.error(error);
+      logger.error(error);
       return Helper.throwCachedError(error);
     }
   }
@@ -343,7 +343,7 @@ export class CodetraceQueryController {
       }
       return entity;
     } catch (error) {
-      this.#logger.error(error);
+      logger.error(error);
       return Helper.throwCachedError(error);
     }
   }

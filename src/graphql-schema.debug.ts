@@ -34,6 +34,7 @@ import { writeFileSync } from "fs";
 import { NestFactory } from "@nestjs/core";
 import { GraphQLSchemaHost } from "@nestjs/graphql";
 import { CodetraceAppModule } from "./app.module";
+import { logger } from "@core/logs/logger";
 
 async function debugSchema() {
   const app = await NestFactory.create(CodetraceAppModule);

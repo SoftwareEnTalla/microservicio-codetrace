@@ -47,6 +47,7 @@ import {CodetraceRepository} from './codetrace.repository'
 //Logger
 import { LogExecutionTime } from 'src/common/logger/loggers.functions';
 import { LoggerClient } from 'src/common/logger/logger.client';
+import { logger } from @core/logs/logger;
 
   @Injectable()
   export class CodetraceQueryRepository {

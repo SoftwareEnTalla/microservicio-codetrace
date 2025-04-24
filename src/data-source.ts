@@ -2,7 +2,7 @@
  * Copyright (c) 2025 SoftwarEnTalla
  * Licencia: MIT
  * Contacto: softwarentalla@gmail.com
- * CEOs:
+ * CEOs: 
  *       Persy Morell Guerra      Email: pmorellpersi@gmail.com  Phone : +53-5336-4654 Linkedin: https://www.linkedin.com/in/persy-morell-guerra-288943357/
  *       Dailyn García Domínguez  Email: dailyngd@gmail.com      Phone : +53-5432-0312 Linkedin: https://www.linkedin.com/in/dailyn-dominguez-3150799b/
  *
@@ -10,8 +10,8 @@
  * COO: Dailyn García Domínguez and Persy Morell Guerra
  * CFO: Dailyn García Domínguez and Persy Morell Guerra
  *
- * Repositories:
- *               https://github.com/SoftwareEnTalla
+ * Repositories: 
+ *               https://github.com/SoftwareEnTalla 
  *
  *               https://github.com/apokaliptolesamale?tab=repositories
  *
@@ -23,10 +23,11 @@
  *              https://www.facebook.com/profile.php?id=61572625716568
  *
  *              https://www.instagram.com/softwarentalla/
- *
+ *              
  *
  *
  */
+
 
 import { DataSource } from "typeorm";
 import * as dotenv from "dotenv";
@@ -61,6 +62,7 @@ export const AppDataSource = new DataSource({
   },
 } as CustomPostgresOptions);
 
+
 // Añade esta función después de initializeDatabase()
 export async function createDatabaseIfNotExists(
   dbName: string,
@@ -88,7 +90,7 @@ export async function createDatabaseIfNotExists(
     if (dbExists.rows.length === 0) {
       logger.log(`🛠 Creando base de datos ${dbName}...`);
 
-      const createDbQuery = `
+        const createDbQuery = `
             CREATE DATABASE "${dbName}"
             WITH OWNER = "${owner}"
             ENCODING = 'UTF8'
@@ -98,15 +100,13 @@ export async function createDatabaseIfNotExists(
             CONNECTION LIMIT = -1;
         `;
 
-      // Crear la BD con el owner especificado
-      await client.query(createDbQuery);
+          // Crear la BD con el owner especificado
+          await client.query(createDbQuery);
 
       logger.log(`✅ Base de datos ${dbName} creada con éxito`);
 
       // Otorgar todos los privilegios al owner
-      await client.query(
-        `GRANT ALL PRIVILEGES ON DATABASE "${dbName}" TO "${owner}";`
-      );
+      await client.query(`GRANT ALL PRIVILEGES ON DATABASE "${dbName}" TO "${owner}";`);
     } else {
       logger.log(`ℹ️ La base de datos ${dbName} ya existe`);
     }
@@ -121,6 +121,7 @@ export async function createDatabaseIfNotExists(
     adminPool.end();
   }
 }
+
 
 async function checkPostgreSQLExtensions() {
   const poolConfig: PoolConfig = {
@@ -155,7 +156,7 @@ async function checkPostgreSQLExtensions() {
 
 export async function initializeDatabase() {
   try {
-    logger.info("Data Source Object: ", AppDataSource);
+    logger.info("Data Source Object: ",AppDataSource);
     if (!AppDataSource.isInitialized) {
       // Primero verificar/crear la BD
       await createDatabaseIfNotExists(
@@ -173,3 +174,5 @@ export async function initializeDatabase() {
     throw error;
   }
 }
+
+

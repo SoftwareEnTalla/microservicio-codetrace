@@ -44,6 +44,7 @@ import { Helper } from "src/common/helpers/helpers";
 //Logger
 import { LogExecutionTime } from "src/common/logger/loggers.functions";
 import { LoggerClient } from "src/common/logger/logger.client";
+import { logger } from "@core/logs/logger";
 
 import { CommandBus } from "@nestjs/cqrs";
 import { EventStoreService } from "../shared/event-store/event-store.service";
@@ -133,7 +134,7 @@ export class CodetraceCommandService implements OnModuleInit {
     } catch (error) {
       logger.info("Error creating entity on service:", error);
       // Imprimir error
-      this.#logger.error(error);
+      logger.error(error);
       // Lanzar error
       return Helper.throwCachedError(error);
     }
@@ -183,7 +184,7 @@ export class CodetraceCommandService implements OnModuleInit {
       };
     } catch (error) {
       // Imprimir error
-      this.#logger.error(error);
+      logger.error(error);
       // Lanzar error
       return Helper.throwCachedError(error);
     }
@@ -233,7 +234,7 @@ export class CodetraceCommandService implements OnModuleInit {
       };
     } catch (error) {
       // Imprimir error
-      this.#logger.error(error);
+      logger.error(error);
       // Lanzar error
       return Helper.throwCachedError(error);
     }
@@ -282,7 +283,7 @@ export class CodetraceCommandService implements OnModuleInit {
       };
     } catch (error) {
       // Imprimir error
-      this.#logger.error(error);
+      logger.error(error);
       // Lanzar error
       return Helper.throwCachedError(error);
     }
@@ -327,7 +328,7 @@ export class CodetraceCommandService implements OnModuleInit {
       };
     } catch (error) {
       // Imprimir error
-      this.#logger.error(error);
+      logger.error(error);
       // Lanzar error
       return Helper.throwCachedError(error);
     }

@@ -43,6 +43,7 @@ import { PaginationArgs } from "src/common/dto/args/pagination.args";
 import { LogExecutionTime } from "src/common/logger/loggers.functions";
 import { LoggerClient } from "src/common/logger/logger.client";
 import { ModuleRef } from "@nestjs/core";
+import { logger } from "@core/logs/logger";
 
 @Injectable()
 export class CodetraceQueryService implements OnModuleInit{
@@ -102,12 +103,12 @@ export class CodetraceQueryService implements OnModuleInit{
       const entityInstance = Object.create(Codetrace.prototype);
       if (!(entityInstance instanceof BaseEntity)) {
         let sms = `El tipo ${Codetrace.name} no extiende de BaseEntity. Asegúrate de que todas las entidades hereden correctamente.`;
-        this.#logger.verbose(sms);
+        logger.verbose(sms);
         throw new Error(sms);
       }
     } catch (error) {
       // Imprimir error
-      this.#logger.error(error);
+      logger.error(error);
       return Helper.throwCachedError(error);
     }
   }
@@ -137,7 +138,7 @@ export class CodetraceQueryService implements OnModuleInit{
     try {
       const codetraces = await this.repository.findAll(options);
       // Devolver respuesta
-      this.#logger.verbose("sms");
+      logger.verbose("sms");
       return {
         ok: true,
         message: "Listado de codetraces obtenido con éxito",
@@ -151,7 +152,7 @@ export class CodetraceQueryService implements OnModuleInit{
       };
     } catch (error) {
       // Imprimir error
-      this.#logger.error(error);
+      logger.error(error);
       // Lanzar error
       return Helper.throwCachedError(error);
     }
@@ -194,7 +195,7 @@ export class CodetraceQueryService implements OnModuleInit{
       };
     } catch (error) {
       // Imprimir error
-      this.#logger.error(error);
+      logger.error(error);
       // Lanzar error
       return Helper.throwCachedError(error);
     }
@@ -253,7 +254,7 @@ export class CodetraceQueryService implements OnModuleInit{
       };
     } catch (error) {
       // Imprimir error
-      this.#logger.error(error);
+      logger.error(error);
       // Lanzar error
       return Helper.throwCachedError(error);
     }
@@ -301,7 +302,7 @@ export class CodetraceQueryService implements OnModuleInit{
       };
     } catch (error) {
       // Imprimir error
-      this.#logger.error(error);
+      logger.error(error);
       // Lanzar error
       return Helper.throwCachedError(error);
     }
@@ -379,7 +380,7 @@ export class CodetraceQueryService implements OnModuleInit{
       };
     } catch (error) {
       // Imprimir error
-      this.#logger.error(error);
+      logger.error(error);
       // Lanzar error
       return Helper.throwCachedError(error);
     }
@@ -423,7 +424,7 @@ export class CodetraceQueryService implements OnModuleInit{
       };
     } catch (error) {
       // Imprimir error
-      this.#logger.error(error);
+      logger.error(error);
       // Lanzar error
       return Helper.throwCachedError(error);
     }
@@ -467,7 +468,7 @@ export class CodetraceQueryService implements OnModuleInit{
       };
     } catch (error) {
       // Imprimir error
-      this.#logger.error(error);
+      logger.error(error);
       // Lanzar error
       return Helper.throwCachedError(error);
     }
