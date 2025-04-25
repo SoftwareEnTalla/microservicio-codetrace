@@ -13,7 +13,11 @@ export class LoggerService implements OnModuleInit {
     log: 3,
   };
 
-  constructor() {}
+  constructor() {
+    console.info(
+      `ℹ️[${this.environment}] Logger level: ${process.env.LOG_LEVEL}`
+    );
+  }
 
   async onModuleInit() {
     ServiceRegistry.getInstance().registry(this);
