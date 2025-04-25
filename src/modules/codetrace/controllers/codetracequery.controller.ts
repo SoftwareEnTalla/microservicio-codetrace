@@ -2,7 +2,7 @@
  * Copyright (c) 2025 SoftwarEnTalla
  * Licencia: MIT
  * Contacto: softwarentalla@gmail.com
- * CEOs: 
+ * CEOs:
  *       Persy Morell Guerra      Email: pmorellpersi@gmail.com  Phone : +53-5336-4654 Linkedin: https://www.linkedin.com/in/persy-morell-guerra-288943357/
  *       Dailyn García Domínguez  Email: dailyngd@gmail.com      Phone : +53-5432-0312 Linkedin: https://www.linkedin.com/in/dailyn-dominguez-3150799b/
  *
@@ -10,8 +10,8 @@
  * COO: Dailyn García Domínguez and Persy Morell Guerra
  * CFO: Dailyn García Domínguez and Persy Morell Guerra
  *
- * Repositories: 
- *               https://github.com/SoftwareEnTalla 
+ * Repositories:
+ *               https://github.com/SoftwareEnTalla
  *
  *               https://github.com/apokaliptolesamale?tab=repositories
  *
@@ -23,11 +23,10 @@
  *              https://www.facebook.com/profile.php?id=61572625716568
  *
  *              https://www.instagram.com/softwarentalla/
- *              
+ *
  *
  *
  */
-
 
 import {
   Controller,
@@ -39,16 +38,25 @@ import {
 } from "@nestjs/common";
 import { CodetraceQueryService } from "../services/codetracequery.service";
 import { FindManyOptions } from "typeorm";
-import { ApiTags, ApiOperation, ApiResponse, ApiQuery, ApiParam } from "@nestjs/swagger";
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiQuery,
+  ApiParam,
+} from "@nestjs/swagger";
 import { LogExecutionTime } from "src/common/logger/loggers.functions";
-import { CodetraceResponse, CodetracesResponse } from "../types/codetrace.types";
+import {
+  CodetraceResponse,
+  CodetracesResponse,
+} from "../types/codetrace.types";
 import { LoggerClient } from "src/common/logger/logger.client";
 import { Codetrace } from "../entities/codetrace.entity";
 import { Order, PaginationArgs } from "src/common/dto/args/pagination.args";
 import { Helper } from "src/common/helpers/helpers";
-import { CodetraceDto } from "../dtos/createcodetrace.dto";
+import { CodetraceDto } from "../dtos/codetrace.dto";
 
-import { logger } from '@core/logs/logger';
+import { logger } from "@core/logs/logger";
 
 @ApiTags("Codetrace Query")
 @Controller("codetraces/query")
@@ -64,7 +72,7 @@ export class CodetraceQueryController {
   @ApiQuery({ name: "page", required: false, type: Number })
   @ApiQuery({ name: "size", required: false, type: Number })
   @ApiQuery({ name: "sort", required: false, type: String })
-  @ApiQuery({ name: "order", required: false, type: ()=>Order })
+  @ApiQuery({ name: "order", required: false, type: () => Order })
   @ApiQuery({ name: "search", required: false, type: String })
   @ApiQuery({ name: "initDate", required: false, type: Date })
   @ApiQuery({ name: "endDate", required: false, type: Date })
@@ -78,10 +86,9 @@ export class CodetraceQueryController {
       .get(CodetraceQueryService.name),
   })
   async findAll(
-    @Query("options") options?: FindManyOptions<Codetrace>    
+    @Query("options") options?: FindManyOptions<Codetrace>
   ): Promise<CodetracesResponse<Codetrace>> {
     try {
-     
       const codetraces = await this.service.findAll(options);
       logger.info("Retrieving all codetrace");
       return codetraces;
@@ -95,7 +102,12 @@ export class CodetraceQueryController {
   @ApiOperation({ summary: "Get codetrace by ID" })
   @ApiResponse({ status: 200, type: CodetraceResponse<Codetrace> })
   @ApiResponse({ status: 404, description: "Codetrace not found" })
-  @ApiParam({ name: 'id', required: true, description: 'ID of the codetrace to retrieve', type: String })
+  @ApiParam({
+    name: "id",
+    required: true,
+    description: "ID of the codetrace to retrieve",
+    type: String,
+  })
   @LogExecutionTime({
     layer: "controller",
     callback: async (logData, client) => {
@@ -105,7 +117,9 @@ export class CodetraceQueryController {
       .registerClient(CodetraceQueryService.name)
       .get(CodetraceQueryService.name),
   })
-  async findById(@Param("id") id: string): Promise<CodetraceResponse<Codetrace>> {
+  async findById(
+    @Param("id") id: string
+  ): Promise<CodetraceResponse<Codetrace>> {
     try {
       const codetrace = await this.service.findOne({ where: { id } });
       if (!codetrace) {
@@ -122,8 +136,18 @@ export class CodetraceQueryController {
 
   @Get("field/:field") // Asegúrate de que el endpoint esté definido correctamente
   @ApiOperation({ summary: "Find codetrace by specific field" })
-  @ApiQuery({ name: "value", required: true, description: 'Value to search for', type: String }) // Documenta el parámetro de consulta
-  @ApiParam({ name: 'field', required: true, description: 'Field to filter codetrace', type: String }) // Documenta el parámetro de la ruta
+  @ApiQuery({
+    name: "value",
+    required: true,
+    description: "Value to search for",
+    type: String,
+  }) // Documenta el parámetro de consulta
+  @ApiParam({
+    name: "field",
+    required: true,
+    description: "Field to filter codetrace",
+    type: String,
+  }) // Documenta el parámetro de la ruta
   @ApiResponse({ status: 200, type: CodetracesResponse })
   @LogExecutionTime({
     layer: "controller",
@@ -160,7 +184,6 @@ export class CodetraceQueryController {
     }
   }
 
-
   @Get("pagination")
   @ApiOperation({ summary: "Find codetraces with pagination" })
   @ApiResponse({ status: 200, type: CodetracesResponse<Codetrace> })
@@ -168,7 +191,7 @@ export class CodetraceQueryController {
   @ApiQuery({ name: "page", required: false, type: Number })
   @ApiQuery({ name: "size", required: false, type: Number })
   @ApiQuery({ name: "sort", required: false, type: String })
-  @ApiQuery({ name: "order", required: false, type: ()=>Order })
+  @ApiQuery({ name: "order", required: false, type: () => Order })
   @ApiQuery({ name: "search", required: false, type: String })
   @ApiQuery({ name: "initDate", required: false, type: Date })
   @ApiQuery({ name: "endDate", required: false, type: Date })
@@ -192,7 +215,7 @@ export class CodetraceQueryController {
     @Query("endDate") endDate?: Date
   ): Promise<CodetracesResponse<Codetrace>> {
     try {
-     const paginationArgs: PaginationArgs = PaginationArgs.createPaginator(
+      const paginationArgs: PaginationArgs = PaginationArgs.createPaginator(
         page || 1,
         size || 25,
         sort || "createdAt", // Asigna valor por defecto
@@ -238,7 +261,7 @@ export class CodetraceQueryController {
   @ApiQuery({ name: "page", required: false, type: Number })
   @ApiQuery({ name: "size", required: false, type: Number })
   @ApiQuery({ name: "sort", required: false, type: String })
-  @ApiQuery({ name: "order", required: false, type: ()=>Order })
+  @ApiQuery({ name: "order", required: false, type: () => Order })
   @ApiQuery({ name: "search", required: false, type: String })
   @ApiQuery({ name: "initDate", required: false, type: Date })
   @ApiQuery({ name: "endDate", required: false, type: Date })
@@ -252,7 +275,7 @@ export class CodetraceQueryController {
       .get(CodetraceQueryService.name),
   })
   async findAndCount(
-    @Query() where: Record<string, any>={},
+    @Query() where: Record<string, any> = {},
     @Query("page") page?: number,
     @Query("size") size?: number,
     @Query("sort") sort?: string,
@@ -302,7 +325,7 @@ export class CodetraceQueryController {
       .get(CodetraceQueryService.name),
   })
   async findOne(
-    @Query() where: Record<string, any>={}
+    @Query() where: Record<string, any> = {}
   ): Promise<CodetraceResponse<Codetrace>> {
     try {
       const entity = await this.service.findOne({
@@ -333,7 +356,7 @@ export class CodetraceQueryController {
       .get(CodetraceQueryService.name),
   })
   async findOneOrFail(
-    @Query() where: Record<string, any>={}
+    @Query() where: Record<string, any> = {}
   ): Promise<CodetraceResponse<Codetrace> | Error> {
     try {
       const entity = await this.service.findOne({
@@ -350,5 +373,3 @@ export class CodetraceQueryController {
     }
   }
 }
-
-

@@ -2,7 +2,7 @@
  * Copyright (c) 2025 SoftwarEnTalla
  * Licencia: MIT
  * Contacto: softwarentalla@gmail.com
- * CEOs: 
+ * CEOs:
  *       Persy Morell Guerra      Email: pmorellpersi@gmail.com  Phone : +53-5336-4654 Linkedin: https://www.linkedin.com/in/persy-morell-guerra-288943357/
  *       Dailyn García Domínguez  Email: dailyngd@gmail.com      Phone : +53-5432-0312 Linkedin: https://www.linkedin.com/in/dailyn-dominguez-3150799b/
  *
@@ -10,8 +10,8 @@
  * COO: Dailyn García Domínguez and Persy Morell Guerra
  * CFO: Dailyn García Domínguez and Persy Morell Guerra
  *
- * Repositories: 
- *               https://github.com/SoftwareEnTalla 
+ * Repositories:
+ *               https://github.com/SoftwareEnTalla
  *
  *               https://github.com/apokaliptolesamale?tab=repositories
  *
@@ -23,40 +23,48 @@
  *              https://www.facebook.com/profile.php?id=61572625716568
  *
  *              https://www.instagram.com/softwarentalla/
- *              
+ *
  *
  *
  */
 
-
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsString, IsBoolean, IsDate, IsOptional,IsObject, ValidateNested } from "class-validator";
-import { InputType, Field } from '@nestjs/graphql'; 
-import { Type } from 'class-transformer';
+import {
+  IsNotEmpty,
+  IsString,
+  IsBoolean,
+  IsDate,
+  IsOptional,
+  IsObject,
+  ValidateNested,
+} from "class-validator";
+import { InputType, Field } from "@nestjs/graphql";
+import { Type } from "class-transformer";
 
 @InputType()
 export class DeleteCodetraceDto {
- // Propiedades específicas de la clase DeleteCodetraceDto en cuestión
-  
- 
+  // Propiedades específicas de la clase DeleteCodetraceDto en cuestión
+
   @ApiProperty({
+    type: () => String,
     description: "Identificador de instancia a eliminar",
     example: "Se proporciona un identificador de DeleteCodetrace a eliminar",
+    default: "",
   })
   @IsString()
   @IsNotEmpty()
-  @Field(() => String,{ nullable: false })
-  id: string='';
-  
+  @Field(() => String, { nullable: false })
+  id: string = "";
 
   @ApiProperty({
+    type: () => String,
     description: "Lista de identificadores de instancias a eliminar",
-    example:"Se proporciona una lista de identificadores de DeleteCodetrace a eliminar",
+    example:
+      "Se proporciona una lista de identificadores de DeleteCodetrace a eliminar",
+    default: [],
   })
   @IsString()
   @IsOptional()
-  @Field(() => String,{ nullable: true })
-  ids?: string[];  
-  
-
+  @Field(() => String, { nullable: true })
+  ids?: string[];
 }
