@@ -13,10 +13,10 @@ export class CodetraceValueInput {
   fieldName: string = "id";
 
   @ApiProperty({
-    type: () => CodetraceDto,
+    type: () => Object,
     nullable: false,
     description: "Valor del filtro",
   })
-  @Field(() => CodetraceDto, { nullable: false })
+  @Field(() => Object, { nullable: false })
   fieldValue: any; // Permite cualquier tipo
 }
