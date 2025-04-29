@@ -5,6 +5,7 @@ import { LoggerCallback } from "../types/logger.type";
 import { HttpLoggerClient } from "./http-logger.client";
 import { getRemoteApiLoggerUrl } from "./loggers.functions";
 import * as dotenv from "dotenv";
+import { logger } from "@core/logs/logger";
 
 @Injectable()
 export class LoggerClient {
@@ -66,19 +67,19 @@ export class LoggerClient {
         const success = connected ? await callback(logData, client) : connected;
 
         if (!success) {
-          console.error(
+          logger.error(
             connected
               ? `LoggerClient: Callback failed for client ${name}`
               : `LoggerClient: Callback failed for client connection failed`
           );
         }
       } catch (error) {
-        console.error(`LoggerClient: Error with client ${name}`, error);
+        logger.error(`LoggerClient: Error with client ${name}`, error);
       } finally {
         try {
           await client.close();
         } catch (closeError) {
-          console.error(
+          logger.error(
             `LoggerClient: Error closing client ${name}`,
             closeError
           );
@@ -96,19 +97,19 @@ export class LoggerClient {
         const connected = await client.connect();
         const success = connected ? await client.send(logData) : connected;
         if (!success) {
-          console.error(
+          logger.error(
             connected
               ? `LoggerClient: Send failed for client ${name}`
               : `LoggerClient: Callback failed for client connection failed`
           );
         }
       } catch (error) {
-        console.error(`LoggerClient: Error with client ${name}`, error);
+        logger.error(`LoggerClient: Error with client ${name}`, error);
       } finally {
         try {
           await client.close();
         } catch (closeError) {
-          console.error(
+          logger.error(
             `LoggerClient: Error closing client ${name}`,
             closeError
           );

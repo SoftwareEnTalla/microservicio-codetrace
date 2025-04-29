@@ -1,11 +1,12 @@
 import * as https from "https";
 import { ILoggerClient } from "src/interfaces/log-context";
+import { logger } from "@core/logs/logger";
 
 export class HttpLoggerClient implements ILoggerClient {
   constructor(private baseUrl: string) {}
 
   async connect(): Promise<boolean> {
-    console.log("Connecting to HTTP Logger at", this.baseUrl);
+    logger.log("Connecting to HTTP Logger at", this.baseUrl);
     return true;
   }
 
@@ -36,14 +37,14 @@ export class HttpLoggerClient implements ILoggerClient {
           if (res.statusCode === 201) {
             resolve(true);
           } else {
-            console.error("HTTP Logger Error:", responseBody);
+            logger.error("❌ HTTP Logger Error:", responseBody);
             resolve(false);
           }
         });
       });
 
       req.on("error", (error) => {
-        console.error("HTTP Logger Error:", error);
+        logger.error("❌ HTTP Logger Error:", error);
         reject(false);
       });
 
@@ -53,7 +54,7 @@ export class HttpLoggerClient implements ILoggerClient {
   }
 
   async close(): Promise<boolean> {
-    console.log("Closing HTTP Logger connection");
+    logger.log("Closing HTTP Logger connection");
     return true;
   }
 }
