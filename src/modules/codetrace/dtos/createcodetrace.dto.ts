@@ -28,8 +28,6 @@
  *
  */
 
-
-
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsNotEmpty,
@@ -42,6 +40,8 @@ import {
 } from 'class-validator';
 import { InputType, Field, ObjectType } from '@nestjs/graphql';
 import { BaseCodetraceDto } from './basecodetrace.dto';
+
+
 
 @InputType()
 export class CreateCodetraceDto extends BaseCodetraceDto {

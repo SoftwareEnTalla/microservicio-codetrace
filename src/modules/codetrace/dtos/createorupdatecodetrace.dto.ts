@@ -28,8 +28,6 @@
  *
  */
 
-
-
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsOptional,
@@ -40,6 +38,7 @@ import {
 import { InputType, Field } from '@nestjs/graphql';
 import { CreateCodetraceDto } from './createcodetrace.dto';
 import { UpdateCodetraceDto } from './updatecodetrace.dto'; // Asegúrate de importar esto
+
 
 @InputType()
 export class CreateOrUpdateCodetraceDto {

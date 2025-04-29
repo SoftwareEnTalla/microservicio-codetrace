@@ -28,11 +28,12 @@
  *
  */
 
-
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString } from 'class-validator';
 import { Field, InputType } from '@nestjs/graphql';
 import { BaseCodetraceDto } from './basecodetrace.dto';
+
+
 
 @InputType()
 export class CodetraceDto extends BaseCodetraceDto {

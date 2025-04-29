@@ -28,8 +28,6 @@
  *
  */
  
-
-
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsNotEmpty,
@@ -42,6 +40,7 @@ import {
 } from 'class-validator';
 import { InputType, Field } from '@nestjs/graphql';
 import { Type } from 'class-transformer';
+
 
 @InputType()
 export class DeleteCodetraceDto {

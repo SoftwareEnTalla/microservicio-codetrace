@@ -29,15 +29,7 @@
  */
 
 
-import { Field, InputType } from '@nestjs/graphql';
-import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsBoolean,
-  IsDate,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+
 
 @InputType()
 export class BaseCodetraceDto {
@@ -107,10 +99,7 @@ export class BaseCodetraceDto {
 }
 
 
-import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
-import { Field, InputType } from '@nestjs/graphql';
-import { BaseCodetraceDto } from './basecodetrace.dto';
+
 
 @InputType()
 export class CodetraceDto extends BaseCodetraceDto {
@@ -142,9 +131,7 @@ export class CodetraceDto extends BaseCodetraceDto {
 } 
 
 
-import { ApiProperty } from '@nestjs/swagger';
-import { Field, InputType } from '@nestjs/graphql';
-import { CodetraceDto } from './codetrace.dto';
+
 
 @InputType()
 export class CodetraceValueInput {
@@ -166,10 +153,7 @@ export class CodetraceValueInput {
 } 
 
 
-import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
-import { Field, ObjectType } from '@nestjs/graphql';
-import { BaseCodetraceDto } from './basecodetrace.dto';
+
 
 @ObjectType()
 export class CodetraceOutPutDto extends BaseCodetraceDto {
@@ -201,19 +185,6 @@ export class CodetraceOutPutDto extends BaseCodetraceDto {
 }
 
 
-
-import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsNotEmpty,
-  IsString,
-  IsBoolean,
-  IsDate,
-  IsOptional,
-  IsObject,
-  ValidateNested,
-} from 'class-validator';
-import { InputType, Field, ObjectType } from '@nestjs/graphql';
-import { BaseCodetraceDto } from './basecodetrace.dto';
 
 @InputType()
 export class CreateCodetraceDto extends BaseCodetraceDto {
@@ -247,17 +218,6 @@ export class CreateCodetraceDto extends BaseCodetraceDto {
 
 
 
-import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsOptional,
-  IsString,
-  IsObject,
-  ValidateNested,
-} from 'class-validator';
-import { InputType, Field } from '@nestjs/graphql';
-import { CreateCodetraceDto } from './createcodetrace.dto';
-import { UpdateCodetraceDto } from './updatecodetrace.dto'; // Asegúrate de importar esto
-
 @InputType()
 export class CreateOrUpdateCodetraceDto {
   @ApiProperty({
@@ -283,19 +243,6 @@ export class CreateOrUpdateCodetraceDto {
 }
 
 
-
-import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsNotEmpty,
-  IsString,
-  IsBoolean,
-  IsDate,
-  IsOptional,
-  IsObject,
-  ValidateNested,
-} from 'class-validator';
-import { InputType, Field } from '@nestjs/graphql';
-import { Type } from 'class-transformer';
 
 @InputType()
 export class DeleteCodetraceDto {
@@ -326,12 +273,6 @@ export class DeleteCodetraceDto {
 }
 
 
-
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
-import { InputType, Field } from '@nestjs/graphql';
-
-import { BaseCodetraceDto } from './basecodetrace.dto';
 
 @InputType()
 export class UpdateCodetraceDto extends BaseCodetraceDto {
