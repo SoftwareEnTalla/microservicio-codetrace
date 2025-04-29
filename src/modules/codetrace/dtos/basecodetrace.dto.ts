@@ -39,11 +39,11 @@ import {
 } from "class-validator";
 
 @InputType()
-export class BasecodetraceDto {
+export class BaseCodetraceDto {
   @ApiProperty({
     type: () => String,
-    description: "Nombre de instancia Createcodetrace",
-    example: "Nombre de instancia Createcodetrace",
+    description: "Nombre de instancia CreateCodetrace",
+    example: "Nombre de instancia CreateCodetrace",
     nullable: false,
   })
   @IsString()
@@ -51,12 +51,12 @@ export class BasecodetraceDto {
   @Field(() => String, { nullable: false })
   name: string = "";
 
-  // Propiedades predeterminadas de la clase CreatecodetraceDto según especificación del sistema
+  // Propiedades predeterminadas de la clase CreateCodetraceDto según especificación del sistema
 
   @ApiProperty({
     type: () => Date,
-    description: "Fecha de creación de la instancia (Createcodetrace).",
-    example: "Fecha de creación de la instancia (Createcodetrace).",
+    description: "Fecha de creación de la instancia (CreateCodetrace).",
+    example: "Fecha de creación de la instancia (CreateCodetrace).",
     nullable: false,
   })
   @IsDate()
@@ -66,8 +66,8 @@ export class BasecodetraceDto {
 
   @ApiProperty({
     type: () => Date,
-    description: "Fecha de actualización de la instancia (Createcodetrace).",
-    example: "Fecha de actualización de la instancia (Createcodetrace).",
+    description: "Fecha de actualización de la instancia (CreateCodetrace).",
+    example: "Fecha de actualización de la instancia (CreateCodetrace).",
     nullable: false,
   })
   @IsDate()
@@ -78,9 +78,9 @@ export class BasecodetraceDto {
   @ApiProperty({
     type: () => String,
     description:
-      "Usuario que realiza la creación de la instancia (Createcodetrace).",
+      "Usuario que realiza la creación de la instancia (CreateCodetrace).",
     example:
-      "Usuario que realiza la creación de la instancia (Createcodetrace).",
+      "Usuario que realiza la creación de la instancia (CreateCodetrace).",
     nullable: true,
   })
   @IsString()
@@ -90,8 +90,8 @@ export class BasecodetraceDto {
 
   @ApiProperty({
     type: () => Boolean,
-    description: "Estado de activación de la instancia (Createcodetrace).",
-    example: "Estado de activación de la instancia (Createcodetrace).",
+    description: "Estado de activación de la instancia (CreateCodetrace).",
+    example: "Estado de activación de la instancia (CreateCodetrace).",
     nullable: false,
   })
   @IsBoolean()
@@ -100,7 +100,7 @@ export class BasecodetraceDto {
   isActive: boolean = false; // Por defecto, el objeto no está activo
 
   // Constructor
-  constructor(partial: Partial<BasecodetraceDto>) {
+  constructor(partial: Partial<BaseCodetraceDto>) {
     Object.assign(this, partial);
   }
 }

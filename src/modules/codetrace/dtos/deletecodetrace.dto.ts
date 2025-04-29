@@ -42,13 +42,13 @@ import { InputType, Field } from "@nestjs/graphql";
 import { Type } from "class-transformer";
 
 @InputType()
-export class DeletecodetraceDto {
-  // Propiedades específicas de la clase DeletecodetraceDto en cuestión
+export class DeleteCodetraceDto {
+  // Propiedades específicas de la clase DeleteCodetraceDto en cuestión
 
   @ApiProperty({
     type: () => String,
     description: "Identificador de instancia a eliminar",
-    example: "Se proporciona un identificador de Deletecodetrace a eliminar",
+    example: "Se proporciona un identificador de DeleteCodetrace a eliminar",
     default: "",
   })
   @IsString()
@@ -60,7 +60,7 @@ export class DeletecodetraceDto {
     type: () => String,
     description: "Lista de identificadores de instancias a eliminar",
     example:
-      "Se proporciona una lista de identificadores de Deletecodetrace a eliminar",
+      "Se proporciona una lista de identificadores de DeleteCodetrace a eliminar",
     default: [],
   })
   @IsString()

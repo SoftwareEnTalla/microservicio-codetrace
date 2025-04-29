@@ -32,16 +32,16 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, IsString } from "class-validator";
 import { InputType, Field } from "@nestjs/graphql";
 
-import { BasecodetraceDto } from "./basecodetrace.dto";
+import { BaseCodetraceDto } from "./basecodetrace.dto";
 
 @InputType()
-export class UpdatecodetraceDto extends BasecodetraceDto {
-  // Propiedades específicas de la clase UpdatecodetraceDto en cuestión
+export class UpdateCodetraceDto extends BaseCodetraceDto {
+  // Propiedades específicas de la clase UpdateCodetraceDto en cuestión
 
   @ApiProperty({
     type: () => String,
     description: "Identificador de instancia a actualizar",
-    example: "Se proporciona un identificador de Updatecodetrace a actualizar",
+    example: "Se proporciona un identificador de UpdateCodetrace a actualizar",
   })
   @IsString()
   @IsNotEmpty()
@@ -49,14 +49,14 @@ export class UpdatecodetraceDto extends BasecodetraceDto {
   id!: string;
 
   // Constructor
-  constructor(partial: Partial<UpdatecodetraceDto>) {
+  constructor(partial: Partial<UpdateCodetraceDto>) {
     super(partial);
     Object.assign(this, partial);
   }
 
   // Método estático para construir la instancia
-  static build(data: Partial<UpdatecodetraceDto>): UpdatecodetraceDto {
-    const instance = new UpdatecodetraceDto(data);
+  static build(data: Partial<UpdateCodetraceDto>): UpdateCodetraceDto {
+    const instance = new UpdateCodetraceDto(data);
     instance.creationDate = new Date(); // Actualiza la fecha de creación al momento de la creación
     instance.modificationDate = new Date(); // Actualiza la fecha de modificación al momento de la creación
     return instance;

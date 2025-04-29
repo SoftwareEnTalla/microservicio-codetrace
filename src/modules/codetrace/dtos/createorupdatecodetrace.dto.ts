@@ -36,11 +36,11 @@ import {
   ValidateNested,
 } from "class-validator";
 import { InputType, Field } from "@nestjs/graphql";
-import { CreatecodetraceDto } from "./createcodetrace.dto";
-import { UpdatecodetraceDto } from "./updatecodetrace.dto"; // Asegúrate de importar esto
+import { CreateCodetraceDto } from "./createcodetrace.dto";
+import { UpdateCodetraceDto } from "./updatecodetrace.dto"; // Asegúrate de importar esto
 
 @InputType()
-export class CreateOrUpdatecodetraceDto {
+export class CreateOrUpdateCodetraceDto {
   @ApiProperty({
     type: () => String,
     description: "Identificador",
@@ -52,14 +52,14 @@ export class CreateOrUpdatecodetraceDto {
   id?: string;
 
   @ApiProperty({
-    type: () => CreatecodetraceDto,
-    description: "Instancia Createcodetrace o Updatecodetrace",
+    type: () => CreateCodetraceDto,
+    description: "Instancia CreateCodetrace o UpdateCodetrace",
     nullable: true,
   })
   @IsOptional()
   @IsObject()
   @ValidateNested()
-  @Field(() => CreatecodetraceDto, { nullable: true })
-  input?: CreatecodetraceDto | UpdatecodetraceDto; // Asegúrate de que esto esté correcto
+  @Field(() => CreateCodetraceDto, { nullable: true })
+  input?: CreateCodetraceDto | UpdateCodetraceDto; // Asegúrate de que esto esté correcto
 }
 
