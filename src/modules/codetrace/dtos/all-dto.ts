@@ -43,7 +43,6 @@ import {
 
 
 
-
 @InputType()
 export class BaseCodetraceDto {
   @ApiProperty({
