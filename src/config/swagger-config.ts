@@ -110,6 +110,8 @@ try{
   }
   catch(error){
     logger.error("❌ Error al configurar swagger", error);
+    return apiDoc;
   }
+  logger.info("✅ Swagger configurado correctamente");
   return apiDoc;
 }
