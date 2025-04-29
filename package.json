@@ -41,7 +41,6 @@
     "cache-manager-redis-store": "^3.0.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
-    "cross-env": "^7.0.3",
     "crypto-js": "^4.2.0",
     "dotenv": "^16.4.7",
     "esm": "^3.2.25",
@@ -94,3 +93,5 @@
     "testEnvironment": "node"
   }
 }
+
+
