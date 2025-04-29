@@ -197,7 +197,7 @@ export class CodetraceQueryController {
         page || 1,
         size || 25,
         sort || "createdAt", // Asigna valor por defecto
-        valueOfOrderBy(order || OrderBy.pscqkgjh), // Asigna valor por defecto
+        valueOfOrderBy(order || OrderBy.asc), // Asigna valor por defecto
         search || "", // Asigna valor por defecto
         initDate || undefined, // Puede ser undefined si no se proporciona
         endDate || undefined // Puede ser undefined si no se proporciona
@@ -267,7 +267,7 @@ export class CodetraceQueryController {
         page || 1,
         size || 25,
         sort || "createdAt", // Asigna valor por defecto
-        valueOfOrderBy(order || OrderBy.pscqkgjh), // Asigna valor por defecto
+        valueOfOrderBy(order || OrderBy.asc), // Asigna valor por defecto
         search || "", // Asigna valor por defecto
         initDate || undefined, // Puede ser undefined si no se proporciona
         endDate || undefined // Puede ser undefined si no se proporciona
