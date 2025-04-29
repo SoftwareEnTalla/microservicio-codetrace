@@ -46,7 +46,7 @@ export class KafkaEventPublisher implements IEventPublisher {
   }
 
   private resolveTopic(event: IEvent): string {
-    // Ejemplo: OrderCreatedEvent -> 'order-created'
+    // Ejemplo: CreatedEvent -> '-created'
     return event.constructor.name
       .replace(/Event$/, '')
       .replace(/([a-z])([A-Z])/g, '$1-$2')
