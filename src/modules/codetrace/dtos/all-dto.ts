@@ -28,6 +28,7 @@
  *
  */
 
+
 import { Field, InputType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
 import {
@@ -105,6 +106,7 @@ export class BaseCodetraceDto {
   }
 }
 
+
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString } from 'class-validator';
 import { Field, InputType } from '@nestjs/graphql';
@@ -139,6 +141,7 @@ export class CodetraceDto extends BaseCodetraceDto {
   }
 } 
 
+
 import { ApiProperty } from '@nestjs/swagger';
 import { Field, InputType } from '@nestjs/graphql';
 import { CodetraceDto } from './codetrace.dto';
@@ -161,6 +164,7 @@ export class CodetraceValueInput {
   @Field(() => CodetraceDto, { nullable: false })
   fieldValue: any; // Permite cualquier tipo
 } 
+
 
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString } from 'class-validator';
@@ -195,6 +199,8 @@ export class CodetraceOutPutDto extends BaseCodetraceDto {
     return instance;
   }
 }
+
+
 
 import { ApiProperty } from '@nestjs/swagger';
 import {
@@ -239,6 +245,8 @@ export class CreateCodetraceDto extends BaseCodetraceDto {
   }
 }
 
+
+
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsOptional,
@@ -273,6 +281,8 @@ export class CreateOrUpdateCodetraceDto {
   @Field(() => CreateCodetraceDto, { nullable: true })
   input?: CreateCodetraceDto | UpdateCodetraceDto; // Asegúrate de que esto esté correcto
 }
+
+
 
 import { ApiProperty } from '@nestjs/swagger';
 import {
@@ -314,6 +324,8 @@ export class DeleteCodetraceDto {
   @Field(() => String, { nullable: true })
   ids?: string[];
 }
+
+
 
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
