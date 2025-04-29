@@ -46,7 +46,7 @@ import { LoggerClient } from "src/common/logger/logger.client";
 import { Codetrace } from "../entities/codetrace.entity";
 import { Order, PaginationArgs } from "src/common/dto/args/pagination.args";
 import { Helper } from "src/common/helpers/helpers";
-import { CodetraceDto } from "../dtos/codetrace.dto";
+import { CodetraceDto } from "../dtos/all-dto";
 
 import { logger } from '@core/logs/logger';
 

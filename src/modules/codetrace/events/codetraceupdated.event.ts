@@ -29,7 +29,7 @@
  */
 
 
-import { UpdateCodetraceDto } from '../dtos/updatecodetrace.dto';
+import { UpdateCodetraceDto } from '../dtos/all-dto';
 import { Codetrace } from '../entities/codetrace.entity';
 import { BaseEvent, PayloadEvent } from './base.event'; 
 import { v4 as uuidv4 } from "uuid";

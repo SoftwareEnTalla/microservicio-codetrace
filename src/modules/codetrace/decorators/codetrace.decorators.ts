@@ -35,8 +35,7 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from "class-validator";
-import { CreateCodetraceDto } from "../dtos/createcodetrace.dto";
-import { UpdateCodetraceDto } from "../dtos/updatecodetrace.dto";
+import { CreateCodetraceDto, UpdateCodetraceDto } from "../dtos/all-dto";
 import { createUnionType } from "@nestjs/graphql";
 
 @ValidatorConstraint({ name: "isCreateOrUpdateCodetraceDtoType", async: false })

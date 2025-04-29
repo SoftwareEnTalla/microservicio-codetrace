@@ -58,11 +58,12 @@ import { logger } from '@core/logs/logger';
 import { v4 as uuidv4 } from "uuid";
 
 //Definición de tdos
-import { UpdateCodetraceDto } from "../dtos/updatecodetrace.dto";
-import { CreateOrUpdateCodetraceDto } from "../dtos/createorupdatecodetrace.dto";
-import { CodetraceValueInput } from "../dtos/codetrace.input.dto";
-import { CodetraceDto } from "../dtos/codetrace.dto";
-import { CreateCodetraceDto} from "../dtos/createcodetrace.dto";
+import { UpdateCodetraceDto, 
+CreateOrUpdateCodetraceDto, 
+CodetraceValueInput, 
+CodetraceDto, 
+CreateCodetraceDto } from "../dtos/all-dto";
+ 
 
 //@UseGuards(JwtGraphQlAuthGuard)
 @Resolver(() => Codetrace)

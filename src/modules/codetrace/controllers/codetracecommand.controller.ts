@@ -48,8 +48,8 @@ import { Logger } from "@nestjs/common";
 import { Helper } from "src/common/helpers/helpers";
 import { Codetrace } from "../entities/codetrace.entity";
 import { CodetraceResponse, CodetracesResponse } from "../types/codetrace.types";
-import { CreateCodetraceDto } from "../dtos/createcodetrace.dto";
-import { UpdateCodetraceDto } from "../dtos/updatecodetrace.dto";
+import { CreateCodetraceDto, UpdateCodetraceDto } from "../dtos/all-dto"; 
+
 //Loggers
 import { LoggerClient } from "src/common/logger/logger.client";
 import { LogExecutionTime } from "src/common/logger/loggers.functions";

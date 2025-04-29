@@ -31,9 +31,8 @@
 
 import { Column, Entity } from 'typeorm';
 import { BaseEntity } from './base.entity';
-import { CreateCodetraceDto } from '../dtos/createcodetrace.dto';
-import { UpdateCodetraceDto } from '../dtos/updatecodetrace.dto';
-import { DeleteCodetraceDto } from '../dtos/deletecodetrace.dto';
+import { CreateCodetraceDto,UpdateCodetraceDto,DeleteCodetraceDto } from '../dtos/all-dto';
+ 
 import { IsNotEmpty, IsString, validate } from 'class-validator';
 import { plainToClass, plainToInstance } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';

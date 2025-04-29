@@ -32,9 +32,8 @@
 import { Injectable, Logger, NotFoundException, OnModuleInit } from "@nestjs/common";
 import { DeleteResult, UpdateResult } from "typeorm";
 import { Codetrace } from "../entities/codetrace.entity";
-import { CreateCodetraceDto } from "../dtos/createcodetrace.dto";
-import { UpdateCodetraceDto } from "../dtos/updatecodetrace.dto";
-import { DeleteCodetraceDto } from "../dtos/deletecodetrace.dto";
+import { CreateCodetraceDto, UpdateCodetraceDto, DeleteCodetraceDto } from "../dtos/all-dto";
+ 
 import { generateCacheKey } from "src/utils/functions";
 import { CodetraceCommandRepository } from "../repositories/codetracecommand.repository";
 import { CodetraceQueryRepository } from "../repositories/codetracequery.repository";
