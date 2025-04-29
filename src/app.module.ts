@@ -185,8 +185,8 @@ export class CodetraceAppModule implements OnModuleInit {
     //Inicializar servicios del microservicio
     ServiceRegistry.getInstance().setModuleRef(this.moduleRef);
     ServiceRegistry.getInstance().registryAll([
-      CodetraceCommandService,
-      CodetraceQueryService,
+      CommandService,
+      QueryService,
     ]);
     const loggerService = ServiceRegistry.getInstance().get(
       "LoggerService"
