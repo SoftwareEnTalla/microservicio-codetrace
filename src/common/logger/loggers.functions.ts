@@ -29,6 +29,16 @@ function getEnhancedContext(): LogContext {
   return { className: "Global", functionName: "anonymous" };
 }
 
+export function getRemoteApiLoggerUrl(): string {
+  let createUrl: string = process.env.LOG_API_BASE_URL || "https://logs.api";
+  createUrl += process.env.LOG_API_SCOPE
+    ? `/${process.env.LOG_API_SCOPE}/`
+    : "/codetrace";
+  createUrl += process.env.LOG_API_CREATE_ACTION
+    ? `/${process.env.LOG_API_CREATE_ACTION}`
+    : "/command";
+  return createUrl;
+}
 export function LogExecutionTime(options: LogExecutionTimeOptions) {
   return function (
     target: any,
@@ -70,7 +80,7 @@ export function LogExecutionTime(options: LogExecutionTimeOptions) {
         );
 
         const logData: HttpLoggerApiRest = {
-          endpoint: process.env.LOG_API_BASE_URL || "https://logs.api",
+          endpoint: getRemoteApiLoggerUrl(),
           method: "POST",
           body: {
             layer,
@@ -100,7 +110,7 @@ export function LogExecutionTime(options: LogExecutionTimeOptions) {
         );
 
         const errorLogData: HttpLoggerApiRest = {
-          endpoint: process.env.LOG_API_BASE_URL || "https://logs.api",
+          endpoint: getRemoteApiLoggerUrl(),
           method: "POST",
           body: {
             layer,

@@ -3,6 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { HttpLoggerApiRest, ILoggerClient } from "src/interfaces/log-context";
 import { LoggerCallback } from "../types/logger.type";
 import { HttpLoggerClient } from "./http-logger.client";
+import { getRemoteApiLoggerUrl } from "./loggers.functions";
 import * as dotenv from "dotenv";
 
 @Injectable()
@@ -19,10 +20,7 @@ export class LoggerClient {
    * @param client Objeto ILoggerClient que implementa la interfaz
    */
   registerClient(name: string, client?: ILoggerClient): LoggerClient {
-    if (client == null)
-      client = new HttpLoggerClient(
-        process.env.LOG_API_BASE_URL || "https://logs.api"
-      );
+    if (client == null) client = new HttpLoggerClient(getRemoteApiLoggerUrl());
     if (!this.has(name)) this.clients.set(name, client);
     return this;
   }

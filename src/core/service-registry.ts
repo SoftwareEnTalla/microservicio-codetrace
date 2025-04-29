@@ -1,5 +1,6 @@
 import { Injectable, OnModuleInit } from "@nestjs/common";
 import { ModuleRef } from "@nestjs/core";
+import { logger } from "@core/logs/logger";
 
 @Injectable()
 export class ServiceRegistry implements OnModuleInit {
@@ -35,7 +36,8 @@ export class ServiceRegistry implements OnModuleInit {
   public registry(service: OnModuleInit): void {
     const serviceName = service.constructor.name;
     if (this.services.has(serviceName)) {
-      throw new Error(`El servicio ${serviceName} ya está registrado.`);
+      //throw new Error(`El servicio ${serviceName} ya está registrado.`);
+      logger.info(`✅ El servicio ${serviceName} ya está registrado.`);
     }
     this.services.set(serviceName, service);
   }
@@ -43,7 +45,8 @@ export class ServiceRegistry implements OnModuleInit {
   // Método para eliminar un registro
   public unRegistry(serviceName: string): void {
     if (!this.services.has(serviceName)) {
-      throw new Error(`El servicio ${serviceName} no está registrado.`);
+      //throw new Error(`El servicio ${serviceName} no está registrado.`);
+      logger.info(`✅ El servicio ${serviceName} no está registrado.`);
     }
     this.services.delete(serviceName);
   }
