@@ -30,10 +30,10 @@
 
 import { ApiProperty } from "@nestjs/swagger";
 import { Field, InputType } from "@nestjs/graphql";
-import { CodetraceDto } from "./codetrace.dto";
+import { codetraceDto } from "./codetrace.dto";
 
 @InputType()
-export class CodetraceValueInput {
+export class codetraceValueInput {
   @ApiProperty({
     type: () => String,
     nullable: false,
@@ -43,11 +43,11 @@ export class CodetraceValueInput {
   fieldName: string = "id";
 
   @ApiProperty({
-    type: () => CodetraceDto,
+    type: () => codetraceDto,
     nullable: false,
     description: "Valor del filtro",
   })
-  @Field(() => CodetraceDto, { nullable: false })
+  @Field(() => codetraceDto, { nullable: false })
   fieldValue: any; // Permite cualquier tipo
 }
 

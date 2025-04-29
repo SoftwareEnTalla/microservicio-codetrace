@@ -31,11 +31,11 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsOptional, IsString } from "class-validator";
 import { Field, ObjectType } from "@nestjs/graphql";
-import { BaseCodetraceDto } from "./basecodetrace.dto";
+import { BasecodetraceDto } from "./basecodetrace.dto";
 
 @ObjectType()
-export class CodetraceOutPutDto extends BaseCodetraceDto {
-  // Propiedades específicas de la clase CodetraceOutPutDto en cuestión
+export class codetraceOutPutDto extends BasecodetraceDto {
+  // Propiedades específicas de la clase codetraceOutPutDto en cuestión
 
   @ApiProperty({
     type: () => String,
@@ -48,14 +48,14 @@ export class CodetraceOutPutDto extends BaseCodetraceDto {
   id?: string;
 
   // Constructor
-  constructor(partial: Partial<CodetraceOutPutDto>) {
+  constructor(partial: Partial<codetraceOutPutDto>) {
     super(partial);
     Object.assign(this, partial);
   }
 
   // Método estático para construir la instancia
-  static build(data: Partial<CodetraceOutPutDto>): CodetraceOutPutDto {
-    const instance = new CodetraceOutPutDto(data);
+  static build(data: Partial<codetraceOutPutDto>): codetraceOutPutDto {
+    const instance = new codetraceOutPutDto(data);
     instance.creationDate = new Date(); // Actualiza la fecha de creación al momento de la creación
     instance.modificationDate = new Date(); // Actualiza la fecha de modificación al momento de la creación
     return instance;

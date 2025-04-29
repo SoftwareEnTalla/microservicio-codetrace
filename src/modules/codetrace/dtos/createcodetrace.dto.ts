@@ -39,17 +39,17 @@ import {
   ValidateNested,
 } from "class-validator";
 import { InputType, Field, ObjectType } from "@nestjs/graphql";
-import { BaseCodetraceDto } from "./basecodetrace.dto";
+import { BasecodetraceDto } from "./basecodetrace.dto";
 
 @InputType()
-export class CreateCodetraceDto extends BaseCodetraceDto {
-  // Propiedades específicas de la clase CreateCodetraceDto en cuestión
+export class CreatecodetraceDto extends BasecodetraceDto {
+  // Propiedades específicas de la clase CreatecodetraceDto en cuestión
 
   @ApiProperty({
     type: () => String,
     description: "Identificador de instancia a crear",
     example:
-      "Se proporciona un identificador de CreateCodetrace a crear \(opcional\) ",
+      "Se proporciona un identificador de Createcodetrace a crear \(opcional\) ",
   })
   @IsString()
   @IsOptional()
@@ -57,14 +57,14 @@ export class CreateCodetraceDto extends BaseCodetraceDto {
   id?: string;
 
   // Constructor
-  constructor(partial: Partial<CreateCodetraceDto>) {
+  constructor(partial: Partial<CreatecodetraceDto>) {
     super(partial);
     Object.assign(this, partial);
   }
 
   // Método estático para construir la instancia
-  static build(data: Partial<CreateCodetraceDto>): CreateCodetraceDto {
-    const instance = new CreateCodetraceDto(data);
+  static build(data: Partial<CreatecodetraceDto>): CreatecodetraceDto {
+    const instance = new CreatecodetraceDto(data);
     instance.creationDate = new Date(); // Actualiza la fecha de creación al momento de la creación
     instance.modificationDate = new Date(); // Actualiza la fecha de modificación al momento de la creación
     return instance;
