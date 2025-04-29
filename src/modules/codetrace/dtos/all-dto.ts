@@ -37,7 +37,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-
+import { InputType, Field, ObjectType } from '@nestjs/graphql';
 
 
 
