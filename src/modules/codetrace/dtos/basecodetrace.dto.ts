@@ -28,7 +28,7 @@
  *
  */
 
-import { Field, InputType } from '@nestjs/graphql';
+import { InputType, Field, ObjectType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsBoolean,
@@ -36,6 +36,8 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  IsObject,
+  ValidateNested,
 } from 'class-validator';
 
 
