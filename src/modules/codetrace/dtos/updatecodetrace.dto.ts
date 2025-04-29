@@ -27,12 +27,12 @@
  *
  *
  */
- 
-import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsString } from "class-validator";
-import { InputType, Field } from "@nestjs/graphql";
 
-import { BaseCodetraceDto } from "./basecodetrace.dto";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString } from 'class-validator';
+import { InputType, Field } from '@nestjs/graphql';
+
+import { BaseCodetraceDto } from './basecodetrace.dto';
 
 @InputType()
 export class UpdateCodetraceDto extends BaseCodetraceDto {
@@ -40,8 +40,8 @@ export class UpdateCodetraceDto extends BaseCodetraceDto {
 
   @ApiProperty({
     type: () => String,
-    description: "Identificador de instancia a actualizar",
-    example: "Se proporciona un identificador de UpdateCodetrace a actualizar",
+    description: 'Identificador de instancia a actualizar',
+    example: 'Se proporciona un identificador de UpdateCodetrace a actualizar',
   })
   @IsString()
   @IsNotEmpty()
@@ -61,4 +61,5 @@ export class UpdateCodetraceDto extends BaseCodetraceDto {
     instance.modificationDate = new Date(); // Actualiza la fecha de modificación al momento de la creación
     return instance;
   }
-}
+} 
+

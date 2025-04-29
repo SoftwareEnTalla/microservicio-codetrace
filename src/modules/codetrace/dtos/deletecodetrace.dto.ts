@@ -28,7 +28,7 @@
  *
  */
  
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsNotEmpty,
   IsString,
@@ -37,9 +37,9 @@ import {
   IsOptional,
   IsObject,
   ValidateNested,
-} from "class-validator";
-import { InputType, Field } from "@nestjs/graphql";
-import { Type } from "class-transformer";
+} from 'class-validator';
+import { InputType, Field } from '@nestjs/graphql';
+import { Type } from 'class-transformer';
 
 @InputType()
 export class DeleteCodetraceDto {
@@ -47,20 +47,20 @@ export class DeleteCodetraceDto {
 
   @ApiProperty({
     type: () => String,
-    description: "Identificador de instancia a eliminar",
-    example: "Se proporciona un identificador de DeleteCodetrace a eliminar",
-    default: "",
+    description: 'Identificador de instancia a eliminar',
+    example: 'Se proporciona un identificador de DeleteCodetrace a eliminar',
+    default: '',
   })
   @IsString()
   @IsNotEmpty()
   @Field(() => String, { nullable: false })
-  id: string = "";
+  id: string = '';
 
   @ApiProperty({
     type: () => String,
-    description: "Lista de identificadores de instancias a eliminar",
+    description: 'Lista de identificadores de instancias a eliminar',
     example:
-      "Se proporciona una lista de identificadores de DeleteCodetrace a eliminar",
+      'Se proporciona una lista de identificadores de DeleteCodetrace a eliminar',
     default: [],
   })
   @IsString()

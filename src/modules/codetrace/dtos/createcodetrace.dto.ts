@@ -28,7 +28,7 @@
  *
  */
 
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsNotEmpty,
   IsString,
@@ -37,9 +37,9 @@ import {
   IsOptional,
   IsObject,
   ValidateNested,
-} from "class-validator";
-import { InputType, Field, ObjectType } from "@nestjs/graphql";
-import { BaseCodetraceDto } from "./basecodetrace.dto";
+} from 'class-validator';
+import { InputType, Field, ObjectType } from '@nestjs/graphql';
+import { BaseCodetraceDto } from './basecodetrace.dto';
 
 @InputType()
 export class CreateCodetraceDto extends BaseCodetraceDto {
@@ -47,9 +47,9 @@ export class CreateCodetraceDto extends BaseCodetraceDto {
 
   @ApiProperty({
     type: () => String,
-    description: "Identificador de instancia a crear",
+    description: 'Identificador de instancia a crear',
     example:
-      "Se proporciona un identificador de CreateCodetrace a crear \(opcional\) ",
+      'Se proporciona un identificador de CreateCodetrace a crear \(opcional\) ',
   })
   @IsString()
   @IsOptional()
@@ -70,3 +70,4 @@ export class CreateCodetraceDto extends BaseCodetraceDto {
     return instance;
   }
 }
+

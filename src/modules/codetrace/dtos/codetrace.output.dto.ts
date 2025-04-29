@@ -28,10 +28,10 @@
  *
  */
 
-import { ApiProperty } from "@nestjs/swagger";
-import { IsOptional, IsString } from "class-validator";
-import { Field, ObjectType } from "@nestjs/graphql";
-import { BaseCodetraceDto } from "./basecodetrace.dto";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsOptional, IsString } from 'class-validator';
+import { Field, ObjectType } from '@nestjs/graphql';
+import { BaseCodetraceDto } from './basecodetrace.dto';
 
 @ObjectType()
 export class CodetraceOutPutDto extends BaseCodetraceDto {
@@ -40,7 +40,7 @@ export class CodetraceOutPutDto extends BaseCodetraceDto {
   @ApiProperty({
     type: () => String,
     nullable: true,
-    description: "Identificador único de la instancia",
+    description: 'Identificador único de la instancia',
   })
   @IsString()
   @IsOptional()

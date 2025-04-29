@@ -28,35 +28,35 @@
  *
  */
 
-import { Field, InputType } from "@nestjs/graphql";
-import { ApiProperty } from "@nestjs/swagger";
+import { Field, InputType } from '@nestjs/graphql';
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsBoolean,
   IsDate,
   IsNotEmpty,
   IsOptional,
   IsString,
-} from "class-validator";
+} from 'class-validator';
 
 @InputType()
 export class BaseCodetraceDto {
   @ApiProperty({
     type: () => String,
-    description: "Nombre de instancia CreateCodetrace",
-    example: "Nombre de instancia CreateCodetrace",
+    description: 'Nombre de instancia CreateCodetrace',
+    example: 'Nombre de instancia CreateCodetrace',
     nullable: false,
   })
   @IsString()
   @IsNotEmpty()
   @Field(() => String, { nullable: false })
-  name: string = "";
+  name: string = '';
 
   // Propiedades predeterminadas de la clase CreateCodetraceDto según especificación del sistema
 
   @ApiProperty({
     type: () => Date,
-    description: "Fecha de creación de la instancia (CreateCodetrace).",
-    example: "Fecha de creación de la instancia (CreateCodetrace).",
+    description: 'Fecha de creación de la instancia (CreateCodetrace).',
+    example: 'Fecha de creación de la instancia (CreateCodetrace).',
     nullable: false,
   })
   @IsDate()
@@ -66,8 +66,8 @@ export class BaseCodetraceDto {
 
   @ApiProperty({
     type: () => Date,
-    description: "Fecha de actualización de la instancia (CreateCodetrace).",
-    example: "Fecha de actualización de la instancia (CreateCodetrace).",
+    description: 'Fecha de actualización de la instancia (CreateCodetrace).',
+    example: 'Fecha de actualización de la instancia (CreateCodetrace).',
     nullable: false,
   })
   @IsDate()
@@ -78,9 +78,9 @@ export class BaseCodetraceDto {
   @ApiProperty({
     type: () => String,
     description:
-      "Usuario que realiza la creación de la instancia (CreateCodetrace).",
+      'Usuario que realiza la creación de la instancia (CreateCodetrace).',
     example:
-      "Usuario que realiza la creación de la instancia (CreateCodetrace).",
+      'Usuario que realiza la creación de la instancia (CreateCodetrace).',
     nullable: true,
   })
   @IsString()
@@ -90,8 +90,8 @@ export class BaseCodetraceDto {
 
   @ApiProperty({
     type: () => Boolean,
-    description: "Estado de activación de la instancia (CreateCodetrace).",
-    example: "Estado de activación de la instancia (CreateCodetrace).",
+    description: 'Estado de activación de la instancia (CreateCodetrace).',
+    example: 'Estado de activación de la instancia (CreateCodetrace).',
     nullable: false,
   })
   @IsBoolean()
@@ -104,4 +104,3 @@ export class BaseCodetraceDto {
     Object.assign(this, partial);
   }
 }
-
