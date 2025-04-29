@@ -32,7 +32,7 @@ function getEnhancedContext(): LogContext {
 export function getRemoteApiLoggerUrl(): string {
   let createUrl: string = process.env.LOG_API_BASE_URL || "https://logs.api";
   createUrl += process.env.LOG_API_SCOPE
-    ? `/${process.env.LOG_API_SCOPE}/`
+    ? `/${process.env.LOG_API_SCOPE}`
     : "/codetrace";
   createUrl += process.env.LOG_API_CREATE_ACTION
     ? `/${process.env.LOG_API_CREATE_ACTION}`
