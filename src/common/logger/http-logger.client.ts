@@ -209,6 +209,7 @@ export class HttpLoggerClient implements ILoggerClient {
         url: url.href,
         options: { ...options, agent: undefined },
       });
+
       const protocol = this.getProtocol();
       const req = protocol.request(options, (res) => {
         let responseBody = "";
