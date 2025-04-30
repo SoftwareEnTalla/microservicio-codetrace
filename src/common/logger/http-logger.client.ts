@@ -93,7 +93,8 @@ export class HttpLoggerClient implements ILoggerClient {
   private validateBaseUrl(url: string): URL {
     try {
       if (!url.toLowerCase().startsWith("http")) {
-        throw new Error("URL debe usar protocolo HTTP/HTTPS");
+        //throw new Error("URL debe usar protocolo HTTP/HTTPS");
+        logger.error(`URL debe usar protocolo HTTP/HTTPS`);
       }
       return new URL(url);
     } catch (error) {
@@ -142,7 +143,10 @@ export class HttpLoggerClient implements ILoggerClient {
       const isReachable = await this.checkHostReachable();
 
       if (!isReachable) {
-        throw new Error(
+        /*throw new Error(
+          `No se puede conectar al host ${this.baseUrlParsed.hostname}`
+        );*/
+        logger.error(
           `No se puede conectar al host ${this.baseUrlParsed.hostname}`
         );
       }
@@ -169,7 +173,7 @@ export class HttpLoggerClient implements ILoggerClient {
     const requestData = this.prepareRequestData(data);
 
     try {
-      return await this.executeRequest(data, requestData);
+      return requestData ? await this.executeRequest(data, requestData) : false;
     } catch (error) {
       logger.error("Error en send()", { error });
       return false;
@@ -185,13 +189,14 @@ export class HttpLoggerClient implements ILoggerClient {
     if (!data?.body?.status) throw new Error("status en body es requerido");
   }
 
-  private prepareRequestData(data: HttpLoggerApiRest): string {
+  private prepareRequestData(data: HttpLoggerApiRest): string | null {
     try {
       return JSON.stringify(data.body);
     } catch (error) {
-      logger.error("Error al serializar body", { error });
-      throw new Error("Error al serializar los datos del log");
+      logger.error("Error al serializar los datos del log", error);
+      //throw new Error("Error al serializar los datos del log");
     }
+    return null;
   }
 
   private getProtocol(): typeof https | typeof http {

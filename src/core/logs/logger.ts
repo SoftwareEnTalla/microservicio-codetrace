@@ -1,5 +1,6 @@
 import { ServiceRegistry } from "@core/service-registry";
 import { Injectable, OnModuleInit } from "@nestjs/common";
+import { FunctionTrace } from "src/common/logger/loggers.functions";
 
 @Injectable()
 export class LoggerService implements OnModuleInit {
@@ -15,7 +16,7 @@ export class LoggerService implements OnModuleInit {
 
   constructor() {
     console.info(
-      `ℹ️[${this.environment}] Logger level: ${process.env.LOG_LEVEL}`
+      `ℹ️ [${this.environment}] Logger level: ${process.env.LOG_LEVEL}`
     );
   }
 
@@ -27,38 +28,52 @@ export class LoggerService implements OnModuleInit {
     return this.levels[level] <= this.levels[this.level];
   }
 
+  @FunctionTrace("LoggerService")
   log(message: any, ...optionalParams: any[]): void {
     if (this.shouldLog("log")) {
       console.log(`🔊 [${this.environment}] ${message}`, optionalParams);
     }
   }
 
+  @FunctionTrace("LoggerService")
   debug(message: any, ...optionalParams: any[]): void {
     if (this.shouldLog("debug")) {
       console.debug(`🔊 [${this.environment}] ${message}`, optionalParams);
     }
   }
-
+  @FunctionTrace("LoggerService")
   error(message: any, ...optionalParams: any[]): void {
     if (this.shouldLog("error")) {
-      console.error(`❌[${this.environment}] ${message}`, optionalParams);
+      console.error(`❌ [${this.environment}] ${message}`, optionalParams);
     }
   }
-
+  @FunctionTrace("LoggerService")
   warning(message: any, ...optionalParams: any[]): void {
     if (this.shouldLog("warning")) {
-      console.warn(`⚠️[${this.environment}] ${message}`, optionalParams);
+      console.warn(`⚠️ [${this.environment}] ${message}`, optionalParams);
     }
   }
-
+  @FunctionTrace("LoggerService")
   warn(message: any, ...optionalParams: any[]): void {
     this.warning(message, ...optionalParams);
   }
-
+  @FunctionTrace("LoggerService")
   info(message: any, ...optionalParams: any[]): void {
     if (this.shouldLog("info")) {
-      console.info(`ℹ️[${this.environment}] ${message}`, optionalParams);
+      console.info(`ℹ️ [${this.environment}] ${message}`, optionalParams);
     }
+  }
+  @FunctionTrace("LoggerService")
+  success(message: any, ...optionalParams: any[]): void {
+    console.info(`✅ [${this.environment}] ${message}`, optionalParams);
+  }
+  @FunctionTrace("LoggerService")
+  print(message: any, ...optionalParams: any[]): void {
+    console.info(`[${this.environment}] ${message}`, optionalParams);
+  }
+  @FunctionTrace("LoggerService")
+  notify(message: any, icon: string = "", ...optionalParams: any[]): void {
+    console.info(`${icon} [${this.environment}] ${message}`, optionalParams);
   }
 }
 export default LoggerService;

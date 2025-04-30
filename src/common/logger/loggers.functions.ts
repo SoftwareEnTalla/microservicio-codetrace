@@ -245,3 +245,130 @@ export function withLogging<T extends (...args: any[]) => any>(
     }
   } as T;
 }
+
+/**
+ * Decorador para trazar llamadas a funciones/métodos
+ * Registra el archivo y línea donde se invoca la función
+ */
+export function FunctionTrace(contextName?: string): MethodDecorator {
+  return function (
+    target: any,
+    propertyKey: string | symbol,
+    descriptor: TypedPropertyDescriptor<any>
+  ) {
+    // Guard clause para propiedades (no métodos)
+    if (!descriptor || !descriptor.value) {
+      return;
+    }
+
+    const originalMethod = descriptor.value;
+    const className = target.constructor?.name || "AnonymousClass";
+    const logger = new Logger(contextName || className);
+    const methodName = String(propertyKey);
+
+    descriptor.value = function (...args: any[]) {
+      const [filePath, lineNumber] = getCallerInfo();
+      const traceId = generateShortId();
+
+      logger.debug(
+        `[TRACE] ${className}.${methodName} called from ${filePath}:${lineNumber} (ID: ${traceId})`
+      );
+
+      try {
+        const result = originalMethod.apply(this, args);
+
+        // Manejar promesas para métodos async
+        if (result instanceof Promise) {
+          return result
+            .then((res) => {
+              logger.debug(
+                `[TRACE] ${className}.${methodName} completed (ID: ${traceId})`
+              );
+              return res;
+            })
+            .catch((error) => {
+              logger.error(
+                `[TRACE] ${className}.${methodName} failed from ${filePath}:${lineNumber} (ID: ${traceId}): ${error.message}`
+              );
+              throw error;
+            });
+        }
+
+        logger.debug(
+          `[TRACE] ${className}.${methodName} completed (ID: ${traceId})`
+        );
+        return result;
+      } catch (error: any) {
+        logger.error(
+          `[TRACE] ${className}.${methodName} failed from ${filePath}:${lineNumber} (ID: ${traceId}): ${error.message}`
+        );
+        throw error;
+      }
+    };
+
+    return descriptor;
+  };
+}
+
+// Función auxiliar para obtener información del llamador
+function getCallerInfo(): [string, number] {
+  const stack = new Error().stack?.split("\n") || [];
+
+  // El índice 3 es donde está el llamador real (ajustar según necesidad)
+  const callerLine = stack[3] || "";
+
+  const match =
+    callerLine.match(/\(?(.+):(\d+):\d+\)?/) ||
+    callerLine.match(/\s+at\s+(.+):(\d+):\d+/);
+
+  if (match) {
+    return [match[1], parseInt(match[2])];
+  }
+
+  return ["unknown", 0];
+}
+
+// Genera un ID corto para trazar la llamada
+function generateShortId(): string {
+  return Math.random().toString(36).substring(2, 8);
+}
+// Versión para funciones independientes
+function traceFunction(fn: Function, contextName?: string) {
+  const logger = new Logger(contextName || "FunctionTrace");
+  const functionName = fn.name || "anonymous";
+
+  return function (...args: any[]) {
+    const [filePath, lineNumber] = getCallerInfo();
+    const traceId = generateShortId();
+
+    logger.debug(
+      `[TRACE] ${functionName} called from ${filePath}:${lineNumber} (ID: ${traceId})`
+    );
+
+    try {
+      const result = fn(...args);
+
+      if (result instanceof Promise) {
+        return result
+          .then((res) => {
+            logger.debug(`[TRACE] ${functionName} completed (ID: ${traceId})`);
+            return res;
+          })
+          .catch((error) => {
+            logger.error(
+              `[TRACE] ${functionName} failed from ${filePath}:${lineNumber} (ID: ${traceId}): ${error.message}`
+            );
+            throw error;
+          });
+      }
+
+      logger.debug(`[TRACE] ${functionName} completed (ID: ${traceId})`);
+      return result;
+    } catch (error: any) {
+      logger.error(
+        `[TRACE] ${functionName} failed from ${filePath}:${lineNumber} (ID: ${traceId}): ${error.message}`
+      );
+      throw error;
+    }
+  };
+}
