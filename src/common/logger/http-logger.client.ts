@@ -43,10 +43,20 @@ export class HttpLoggerClient implements ILoggerClient {
     const isHttps = protocol === https;
     const isProduction = process.env.NODE_ENV === "production";
 
+    // Configuración común para todos los agentes
+    const commonAgentOptions = {
+      keepAlive: true,
+      keepAliveMsecs: 60000, // 1 minuto para mantener conexiones vivas
+      maxSockets: 50, // Máximo de sockets concurrentes
+      maxFreeSockets: 10, // Sockets libres a mantener
+      timeout: 30000, // Timeout de 30 segundos
+    };
+
     if (isProduction) {
       if (isHttps) {
         // Configuración segura para HTTPS en producción
         return new https.Agent({
+          ...commonAgentOptions,
           rejectUnauthorized: this.strictSSL,
           minVersion: "TLSv1.2",
           maxVersion: "TLSv1.3",
@@ -58,33 +68,28 @@ export class HttpLoggerClient implements ILoggerClient {
             "ECDHE-RSA-AES128-GCM-SHA256",
           ].join(":"),
           honorCipherOrder: true,
-          keepAlive: true,
-          timeout: 10000,
         });
       } else {
         // Configuración para HTTP en producción
         return new http.Agent({
-          keepAlive: true,
-          timeout: 10000,
-          // Opciones específicas para HTTP si las hay
+          ...commonAgentOptions,
+          // Opciones adicionales específicas para HTTP si las hay
         });
       }
     } else {
       if (isHttps) {
         // Configuración menos estricta para HTTPS en desarrollo
         return new https.Agent({
+          ...commonAgentOptions,
           rejectUnauthorized: false,
           secureProtocol: "TLS_method",
           ciphers: "ALL",
-          keepAlive: true,
-          timeout: 10000,
         });
       } else {
         // Configuración para HTTP en desarrollo
         return new http.Agent({
-          keepAlive: true,
-          timeout: 10000,
-          // Opciones específicas para HTTP en desarrollo si las hay
+          ...commonAgentOptions,
+          // Opciones adicionales específicas para HTTP en desarrollo si las hay
         });
       }
     }
@@ -236,7 +241,7 @@ export class HttpLoggerClient implements ILoggerClient {
       });
 
       req.on("error", (error) => {
-        logger.error("Error en solicitud HTTP", { error });
+        logger.error("Error en solicitud HTTP", { error, req });
         reject(false);
       });
 
@@ -269,7 +274,7 @@ export class HttpLoggerClient implements ILoggerClient {
         Accept: "application/json",
         "User-Agent": "HttpLoggerClient/1.0",
       },
-      timeout: 10000,
+      timeout: 30000, // Aumenta el timeout a 30 segundos
     };
   }
 

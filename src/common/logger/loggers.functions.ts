@@ -1,4 +1,3 @@
-import { Logger } from "@nestjs/common";
 import { performance } from "perf_hooks";
 import {
   HttpLoggerApiRest,
@@ -7,6 +6,7 @@ import {
   LogExecutionTimeOptions,
 } from "src/interfaces/log-context";
 import { v4 as uuidv4 } from "uuid";
+import { logger } from "@core/logs/logger";
 
 function getEnhancedContext(): LogContext {
   const error = new Error();
@@ -48,7 +48,7 @@ export function LogExecutionTime(options: LogExecutionTimeOptions) {
     const enabled = process.env.LOG_EXECUTION_TIME === "true";
 
     if (!enabled) return descriptor; // si no está habilitado
-    const logger = new Logger(target.constructor.name); // Nombre de la clase
+
     const originalMethod = descriptor.value;
     descriptor.value = async function (...args: any[]) {
       const uuid = uuidv4();
@@ -96,7 +96,7 @@ export function LogExecutionTime(options: LogExecutionTimeOptions) {
           },
         };
 
-        if (client) await handleLogDelivery(client, logData, callback, logger);
+        if (client) await handleLogDelivery(client, logData, callback);
 
         return result;
       } catch (error: any) {
@@ -130,8 +130,7 @@ export function LogExecutionTime(options: LogExecutionTimeOptions) {
           },
         };
 
-        if (client)
-          await handleLogDelivery(client, errorLogData, callback, logger);
+        if (client) await handleLogDelivery(client, errorLogData, callback);
 
         throw error;
       }
@@ -166,8 +165,7 @@ async function handleLogDelivery(
   logData: HttpLoggerApiRest,
   callback:
     | ((data: HttpLoggerApiRest, client: ILoggerClient) => Promise<boolean>)
-    | undefined,
-  logger: Logger
+    | undefined
 ) {
   try {
     const connected = await client.connect();
@@ -217,7 +215,6 @@ export function withLogging<T extends (...args: any[]) => any>(
   fn: T,
   contextName = "Global"
 ): T {
-  const logger = new Logger(contextName);
   const functionName = fn.name || "anonymous";
 
   return async function (...args: Parameters<T>) {
@@ -263,7 +260,6 @@ export function FunctionTrace(contextName?: string): MethodDecorator {
 
     const originalMethod = descriptor.value;
     const className = target.constructor?.name || "AnonymousClass";
-    const logger = new Logger(contextName || className);
     const methodName = String(propertyKey);
 
     descriptor.value = function (...args: any[]) {
@@ -334,7 +330,6 @@ function generateShortId(): string {
 }
 // Versión para funciones independientes
 function traceFunction(fn: Function, contextName?: string) {
-  const logger = new Logger(contextName || "FunctionTrace");
   const functionName = fn.name || "anonymous";
 
   return function (...args: any[]) {
@@ -342,7 +337,7 @@ function traceFunction(fn: Function, contextName?: string) {
     const traceId = generateShortId();
 
     logger.debug(
-      `[TRACE] ${functionName} called from ${filePath}:${lineNumber} (ID: ${traceId})`
+      `[TRACE] ${functionName} called from ${filePath}:${lineNumber} (ID: ${traceId}) on contextName=[${contextName}]`
     );
 
     try {

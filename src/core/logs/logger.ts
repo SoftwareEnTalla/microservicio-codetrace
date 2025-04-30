@@ -1,11 +1,14 @@
 import { ServiceRegistry } from "@core/service-registry";
 import { Injectable, OnModuleInit } from "@nestjs/common";
 import { FunctionTrace } from "src/common/logger/loggers.functions";
+import { INestApplication } from "@nestjs/common";
 
 @Injectable()
 export class LoggerService implements OnModuleInit {
   private readonly environment: string = process.env.NODE_ENV || "development";
   private readonly level: string = process.env.LOG_LEVEL || "info";
+
+  private app?: INestApplication<any>;
 
   private readonly levels: { [key: string]: number } = {
     error: 0,
@@ -18,6 +21,10 @@ export class LoggerService implements OnModuleInit {
     console.info(
       `ℹ️ [${this.environment}] Logger level: ${process.env.LOG_LEVEL}`
     );
+  }
+
+  setApp(app: INestApplication<any>) {
+    this.app = app;
   }
 
   async onModuleInit() {
