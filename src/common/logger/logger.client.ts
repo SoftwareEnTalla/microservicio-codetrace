@@ -10,9 +10,16 @@ import { logger } from "@core/logs/logger";
 @Injectable()
 export class LoggerClient {
   private clients: Map<string, ILoggerClient> = new Map();
+  public static loggerClient: LoggerClient;
 
-  constructor() {
+  private constructor() {
     dotenv.config();
+  }
+
+  public static getInstance(): LoggerClient {
+    if (this.loggerClient === null || this.loggerClient === undefined)
+      this.loggerClient = new LoggerClient();
+    return this.loggerClient;
   }
 
   /**
@@ -21,7 +28,8 @@ export class LoggerClient {
    * @param client Objeto ILoggerClient que implementa la interfaz
    */
   registerClient(name: string, client?: ILoggerClient): LoggerClient {
-    if (client == null) client = new HttpLoggerClient(getRemoteApiLoggerUrl());
+    if (client == null)
+      client = new HttpLoggerClient(getRemoteApiLoggerUrl(), false);
     if (!this.has(name)) this.clients.set(name, client);
     return this;
   }
