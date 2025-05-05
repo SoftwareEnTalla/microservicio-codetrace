@@ -45,7 +45,9 @@ export function LogExecutionTime(options: LogExecutionTimeOptions) {
     propertyKey: string,
     descriptor: PropertyDescriptor
   ) {
-    const enabled = process.env.LOG_EXECUTION_TIME === "true";
+    const enabled =
+      process.env.LOG_EXECUTION_TIME === "true" &&
+      process.env.LOG_READY === "true";
 
     if (!enabled) return descriptor; // si no está habilitado
 
@@ -253,8 +255,11 @@ export function FunctionTrace(contextName?: string): MethodDecorator {
     propertyKey: string | symbol,
     descriptor: TypedPropertyDescriptor<any>
   ) {
+    const enabled =
+      process.env.LOG_EXECUTION_TIME === "true" &&
+      process.env.LOG_READY === "true";
     // Guard clause para propiedades (no métodos)
-    if (!descriptor || !descriptor.value) {
+    if (!descriptor || !descriptor.value || !enabled) {
       return;
     }
 

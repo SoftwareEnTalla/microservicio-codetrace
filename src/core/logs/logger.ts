@@ -8,8 +8,6 @@ export class LoggerService implements OnModuleInit {
   private readonly environment: string = process.env.NODE_ENV || "development";
   private readonly level: string = process.env.LOG_LEVEL || "info";
 
-  private app?: INestApplication<any>;
-
   private readonly levels: { [key: string]: number } = {
     error: 0,
     warning: 1,
@@ -23,10 +21,6 @@ export class LoggerService implements OnModuleInit {
     );
   }
 
-  setApp(app: INestApplication<any>) {
-    this.app = app;
-  }
-
   async onModuleInit() {
     ServiceRegistry.getInstance().registry(this);
   }
@@ -35,50 +29,50 @@ export class LoggerService implements OnModuleInit {
     return this.levels[level] <= this.levels[this.level];
   }
 
-  @FunctionTrace("LoggerService")
+  //@FunctionTrace("LoggerService")
   log(message: any, ...optionalParams: any[]): void {
     if (this.shouldLog("log")) {
       console.log(`🔊 [${this.environment}] ${message}`, optionalParams);
     }
   }
 
-  @FunctionTrace("LoggerService")
+  //@FunctionTrace("LoggerService")
   debug(message: any, ...optionalParams: any[]): void {
     if (this.shouldLog("debug")) {
       console.debug(`🔊 [${this.environment}] ${message}`, optionalParams);
     }
   }
-  @FunctionTrace("LoggerService")
+  //@FunctionTrace("LoggerService")
   error(message: any, ...optionalParams: any[]): void {
     if (this.shouldLog("error")) {
       console.error(`❌ [${this.environment}] ${message}`, optionalParams);
     }
   }
-  @FunctionTrace("LoggerService")
+  //@FunctionTrace("LoggerService")
   warning(message: any, ...optionalParams: any[]): void {
     if (this.shouldLog("warning")) {
       console.warn(`⚠️ [${this.environment}] ${message}`, optionalParams);
     }
   }
-  @FunctionTrace("LoggerService")
+  //@FunctionTrace("LoggerService")
   warn(message: any, ...optionalParams: any[]): void {
     this.warning(message, ...optionalParams);
   }
-  @FunctionTrace("LoggerService")
+  //@FunctionTrace("LoggerService")
   info(message: any, ...optionalParams: any[]): void {
     if (this.shouldLog("info")) {
       console.info(`ℹ️ [${this.environment}] ${message}`, optionalParams);
     }
   }
-  @FunctionTrace("LoggerService")
+  //@FunctionTrace("LoggerService")
   success(message: any, ...optionalParams: any[]): void {
     console.info(`✅ [${this.environment}] ${message}`, optionalParams);
   }
-  @FunctionTrace("LoggerService")
+  //@FunctionTrace("LoggerService")
   print(message: any, ...optionalParams: any[]): void {
     console.info(`[${this.environment}] ${message}`, optionalParams);
   }
-  @FunctionTrace("LoggerService")
+  //@FunctionTrace("LoggerService")
   notify(message: any, icon: string = "", ...optionalParams: any[]): void {
     console.info(`${icon} [${this.environment}] ${message}`, optionalParams);
   }

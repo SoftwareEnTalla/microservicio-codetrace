@@ -48,26 +48,26 @@ loadEnv(envPath);
 watchEnvChanges(envPath);
 
 // Método seguro para inspeccionar rutas
-function printRoutes(app: INestApplication<any>) {
-  const server = app.getHttpServer();
-  const router = server._events.request._router;
+function printRoutes(app: INestApplication) {
+  const httpAdapter = app.getHttpAdapter();
+  const router = httpAdapter.getInstance()._router;
 
-  if (!router || !router.stack) {
+  if (!router || (router && !router.stack)) {
     logger.warn("No se pudo acceder al router");
     return;
   }
 
   const routes = router.stack
-    .filter((layer) => layer?.route)
+    .filter((layer) => layer.route)
     .map((layer) => ({
-      path: (layer.route as any).path as string,
-      methods: (layer.route as any).methods as Record<string, boolean>,
+      path: layer.route.path,
+      methods: layer.route.methods,
     }));
 
   logger.log("=== Rutas Registradas ===");
   routes.forEach((route) => {
     const methods = Object.keys(route.methods).filter((m) => route.methods[m]);
-    //
+    logger.log(`${route.path} -> [${methods.join(", ")}]`);
   });
 }
 
@@ -140,13 +140,13 @@ async function bootstrap() {
 
     await app.listen(port).then(() => {
       printRoutes(app);
-      logger.setApp(app);
+      process.env.LOG_READY = "true";
     });
-    logger.log(`ℹ️ Instancia de aplicación escuchando por el puerto:port `);
+    logger.info(`ℹ️ Instancia de aplicación escuchando por el puerto:port `);
     // Acceso seguro a las propiedades con type assertion
     const dbOptions = AppDataSource.options as PostgresConnectionOptions;
 
-    logger.log(
+    logger.info(
       `\n` +
         `========================================\n` +
         `🚀 Aplicación ejecutándose\n` +
