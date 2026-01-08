@@ -32,6 +32,12 @@
 |____modules
 | |____codetrace
 | | |____aggregates
+| | |____codetrace-service
+| | | |____src
+| | | | |____modules
+| | | | | |____codetrace
+| | | | | | |____shared
+| | | | | | | |____decorators
 | | |____commands
 | | | |____handlers
 | | |____config
