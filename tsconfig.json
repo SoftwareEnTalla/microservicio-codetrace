@@ -42,6 +42,6 @@
     "**/*.module.ts"      // Excluye módulos de Angular
   ],
   "angularCompilerOptions": {
-    "strictTemplates": false
+    "strictTemplates": true
   }
 }
