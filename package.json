@@ -1,7 +1,7 @@
 {
   "name": "api.entalla.backend",
   "version": "0.0.1",
-  "description": "Este proyecto es una API desarrollada con NestJS para la Empresa de Soluciones Informáticas SoftwarEnTalla. Micro servicio de ${name}",
+  "description": "Este proyecto es una API desarrollada con NestJS para la Empresa de Soluciones Informáticas SoftwarEnTalla. Micro servicio de \${name}",
   "author": "softwarentalla@gmail.com",
   "private": true,
   "license": "Proprietary",
