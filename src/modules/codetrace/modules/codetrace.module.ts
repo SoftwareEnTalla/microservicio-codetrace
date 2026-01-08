@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SoftwarEnTalla
+ * Copyright (c) 2026 SoftwarEnTalla
  * Licencia: MIT
  * Contacto: softwarentalla@gmail.com
  * CEOs: 
@@ -78,6 +78,18 @@ import { KafkaService } from "../shared/messaging/kafka.service";
     CodetraceLoggingInterceptor,
     //Publishers
     KafkaEventPublisher,
+    //Configurations
+    {
+      provide: 'EVENT_SOURCING_CONFIG',
+      useFactory: () => ({
+        enabled: process.env.EVENT_SOURCING_ENABLED === 'true',
+        kafkaEnabled: process.env.KAFKA_ENABLED === 'true',
+        eventStoreEnabled: process.env.EVENT_STORE_ENABLED === 'true',
+        publishEvents: true,
+        useProjections: true,
+        topics: ['codetrace-events']
+      })
+    },
     //Others dependencies
     UnhandledExceptionBus, // Manejador global de excepciones
     CommandBus, // Bus de comandos

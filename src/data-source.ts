@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SoftwarEnTalla
+ * Copyright (c) 2026 SoftwarEnTalla
  * Licencia: MIT
  * Contacto: softwarentalla@gmail.com
  * CEOs: 
@@ -88,7 +88,7 @@ export async function createDatabaseIfNotExists(
     const dbExists = await client.query(checkDbQuery, [dbName]);
 
     if (dbExists.rows.length === 0) {
-      logger.log(`🛠 Creando base de datos ${dbName}...`);
+      logger.notify(`Creando base de datos ${dbName}...`,'🛠');
 
         const createDbQuery = `
             CREATE DATABASE "${dbName}"
@@ -103,16 +103,16 @@ export async function createDatabaseIfNotExists(
           // Crear la BD con el owner especificado
           await client.query(createDbQuery);
 
-      logger.log(`✅ Base de datos ${dbName} creada con éxito`);
+      logger.success(`Base de datos ${dbName} creada con éxito`);
 
       // Otorgar todos los privilegios al owner
       await client.query(`GRANT ALL PRIVILEGES ON DATABASE "${dbName}" TO "${owner}";`);
     } else {
-      logger.log(`ℹ️ La base de datos ${dbName} ya existe`);
+      logger.info(`ℹLa base de datos ${dbName} ya existe`);
     }
   } catch (error) {
     logger.error(
-      `❌ Error al verificar/crear la base de datos ${dbName}:`,
+      `Error al verificar/crear la base de datos ${dbName}:`,
       error
     );
     throw error;

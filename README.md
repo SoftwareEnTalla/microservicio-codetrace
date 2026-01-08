@@ -1,6 +1,6 @@
 # CODETRACE Microservice
 
-**Creation Date**: 2025-04-30
+**Creation Date**: 2026-01-08
 
 **Author**: Ing. Persy Morell Guerra e Ing. Dailyn García Dominguez (SoftwarEnTalla CEO)
 
@@ -53,6 +53,11 @@
 | | | |____adapters
 | | | |____event-store
 | | | |____messaging
+| | |____src
+| | | |____modules
+| | | | |____codetrace
+| | | | | |____shared
+| | | | | | |____decorators
 | | |____types
 |____utils
 ```

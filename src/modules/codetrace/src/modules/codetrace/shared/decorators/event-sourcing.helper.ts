@@ -28,27 +28,29 @@
  *
  */
 
-// src/graphql-schema.debug.ts
-import { printSchema } from "graphql";
-import { writeFileSync } from "fs";
-import { NestFactory } from "@nestjs/core";
-import { GraphQLSchemaHost } from "@nestjs/graphql";
-import { CodetraceAppModule } from "./app.module";
-import { logger } from '@core/logs/logger';
+import { EventSourcingConfigOptions } from './event-sourcing.decorator';
 
-async function debugSchema() {
-  const app = await NestFactory.create(CodetraceAppModule);
-  await app.init();
+export class EventSourcingHelper {
+  static isEventSourcingEnabled(config: EventSourcingConfigOptions): boolean {
+    return config?.enabled === true;
+  }
 
-  const { schema } = app.get(GraphQLSchemaHost);
-  writeFileSync("schema.gql", printSchema(schema));
+  static shouldPublishEvents(config: EventSourcingConfigOptions): boolean {
+    return this.isEventSourcingEnabled(config) && config.publishEvents !== false;
+  }
 
-  await app.close();
+  static shouldUseProjections(config: EventSourcingConfigOptions): boolean {
+    return this.isEventSourcingEnabled(config) && config.useProjections !== false;
+  }
+
+  static getDefaultConfig(): EventSourcingConfigOptions {
+    return {
+      enabled: process.env.EVENT_SOURCING_ENABLED === 'true',
+      kafkaEnabled: process.env.KAFKA_ENABLED === 'true',
+      eventStoreEnabled: process.env.EVENT_STORE_ENABLED === 'true',
+      publishEvents: true,
+      useProjections: true,
+      topics: []
+    };
+  }
 }
-
-debugSchema().catch((err) => {
-  logger.error("Failed to generate schema:", err);
-  process.exit(1);
-});
-
-

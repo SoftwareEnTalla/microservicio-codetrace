@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2025 SoftwarEnTalla
+ * Copyright (c) 2026 SoftwarEnTalla
  * Licencia: MIT
  * Contacto: softwarentalla@gmail.com
- * CEOs:
+ * CEOs: 
  *       Persy Morell Guerra      Email: pmorellpersi@gmail.com  Phone : +53-5336-4654 Linkedin: https://www.linkedin.com/in/persy-morell-guerra-288943357/
  *       Dailyn García Domínguez  Email: dailyngd@gmail.com      Phone : +53-5432-0312 Linkedin: https://www.linkedin.com/in/dailyn-dominguez-3150799b/
  *
@@ -10,8 +10,8 @@
  * COO: Dailyn García Domínguez and Persy Morell Guerra
  * CFO: Dailyn García Domínguez and Persy Morell Guerra
  *
- * Repositories:
- *               https://github.com/SoftwareEnTalla
+ * Repositories: 
+ *               https://github.com/SoftwareEnTalla 
  *
  *               https://github.com/apokaliptolesamale?tab=repositories
  *
@@ -23,25 +23,18 @@
  *              https://www.facebook.com/profile.php?id=61572625716568
  *
  *              https://www.instagram.com/softwarentalla/
- *
+ *              
  *
  *
  */
 
-import {
-  Injectable,
-  Logger,
-  NotFoundException,
-  OnModuleInit,
-} from "@nestjs/common";
+
+import { Injectable, Logger, NotFoundException, OnModuleInit } from "@nestjs/common";
 import { FindManyOptions } from "typeorm";
 import { Codetrace } from "../entities/codetrace.entity";
 import { BaseEntity } from "../entities/base.entity";
 import { CodetraceQueryRepository } from "../repositories/codetracequery.repository";
-import {
-  CodetraceResponse,
-  CodetracesResponse,
-} from "../types/codetrace.types";
+import { CodetraceResponse, CodetracesResponse } from "../types/codetrace.types";
 import { Helper } from "src/common/helpers/helpers";
 import { PaginationArgs } from "src/common/dto/args/pagination.args";
 //import { Cacheable } from "../decorators/cache.decorator";
@@ -50,17 +43,18 @@ import { PaginationArgs } from "src/common/dto/args/pagination.args";
 import { LogExecutionTime } from "src/common/logger/loggers.functions";
 import { LoggerClient } from "src/common/logger/logger.client";
 import { ModuleRef } from "@nestjs/core";
-import { logger } from "@core/logs/logger";
+import { logger } from '@core/logs/logger';
+
+
 
 @Injectable()
-export class CodetraceQueryService implements OnModuleInit {
+export class CodetraceQueryService implements OnModuleInit{
   // Private properties
   readonly #logger = new Logger(CodetraceQueryService.name);
   private readonly loggerClient = LoggerClient.getInstance();
 
-  constructor(
-    private readonly repository: CodetraceQueryRepository,
-    private moduleRef: ModuleRef
+  constructor(private readonly repository: CodetraceQueryRepository,
+  private moduleRef: ModuleRef
   ) {
     this.validate();
   }
@@ -69,18 +63,13 @@ export class CodetraceQueryService implements OnModuleInit {
     layer: "service",
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try {
-        logger.info("Información del cliente y datos a enviar:", [
-          logData,
-          client,
-        ]);
+      try{
+        logger.info('Información del cliente y datos a enviar:',[logData,client]);
         return await client.send(logData);
-      } catch (error) {
-        logger.info(
-          "Ha ocurrido un error al enviar la traza de log: ",
-          logData
-        );
-        logger.info("ERROR-LOG: ", error);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -92,22 +81,18 @@ export class CodetraceQueryService implements OnModuleInit {
     //Se ejecuta en la inicialización del módulo
   }
 
+
   @LogExecutionTime({
     layer: "service",
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try {
-        logger.info("Información del cliente y datos a enviar:", [
-          logData,
-          client,
-        ]);
+      try{
+        logger.info('Información del cliente y datos a enviar:',[logData,client]);
         return await client.send(logData);
-      } catch (error) {
-        logger.info(
-          "Ha ocurrido un error al enviar la traza de log: ",
-          logData
-        );
-        logger.info("ERROR-LOG: ", error);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -134,18 +119,13 @@ export class CodetraceQueryService implements OnModuleInit {
     layer: "service",
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try {
-        logger.info("Información del cliente y datos a enviar:", [
-          logData,
-          client,
-        ]);
+      try{
+        logger.info('Información del cliente y datos a enviar:',[logData,client]);
         return await client.send(logData);
-      } catch (error) {
-        logger.info(
-          "Ha ocurrido un error al enviar la traza de log: ",
-          logData
-        );
-        logger.info("ERROR-LOG: ", error);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -184,18 +164,13 @@ export class CodetraceQueryService implements OnModuleInit {
     layer: "service",
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try {
-        logger.info("Información del cliente y datos a enviar:", [
-          logData,
-          client,
-        ]);
+      try{
+        logger.info('Información del cliente y datos a enviar:',[logData,client]);
         return await client.send(logData);
-      } catch (error) {
-        logger.info(
-          "Ha ocurrido un error al enviar la traza de log: ",
-          logData
-        );
-        logger.info("ERROR-LOG: ", error);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -228,22 +203,19 @@ export class CodetraceQueryService implements OnModuleInit {
     }
   }
 
+
+
   @LogExecutionTime({
     layer: "service",
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try {
-        logger.info("Información del cliente y datos a enviar:", [
-          logData,
-          client,
-        ]);
+      try{
+        logger.info('Información del cliente y datos a enviar:',[logData,client]);
         return await client.send(logData);
-      } catch (error) {
-        logger.info(
-          "Ha ocurrido un error al enviar la traza de log: ",
-          logData
-        );
-        logger.info("ERROR-LOG: ", error);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -289,23 +261,19 @@ export class CodetraceQueryService implements OnModuleInit {
       return Helper.throwCachedError(error);
     }
   }
+ 
 
   @LogExecutionTime({
     layer: "service",
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try {
-        logger.info("Información del cliente y datos a enviar:", [
-          logData,
-          client,
-        ]);
+      try{
+        logger.info('Información del cliente y datos a enviar:',[logData,client]);
         return await client.send(logData);
-      } catch (error) {
-        logger.info(
-          "Ha ocurrido un error al enviar la traza de log: ",
-          logData
-        );
-        logger.info("ERROR-LOG: ", error);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -341,23 +309,20 @@ export class CodetraceQueryService implements OnModuleInit {
       return Helper.throwCachedError(error);
     }
   }
+  
+
 
   @LogExecutionTime({
     layer: "service",
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try {
-        logger.info("Información del cliente y datos a enviar:", [
-          logData,
-          client,
-        ]);
+      try{
+        logger.info('Información del cliente y datos a enviar:',[logData,client]);
         return await client.send(logData);
-      } catch (error) {
-        logger.info(
-          "Ha ocurrido un error al enviar la traza de log: ",
-          logData
-        );
-        logger.info("ERROR-LOG: ", error);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -369,22 +334,19 @@ export class CodetraceQueryService implements OnModuleInit {
     return this.repository.count();
   }
 
+ 
+
   @LogExecutionTime({
     layer: "service",
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try {
-        logger.info("Información del cliente y datos a enviar:", [
-          logData,
-          client,
-        ]);
+      try{
+        logger.info('Información del cliente y datos a enviar:',[logData,client]);
         return await client.send(logData);
-      } catch (error) {
-        logger.info(
-          "Ha ocurrido un error al enviar la traza de log: ",
-          logData
-        );
-        logger.info("ERROR-LOG: ", error);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -426,22 +388,20 @@ export class CodetraceQueryService implements OnModuleInit {
     }
   }
 
+
+
+
   @LogExecutionTime({
     layer: "service",
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try {
-        logger.info("Información del cliente y datos a enviar:", [
-          logData,
-          client,
-        ]);
+      try{
+        logger.info('Información del cliente y datos a enviar:',[logData,client]);
         return await client.send(logData);
-      } catch (error) {
-        logger.info(
-          "Ha ocurrido un error al enviar la traza de log: ",
-          logData
-        );
-        logger.info("ERROR-LOG: ", error);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -449,9 +409,7 @@ export class CodetraceQueryService implements OnModuleInit {
       .registerClient(CodetraceQueryService.name)
       .get(CodetraceQueryService.name),
   })
-  async findOne(
-    where?: Record<string, any>
-  ): Promise<CodetraceResponse<Codetrace>> {
+  async findOne(where?: Record<string, any>): Promise<CodetraceResponse<Codetrace>> {
     try {
       const entity = await this.repository.findOne({
         where: where,
@@ -474,22 +432,18 @@ export class CodetraceQueryService implements OnModuleInit {
     }
   }
 
+
   @LogExecutionTime({
     layer: "service",
     callback: async (logData, client) => {
       // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try {
-        logger.info("Información del cliente y datos a enviar:", [
-          logData,
-          client,
-        ]);
+      try{
+        logger.info('Información del cliente y datos a enviar:',[logData,client]);
         return await client.send(logData);
-      } catch (error) {
-        logger.info(
-          "Ha ocurrido un error al enviar la traza de log: ",
-          logData
-        );
-        logger.info("ERROR-LOG: ", error);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
         throw error;
       }
     },
@@ -522,3 +476,6 @@ export class CodetraceQueryService implements OnModuleInit {
     }
   }
 }
+
+
+

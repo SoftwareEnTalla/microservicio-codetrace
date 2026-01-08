@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2025 SoftwarEnTalla
+ * Copyright (c) 2026 SoftwarEnTalla
  * Licencia: MIT
  * Contacto: softwarentalla@gmail.com
- * CEOs:
+ * CEOs: 
  *       Persy Morell Guerra      Email: pmorellpersi@gmail.com  Phone : +53-5336-4654 Linkedin: https://www.linkedin.com/in/persy-morell-guerra-288943357/
  *       Dailyn García Domínguez  Email: dailyngd@gmail.com      Phone : +53-5432-0312 Linkedin: https://www.linkedin.com/in/dailyn-dominguez-3150799b/
  *
@@ -10,8 +10,8 @@
  * COO: Dailyn García Domínguez and Persy Morell Guerra
  * CFO: Dailyn García Domínguez and Persy Morell Guerra
  *
- * Repositories:
- *               https://github.com/SoftwareEnTalla
+ * Repositories: 
+ *               https://github.com/SoftwareEnTalla 
  *
  *               https://github.com/apokaliptolesamale?tab=repositories
  *
@@ -23,44 +23,45 @@
  *              https://www.facebook.com/profile.php?id=61572625716568
  *
  *              https://www.instagram.com/softwarentalla/
- *
+ *              
  *
  *
  */
 
-import { InputType, Field, ObjectType } from "@nestjs/graphql";
-import { ApiProperty } from "@nestjs/swagger";
+import { InputType, Field, ObjectType } from '@nestjs/graphql';
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsBoolean,
   IsDate,
   IsNotEmpty,
   IsOptional,
   IsString,
-  IsNumber,
-  IsEnum,
   IsObject,
   ValidateNested,
-} from "class-validator";
+} from 'class-validator';
+
+
+
 
 @InputType()
 export class BaseCodetraceDto {
   @ApiProperty({
     type: () => String,
-    description: "Nombre de instancia CreateCodetrace",
-    example: "Nombre de instancia CreateCodetrace",
+    description: 'Nombre de instancia CreateCodetrace',
+    example: 'Nombre de instancia CreateCodetrace',
     nullable: false,
   })
   @IsString()
   @IsNotEmpty()
   @Field(() => String, { nullable: false })
-  name: string = "";
+  name: string = '';
 
   // Propiedades predeterminadas de la clase CreateCodetraceDto según especificación del sistema
 
   @ApiProperty({
     type: () => Date,
-    description: "Fecha de creación de la instancia (CreateCodetrace).",
-    example: "Fecha de creación de la instancia (CreateCodetrace).",
+    description: 'Fecha de creación de la instancia (CreateCodetrace).',
+    example: 'Fecha de creación de la instancia (CreateCodetrace).',
     nullable: false,
   })
   @IsDate()
@@ -70,8 +71,8 @@ export class BaseCodetraceDto {
 
   @ApiProperty({
     type: () => Date,
-    description: "Fecha de actualización de la instancia (CreateCodetrace).",
-    example: "Fecha de actualización de la instancia (CreateCodetrace).",
+    description: 'Fecha de actualización de la instancia (CreateCodetrace).',
+    example: 'Fecha de actualización de la instancia (CreateCodetrace).',
     nullable: false,
   })
   @IsDate()
@@ -82,9 +83,9 @@ export class BaseCodetraceDto {
   @ApiProperty({
     type: () => String,
     description:
-      "Usuario que realiza la creación de la instancia (CreateCodetrace).",
+      'Usuario que realiza la creación de la instancia (CreateCodetrace).',
     example:
-      "Usuario que realiza la creación de la instancia (CreateCodetrace).",
+      'Usuario que realiza la creación de la instancia (CreateCodetrace).',
     nullable: true,
   })
   @IsString()
@@ -94,8 +95,8 @@ export class BaseCodetraceDto {
 
   @ApiProperty({
     type: () => Boolean,
-    description: "Estado de activación de la instancia (CreateCodetrace).",
-    example: "Estado de activación de la instancia (CreateCodetrace).",
+    description: 'Estado de activación de la instancia (CreateCodetrace).',
+    example: 'Estado de activación de la instancia (CreateCodetrace).',
     nullable: false,
   })
   @IsBoolean()
@@ -109,6 +110,9 @@ export class BaseCodetraceDto {
   }
 }
 
+
+
+
 @InputType()
 export class CodetraceDto extends BaseCodetraceDto {
   // Propiedades específicas de la clase CodetraceDto en cuestión
@@ -116,105 +120,12 @@ export class CodetraceDto extends BaseCodetraceDto {
   @ApiProperty({
     type: () => String,
     nullable: true,
-    description: "Identificador único de la instancia",
+    description: 'Identificador único de la instancia',
   })
   @IsString()
   @IsOptional()
   @Field(() => String, { nullable: true })
   id?: string;
-
-  @ApiProperty({
-    type: () => String,
-    description: "UUID de la instancia",
-    nullable: true,
-  })
-  @IsString()
-  @IsOptional()
-  @Field(() => String, { nullable: true })
-  uuid?: string;
-
-  @ApiProperty({
-    type: () => String,
-    description: "Referencia UUID de la instancia",
-    nullable: true,
-  })
-  @IsString()
-  @IsOptional()
-  @Field(() => String, { nullable: true })
-  refuuid?: string;
-
-  @ApiProperty({
-    type: () => String,
-    description: "Nombre de la clase relacionada",
-    nullable: true,
-  })
-  @IsString()
-  @IsOptional()
-  @Field(() => String, { nullable: true })
-  className?: string;
-
-  @ApiProperty({
-    type: () => String,
-    description: "Nombre de la función relacionada",
-  })
-  @IsString()
-  @Field(() => String)
-  functionName?: string;
-
-  @ApiProperty({
-    type: () => String,
-    description: "Hora de inicio de la traza",
-  })
-  @IsString()
-  @Field(() => String)
-  startTime?: string;
-
-  @ApiProperty({
-    type: () => String,
-    description: "Hora de finalización de la traza",
-    nullable: true,
-  })
-  @IsString()
-  @IsOptional()
-  @Field(() => String, { nullable: true })
-  endTime?: string;
-
-  @ApiProperty({
-    type: () => Number,
-    description: "Duración de la traza",
-    nullable: true,
-  })
-  @IsNumber()
-  @IsOptional()
-  @Field(() => Number, { nullable: true })
-  duration?: number;
-
-  @ApiProperty({
-    type: () => String,
-    description: "Unidad de duración",
-    nullable: true,
-  })
-  @IsString()
-  @IsOptional()
-  @Field(() => String, { nullable: true })
-  durationUnit?: string;
-
-  @ApiProperty({
-    enum: ["success", "error"],
-    description: "Estado de la traza",
-  })
-  @IsEnum(["success", "error"])
-  @Field(() => String)
-  status: "success" | "error" = "success";
-
-  @ApiProperty({
-    type: () => String,
-    description: "Información del error, si aplica",
-    nullable: true,
-  })
-  @IsOptional()
-  @Field(() => String, { nullable: true })
-  error?: string;
 
   // Constructor
   constructor(partial: Partial<CodetraceDto>) {
@@ -229,26 +140,32 @@ export class CodetraceDto extends BaseCodetraceDto {
     instance.modificationDate = new Date(); // Actualiza la fecha de modificación al momento de la creación
     return instance;
   }
-}
+} 
+
+
+
 
 @InputType()
 export class CodetraceValueInput {
   @ApiProperty({
     type: () => String,
     nullable: false,
-    description: "Campo de filtro",
+    description: 'Campo de filtro',
   })
   @Field({ nullable: false })
-  fieldName: string = "id";
+  fieldName: string = 'id';
 
   @ApiProperty({
     type: () => CodetraceDto,
     nullable: false,
-    description: "Valor del filtro",
+    description: 'Valor del filtro',
   })
   @Field(() => CodetraceDto, { nullable: false })
   fieldValue: any; // Permite cualquier tipo
-}
+} 
+
+
+
 
 @ObjectType()
 export class CodetraceOutPutDto extends BaseCodetraceDto {
@@ -257,105 +174,12 @@ export class CodetraceOutPutDto extends BaseCodetraceDto {
   @ApiProperty({
     type: () => String,
     nullable: true,
-    description: "Identificador único de la instancia",
+    description: 'Identificador único de la instancia',
   })
   @IsString()
   @IsOptional()
   @Field(() => String, { nullable: true })
   id?: string;
-
-  @ApiProperty({
-    type: () => String,
-    description: "UUID de la instancia",
-    nullable: true,
-  })
-  @IsString()
-  @IsOptional()
-  @Field(() => String, { nullable: true })
-  uuid?: string;
-
-  @ApiProperty({
-    type: () => String,
-    description: "Referencia UUID de la instancia",
-    nullable: true,
-  })
-  @IsString()
-  @IsOptional()
-  @Field(() => String, { nullable: true })
-  refuuid?: string;
-
-  @ApiProperty({
-    type: () => String,
-    description: "Nombre de la clase relacionada",
-    nullable: true,
-  })
-  @IsString()
-  @IsOptional()
-  @Field(() => String, { nullable: true })
-  className?: string;
-
-  @ApiProperty({
-    type: () => String,
-    description: "Nombre de la función relacionada",
-  })
-  @IsString()
-  @Field(() => String)
-  functionName?: string;
-
-  @ApiProperty({
-    type: () => String,
-    description: "Hora de inicio de la traza",
-  })
-  @IsString()
-  @Field(() => String)
-  startTime?: string;
-
-  @ApiProperty({
-    type: () => String,
-    description: "Hora de finalización de la traza",
-    nullable: true,
-  })
-  @IsString()
-  @IsOptional()
-  @Field(() => String, { nullable: true })
-  endTime?: string;
-
-  @ApiProperty({
-    type: () => Number,
-    description: "Duración de la traza",
-    nullable: true,
-  })
-  @IsNumber()
-  @IsOptional()
-  @Field(() => Number, { nullable: true })
-  duration?: number;
-
-  @ApiProperty({
-    type: () => String,
-    description: "Unidad de duración",
-    nullable: true,
-  })
-  @IsString()
-  @IsOptional()
-  @Field(() => String, { nullable: true })
-  durationUnit?: string;
-
-  @ApiProperty({
-    enum: ["success", "error"],
-    description: "Estado de la traza",
-  })
-  @IsEnum(["success", "error"])
-  @Field(() => String)
-  status: "success" | "error" = "success";
-
-  @ApiProperty({
-    type: () => String,
-    description: "Información del error, si aplica",
-    nullable: true,
-  })
-  @IsOptional()
-  @Field(() => String, { nullable: true })
-  error?: string;
 
   // Constructor
   constructor(partial: Partial<CodetraceOutPutDto>) {
@@ -372,113 +196,22 @@ export class CodetraceOutPutDto extends BaseCodetraceDto {
   }
 }
 
+
+
 @InputType()
 export class CreateCodetraceDto extends BaseCodetraceDto {
   // Propiedades específicas de la clase CreateCodetraceDto en cuestión
 
   @ApiProperty({
     type: () => String,
-    description: "Identificador de instancia a crear",
+    description: 'Identificador de instancia a crear',
     example:
-      "Se proporciona un identificador de CreateCodetrace a crear \(opcional\) ",
+      'Se proporciona un identificador de CreateCodetrace a crear \(opcional\) ',
   })
   @IsString()
   @IsOptional()
   @Field(() => String, { nullable: true })
   id?: string;
-
-  @ApiProperty({
-    type: () => String,
-    description: "UUID de la instancia",
-    nullable: true,
-  })
-  @IsString()
-  @IsOptional()
-  @Field(() => String, { nullable: true })
-  uuid?: string;
-
-  @ApiProperty({
-    type: () => String,
-    description: "Referencia UUID de la instancia",
-    nullable: true,
-  })
-  @IsString()
-  @IsOptional()
-  @Field(() => String, { nullable: true })
-  refuuid?: string;
-
-  @ApiProperty({
-    type: () => String,
-    description: "Nombre de la clase relacionada",
-    nullable: true,
-  })
-  @IsString()
-  @IsOptional()
-  @Field(() => String, { nullable: true })
-  className?: string;
-
-  @ApiProperty({
-    type: () => String,
-    description: "Nombre de la función relacionada",
-  })
-  @IsString()
-  @Field(() => String)
-  functionName?: string;
-
-  @ApiProperty({
-    type: () => String,
-    description: "Hora de inicio de la traza",
-  })
-  @IsString()
-  @Field(() => String)
-  startTime?: string;
-
-  @ApiProperty({
-    type: () => String,
-    description: "Hora de finalización de la traza",
-    nullable: true,
-  })
-  @IsString()
-  @IsOptional()
-  @Field(() => String, { nullable: true })
-  endTime?: string;
-
-  @ApiProperty({
-    type: () => Number,
-    description: "Duración de la traza",
-    nullable: true,
-  })
-  @IsNumber()
-  @IsOptional()
-  @Field(() => Number, { nullable: true })
-  duration?: number;
-
-  @ApiProperty({
-    type: () => String,
-    description: "Unidad de duración",
-    nullable: true,
-  })
-  @IsString()
-  @IsOptional()
-  @Field(() => String, { nullable: true })
-  durationUnit?: string;
-
-  @ApiProperty({
-    enum: ["success", "error"],
-    description: "Estado de la traza",
-  })
-  @IsEnum(["success", "error"])
-  @Field(() => String)
-  status: "success" | "error" = "success";
-
-  @ApiProperty({
-    type: () => String,
-    description: "Información del error, si aplica",
-    nullable: true,
-  })
-  @IsOptional()
-  @Field(() => String, { nullable: true })
-  error?: string;
 
   // Constructor
   constructor(partial: Partial<CreateCodetraceDto>) {
@@ -495,11 +228,13 @@ export class CreateCodetraceDto extends BaseCodetraceDto {
   }
 }
 
+
+
 @InputType()
 export class CreateOrUpdateCodetraceDto {
   @ApiProperty({
     type: () => String,
-    description: "Identificador",
+    description: 'Identificador',
     nullable: true,
   })
   @IsString()
@@ -508,16 +243,8 @@ export class CreateOrUpdateCodetraceDto {
   id?: string;
 
   @ApiProperty({
-    enum: ["success", "error"],
-    description: "Estado de la traza",
-  })
-  @IsEnum(["success", "error"])
-  @Field(() => String)
-  status: "success" | "error" = "success";
-
-  @ApiProperty({
     type: () => CreateCodetraceDto,
-    description: "Instancia CreateCodetrace o UpdateCodetrace",
+    description: 'Instancia CreateCodetrace o UpdateCodetrace',
     nullable: true,
   })
   @IsOptional()
@@ -527,26 +254,28 @@ export class CreateOrUpdateCodetraceDto {
   input?: CreateCodetraceDto | UpdateCodetraceDto; // Asegúrate de que esto esté correcto
 }
 
+
+
 @InputType()
 export class DeleteCodetraceDto {
   // Propiedades específicas de la clase DeleteCodetraceDto en cuestión
 
   @ApiProperty({
     type: () => String,
-    description: "Identificador de instancia a eliminar",
-    example: "Se proporciona un identificador de DeleteCodetrace a eliminar",
-    default: "",
+    description: 'Identificador de instancia a eliminar',
+    example: 'Se proporciona un identificador de DeleteCodetrace a eliminar',
+    default: '',
   })
   @IsString()
   @IsNotEmpty()
   @Field(() => String, { nullable: false })
-  id: string = "";
+  id: string = '';
 
   @ApiProperty({
     type: () => String,
-    description: "Lista de identificadores de instancias a eliminar",
+    description: 'Lista de identificadores de instancias a eliminar',
     example:
-      "Se proporciona una lista de identificadores de DeleteCodetrace a eliminar",
+      'Se proporciona una lista de identificadores de DeleteCodetrace a eliminar',
     default: [],
   })
   @IsString()
@@ -555,27 +284,21 @@ export class DeleteCodetraceDto {
   ids?: string[];
 }
 
+
+
 @InputType()
 export class UpdateCodetraceDto extends BaseCodetraceDto {
   // Propiedades específicas de la clase UpdateCodetraceDto en cuestión
 
   @ApiProperty({
     type: () => String,
-    description: "Identificador de instancia a actualizar",
-    example: "Se proporciona un identificador de UpdateCodetrace a actualizar",
+    description: 'Identificador de instancia a actualizar',
+    example: 'Se proporciona un identificador de UpdateCodetrace a actualizar',
   })
   @IsString()
   @IsNotEmpty()
   @Field(() => String, { nullable: false })
   id!: string;
-
-  @ApiProperty({
-    enum: ["success", "error"],
-    description: "Estado de la traza",
-  })
-  @IsEnum(["success", "error"])
-  @Field(() => String)
-  status: "success" | "error" = "success";
 
   // Constructor
   constructor(partial: Partial<UpdateCodetraceDto>) {
@@ -590,4 +313,5 @@ export class UpdateCodetraceDto extends BaseCodetraceDto {
     instance.modificationDate = new Date(); // Actualiza la fecha de modificación al momento de la creación
     return instance;
   }
-}
+} 
+
