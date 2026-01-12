@@ -37,6 +37,7 @@
 | | |____config
 | | |____controllers
 | | |____decorators
+| | | |____decorators
 | | |____dtos
 | | |____entities
 | | |____events
@@ -54,11 +55,6 @@
 | | | |____decorators
 | | | |____event-store
 | | | |____messaging
-| | |____src
-| | | |____modules
-| | | | |____codetrace
-| | | | | |____shared
-| | | | | | |____decorators
 | | |____types
 |____utils
 ```

@@ -27,28 +27,8 @@
  *
  *
  */
-
-
-import { AggregateRoot } from '@nestjs/cqrs';
-import { BaseEntity } from '../entities/base.entity';
-
-export class CodetraceAggregate extends AggregateRoot {
-  private state!: BaseEntity;
-
-  constructor() {
-    super();
-  }
-
-  // Métodos para modificar el estado
-  public create(data: any): void {
-    // Lógica de creación
-  }
-
-  public update(data: any): void {
-    // Lógica de actualización
-  }
-
-  public delete(): void {
-    // Lógica de eliminación
-  }
-}
+export * from "./codetracedeleted.event"; 
+export * from "./codetracecreated.event";
+export * from "./codetraceupdated.event";
+export * from "./base.event";
+export * from "./codetrace-failed.event";

@@ -28,27 +28,29 @@
  *
  */
 
+import { EventSourcingConfigOptions } from './event-sourcing.decorator';
 
-import { AggregateRoot } from '@nestjs/cqrs';
-import { BaseEntity } from '../entities/base.entity';
-
-export class CodetraceAggregate extends AggregateRoot {
-  private state!: BaseEntity;
-
-  constructor() {
-    super();
+export class EventSourcingHelper {
+  static isEventSourcingEnabled(config: EventSourcingConfigOptions): boolean {
+    return config?.enabled === true;
   }
 
-  // Métodos para modificar el estado
-  public create(data: any): void {
-    // Lógica de creación
+  static shouldPublishEvents(config: EventSourcingConfigOptions): boolean {
+    return this.isEventSourcingEnabled(config) && config.publishEvents !== false;
   }
 
-  public update(data: any): void {
-    // Lógica de actualización
+  static shouldUseProjections(config: EventSourcingConfigOptions): boolean {
+    return this.isEventSourcingEnabled(config) && config.useProjections !== false;
   }
 
-  public delete(): void {
-    // Lógica de eliminación
+  static getDefaultConfig(): EventSourcingConfigOptions {
+    return {
+      enabled: process.env.EVENT_SOURCING_ENABLED === 'true',
+      kafkaEnabled: process.env.KAFKA_ENABLED === 'true',
+      eventStoreEnabled: process.env.EVENT_STORE_ENABLED === 'true',
+      publishEvents: true,
+      useProjections: true,
+      topics: []
+    };
   }
 }
