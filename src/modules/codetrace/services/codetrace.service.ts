@@ -29,27 +29,27 @@
  */
 
 import { Injectable } from "@nestjs/common";
-import { codetrace } from "../entities/codetrace.entity";
-import { codetraceRepository } from "../repositories/codetrace.repository";
+import { Codetrace } from "../entities/codetrace.entity";
+import { CodetraceRepository } from "../repositories/codetrace.repository";
 
 @Injectable()
-export class codetraceService {
-  constructor(private readonly repository: codetraceRepository) {}
+export class CodetraceService {
+  constructor(private readonly repository: CodetraceRepository) {}
 
   // Métodos delegados
-  async findAll(options?: any): Promise<codetrace[]> {
+  async findAll(options?: any): Promise<Codetrace[]> {
     return this.repository.findAll(options);
   }
 
-  async findById(id: string): Promise<codetrace | null> {
+  async findById(id: string): Promise<Codetrace | null> {
     return this.repository.findById(id);
   }
 
-  async findByField(field: string, value: any, page: number, limit: number): Promise<codetrace[]> {
+  async findByField(field: string, value: any, page: number, limit: number): Promise<Codetrace[]> {
     return this.repository.findByField(field, value, page, limit);
   }
 
-  async findWithPagination(options: any, page: number, limit: number): Promise<codetrace[]> {
+  async findWithPagination(options: any, page: number, limit: number): Promise<Codetrace[]> {
     return this.repository.findWithPagination(options, page, limit);
   }
 
@@ -57,31 +57,31 @@ export class codetraceService {
     return this.repository.count();
   }
 
-  async findAndCount(where?: Record<string, any>): Promise<[codetrace[], number]> {
+  async findAndCount(where?: Record<string, any>): Promise<[Codetrace[], number]> {
     return this.repository.findAndCount(where);
   }
 
-  async findOne(where?: Record<string, any>): Promise<codetrace | null> {
+  async findOne(where?: Record<string, any>): Promise<Codetrace | null> {
     return this.repository.findOne(where);
   }
 
-  async findOneOrFail(where?: Record<string, any>): Promise<codetrace> {
+  async findOneOrFail(where?: Record<string, any>): Promise<Codetrace> {
     return this.repository.findOneOrFail(where);
   }
 
-  async create(entity: codetrace): Promise<codetrace> {
+  async create(entity: Codetrace): Promise<Codetrace> {
     return this.repository.create(entity);
   }
 
-  async bulkCreate(entities: codetrace[]): Promise<codetrace[]> {
+  async bulkCreate(entities: Codetrace[]): Promise<Codetrace[]> {
     return this.repository.bulkCreate(entities);
   }
 
-  async update(id: string, partialEntity: Partial<codetrace>): Promise<codetrace | null> {
+  async update(id: string, partialEntity: Partial<Codetrace>): Promise<Codetrace | null> {
     return this.repository.update(id, partialEntity);
   }
 
-  async bulkUpdate(entities: Partial<codetrace>[]): Promise<codetrace[]> {
+  async bulkUpdate(entities: Partial<Codetrace>[]): Promise<Codetrace[]> {
     return this.repository.bulkUpdate(entities);
   }
 
