@@ -111,10 +111,23 @@ export async function createDatabaseIfNotExists(
       logger.info(`ℹLa base de datos ${dbName} ya existe`);
     }
   } catch (error) {
-    logger.error(
-      `Error al verificar/crear la base de datos ${dbName}:`,
-      error
-    );
+    if (error && error.code === 'ECONNREFUSED') {
+      const causas = [
+        '1. El servicio de PostgreSQL no está corriendo o no es accesible desde la aplicación.',
+        '2. La configuración de conexión (host, puerto, usuario, contraseña) es incorrecta.',
+        '3. El puerto especificado para PostgreSQL está bloqueado o mal configurado.',
+        '4. El contenedor de la base de datos (si usas Docker) no está levantado o no está expuesto correctamente.'
+      ];
+      const solucion = 'Verifica que PostgreSQL esté corriendo, que los datos de conexión sean correctos y que la red entre servicios esté bien configurada.';
+      logger.error(
+        `\n❌ Error de conexión a PostgreSQL (ECONNREFUSED) al verificar/crear la base de datos ${dbName}.\n\nCausas posibles:\n- ${causas.join('\n- ')}\n\nSolución sugerida:\n${solucion}\n`
+      );
+    } else {
+      logger.error(
+        `Error al verificar/crear la base de datos ${dbName}:`,
+        error
+      );
+    }
     throw error;
   } finally {
     client.release();

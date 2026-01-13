@@ -2,30 +2,31 @@
 > api.entalla.backend@0.0.1 build
 > nest build && cp -r src/i18n dist/
 
-[96msrc/modules/codetrace/queries/codetrace.graphql.query.ts[0m:[93m42[0m:[93m25[0m - [91merror[0m[90m TS2339: [0mProperty 'findAll' does not exist on type 'CodetraceGraphqlService'.
 
-[7m42[0m     return this.service.findAll();
-[7m  [0m [91m                        ~~~~~~~[0m
-[96msrc/modules/codetrace/queries/codetrace.graphql.query.ts[0m:[93m49[0m:[93m25[0m - [91merror[0m[90m TS2339: [0mProperty 'findById' does not exist on type 'CodetraceGraphqlService'.
+> api.entalla.backend@0.0.1 start:dev
+> nest start --watch
 
-[7m49[0m     return this.service.findById(id);
-[7m  [0m [91m                        ~~~~~~~~[0m
-[96msrc/modules/codetrace/services/codetracecommand.service.ts[0m:[93m122[0m:[93m19[0m - [91merror[0m[90m TS2339: [0mProperty 'fromDto' does not exist on type 'typeof Codetrace'.
+[2J[3J[H[[90m16:02:21[0m] Starting compilation in watch mode...
 
-[7m122[0m         Codetrace.fromDto(createCodetraceDtoInput)
-[7m   [0m [91m                  ~~~~~~~[0m
-[96msrc/modules/codetrace/services/codetracecommand.service.ts[0m:[93m172[0m:[93m60[0m - [91merror[0m[90m TS2339: [0mProperty 'fromDto' does not exist on type 'typeof Codetrace'.
+[[90m16:02:25[0m] Found 0 errors. Watching for file changes.
 
-[7m172[0m         createCodetraceDtosInput.map((entity) => Codetrace.fromDto(entity))
-[7m   [0m [91m                                                           ~~~~~~~[0m
-[96msrc/modules/codetrace/services/codetracecommand.service.ts[0m:[93m224[0m:[93m19[0m - [91merror[0m[90m TS2339: [0mProperty 'fromDto' does not exist on type 'typeof Codetrace'.
+ℹ️ [development] Logger level: undefined
+❌ [development] Error al iniciar la aplicación [
+  AggregateError [ECONNREFUSED]: 
+      at /media/apokalipto/8f746a2b-4ac6-4d47-a8f8-75319bb2f149/Trabajo/microservices/backend/codetrace-service/node_modules/pg-pool/index.js:45:11
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async createDatabaseIfNotExists (/media/apokalipto/8f746a2b-4ac6-4d47-a8f8-75319bb2f149/Trabajo/microservices/backend/codetrace-service/src/data-source.ts:80:18)
+      at async bootstrap (/media/apokalipto/8f746a2b-4ac6-4d47-a8f8-75319bb2f149/Trabajo/microservices/backend/codetrace-service/src/main.ts:79:5) {
+    code: 'ECONNREFUSED',
+    [errors]: [ [Error], [Error] ]
+  }
+]
+[2J[3J[H[[90m16:10:18[0m] File change detected. Starting incremental compilation...
 
-[7m224[0m         Codetrace.fromDto(partialEntity)
-[7m   [0m [91m                  ~~~~~~~[0m
-[96msrc/modules/codetrace/services/codetracecommand.service.ts[0m:[93m272[0m:[93m49[0m - [91merror[0m[90m TS2339: [0mProperty 'fromDto' does not exist on type 'typeof Codetrace'.
+[96msrc/data-source.ts[0m:[93m114[0m:[93m24[0m - [91merror[0m[90m TS2339: [0mProperty 'code' does not exist on type '{}'.
 
-[7m272[0m         partialEntity.map((entity) => Codetrace.fromDto(entity))
-[7m   [0m [91m                                                ~~~~~~~[0m
+[7m114[0m     if (error && error.code === 'ECONNREFUSED') {
+[7m   [0m [91m                       ~~~~[0m
 
-Found 6 error(s).
+[[90m16:10:18[0m] Found 1 error. Watching for file changes.
 
