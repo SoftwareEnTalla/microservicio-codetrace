@@ -95,4 +95,13 @@ export class Codetrace extends BaseEntity {
     this.id = id;
     return this;
   }
+
+  // Método estático para convertir DTOs a entidad con sobrecarga
+  static fromDto(dto: CreateCodetraceDto): Codetrace;
+  static fromDto(dto: UpdateCodetraceDto): Codetrace;
+  static fromDto(dto: DeleteCodetraceDto): Codetrace;
+  static fromDto(dto: any): Codetrace {
+    // plainToInstance soporta todos los DTOs
+    return plainToInstance(Codetrace, dto);
+  }
 }
