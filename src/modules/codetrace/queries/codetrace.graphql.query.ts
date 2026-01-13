@@ -31,11 +31,11 @@
 
 import { Query, Resolver, Args } from '@nestjs/graphql'; 
 import { CodetraceDto } from '../dtos/all-dto';
-import { CodetraceService } from '../services/codetrace.service';
+import { CodetraceService } from '../services/codetrace.graphql.service';
 
 @Resolver(() => CodetraceDto)
 export class CodetraceGraphqlQuery {
-  constructor(private readonly service: CodetraceService) {}
+  constructor(private readonly service: CodetraceGraphqlService) {}
 
   @Query(() => [CodetraceDto], { name: 'getAllCodetraces' })
   async findAll(): Promise<CodetraceDto[]> {
