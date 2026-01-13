@@ -2,17 +2,19 @@
 > api.entalla.backend@0.0.1 build
 > nest build && cp -r src/i18n dist/
 
-[96msrc/modules/codetrace/queries/codetrace.graphql.query.ts[0m:[93m42[0m:[93m5[0m - [91merror[0m[90m TS2322: [0mType 'Codetrace[]' is not assignable to type 'CodetraceDto[]'.
-  Type 'Codetrace' is not assignable to type 'CodetraceDto'.
-    Property 'name' is private in type 'Codetrace' but not in type 'CodetraceDto'.
+[96msrc/modules/codetrace/queries/codetrace.graphql.query.ts[0m:[93m34[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"../services/codetrace.graphql.service"' has no exported member 'CodetraceService'.
 
-[7m42[0m     return this.service.findAll();
-[7m  [0m [91m    ~~~~~~[0m
-[96msrc/modules/codetrace/queries/codetrace.graphql.query.ts[0m:[93m49[0m:[93m5[0m - [91merror[0m[90m TS2322: [0mType 'Codetrace | null' is not assignable to type 'CodetraceDto'.
-  Type 'null' is not assignable to type 'CodetraceDto'.
+[7m34[0m import { CodetraceService } from '../services/codetrace.graphql.service';
+[7m  [0m [91m         ~~~~~~~~~~~~~~~~[0m
+[96msrc/modules/codetrace/queries/codetrace.graphql.query.ts[0m:[93m38[0m:[93m41[0m - [91merror[0m[90m TS2552: [0mCannot find name 'CodetraceGraphqlService'. Did you mean 'CodetraceGraphqlQuery'?
 
-[7m49[0m     return this.service.findById(id);
-[7m  [0m [91m    ~~~~~~[0m
+[7m38[0m   constructor(private readonly service: CodetraceGraphqlService) {}
+[7m  [0m [91m                                        ~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  [96msrc/modules/codetrace/queries/codetrace.graphql.query.ts[0m:[93m37[0m:[93m14[0m
+    [7m37[0m export class CodetraceGraphqlQuery {
+    [7m  [0m [96m             ~~~~~~~~~~~~~~~~~~~~~[0m
+    'CodetraceGraphqlQuery' is declared here.
 [96msrc/modules/codetrace/services/codetracecommand.service.ts[0m:[93m122[0m:[93m19[0m - [91merror[0m[90m TS2339: [0mProperty 'fromDto' does not exist on type 'typeof Codetrace'.
 
 [7m122[0m         Codetrace.fromDto(createCodetraceDtoInput)

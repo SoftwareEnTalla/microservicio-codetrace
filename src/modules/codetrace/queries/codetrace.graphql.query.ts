@@ -31,7 +31,7 @@
 
 import { Query, Resolver, Args } from '@nestjs/graphql'; 
 import { CodetraceDto } from '../dtos/all-dto';
-import { CodetraceService } from '../services/codetrace.graphql.service';
+import { CodetraceGraphqlService } from '../services/codetrace.graphql.service';
 
 @Resolver(() => CodetraceDto)
 export class CodetraceGraphqlQuery {
