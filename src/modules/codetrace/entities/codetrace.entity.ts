@@ -34,6 +34,7 @@ import { CreateCodetraceDto, UpdateCodetraceDto, DeleteCodetraceDto } from '../d
 import { IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Field, ObjectType } from "@nestjs/graphql";
+import { plainToInstance } from 'class-transformer';
 
 @ChildEntity('codetrace')
 @ObjectType()
