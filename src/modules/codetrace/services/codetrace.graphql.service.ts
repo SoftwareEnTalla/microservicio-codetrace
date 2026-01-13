@@ -35,11 +35,11 @@ import { CodetraceGraphqlRepository } from '../repositories/codetrace.graphql.re
 export class CodetraceGraphqlService {
   constructor(private readonly repository: CodetraceGraphqlRepository) {}
 
-  async getAll() {
+  async findAll() {
     return this.repository.findAll();
   }
 
-  async getById(id: string) {
+  async findById(id: string) {
     return this.repository.findById(id);
   }
 }
