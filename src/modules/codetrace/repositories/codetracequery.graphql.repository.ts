@@ -28,25 +28,23 @@
  *
  */
 
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Codetracequery } from '../entities/codetracequery.entity';
 
-import { Query, Resolver, Args } from '@nestjs/graphql';
-import { CodetraceQuery } from './codetrace.query';
-import { CodetraceDto } from '../dtos/all-dto';
-import { CodetraceService } from '../services/codetrace.service';
+@Injectable()
+export class CodetracequeryGraphqlRepository {
+  constructor(
+    @InjectRepository(Codetracequery)
+    private readonly repository: Repository<Codetracequery>
+  ) {}
 
-@Resolver(() => CodetraceDto)
-export class CodetraceGraphqlQuery {
-  constructor(private readonly service: CodetraceService) {}
-
-  @Query(() => [CodetraceDto], { name: 'getAllCodetraces' })
-  async findAll(): Promise<CodetraceDto[]> {
-    return this.service.findAll();
+  async findAll(): Promise<Codetracequery[]> {
+    return this.repository.find();
   }
 
-  @Query(() => CodetraceDto, { name: 'getCodetraceById' })
-  async findById(
-    @Args('id', { type: () => String }) id: string
-  ): Promise<CodetraceDto> {
-    return this.service.findById(id);
+  async findById(id: string): Promise<Codetracequery | null> {
+    return this.repository.findOneBy({ id });
   }
 }
