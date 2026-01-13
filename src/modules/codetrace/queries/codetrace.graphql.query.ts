@@ -29,8 +29,8 @@
  */
 
 
+
 import { Query, Resolver, Args } from '@nestjs/graphql';
-import { CodetraceQuery } from './codetrace.query';
 import { CodetraceDto } from '../dtos/all-dto';
 import { CodetraceService } from '../services/codetrace.service';
 
@@ -38,15 +38,20 @@ import { CodetraceService } from '../services/codetrace.service';
 export class CodetraceGraphqlQuery {
   constructor(private readonly service: CodetraceService) {}
 
+
   @Query(() => [CodetraceDto], { name: 'getAllCodetraces' })
   async findAll(): Promise<CodetraceDto[]> {
-    return this.service.findAll();
+    // Asegura que el servicio devuelva CodetraceDto[]
+    const result = await this.service.findAll();
+    return result as CodetraceDto[];
   }
 
-  @Query(() => CodetraceDto, { name: 'getCodetraceById' })
+
+  @Query(() => CodetraceDto, { name: 'getCodetraceById', nullable: true })
   async findById(
     @Args('id', { type: () => String }) id: string
-  ): Promise<CodetraceDto> {
-    return this.service.findById(id);
+  ): Promise<CodetraceDto | null> {
+    const result = await this.service.findById(id);
+    return result ? (result as CodetraceDto) : null;
   }
 }
