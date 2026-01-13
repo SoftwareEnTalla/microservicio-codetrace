@@ -28,7 +28,7 @@
  *
  */
 
-import { Column, Entity, OneToOne, JoinColumn, ChildEntity } from 'typeorm';
+import { Column, ChildEntity } from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { CreateCodetraceDto, UpdateCodetraceDto, DeleteCodetraceDto } from '../dtos/all-dto';
 import { IsNotEmpty, IsString } from 'class-validator';
@@ -59,17 +59,11 @@ export class Codetrace extends BaseEntity {
   @Column({ type: 'varchar', length: 255, nullable: false, default: "Sin descripción", comment: 'Este es un campo para describir la instancia Codetrace' })
   private description!: string;
 
-  // Relación con BaseEntity (opcional, si aplica)
-  // @OneToOne(() => BaseEntity, { cascade: true })
-  // @JoinColumn()
-  // base!: BaseEntity;
-
   constructor() {
     super();
     this.type = 'codetrace';
   }
 
-  // Getters y Setters
   get getName(): string {
     return this.name;
   }
@@ -80,7 +74,6 @@ export class Codetrace extends BaseEntity {
     return this.description;
   }
 
-  // Métodos abstractos implementados
   async create(data: any): Promise<BaseEntity> {
     Object.assign(this, data);
     this.modificationDate = new Date();
