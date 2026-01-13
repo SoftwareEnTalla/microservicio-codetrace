@@ -51,4 +51,3 @@ Thumbs.db
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
-npm-build.log

@@ -30,3 +30,18 @@
 
 [[90m16:10:18[0m] Found 1 error. Watching for file changes.
 
+[2J[3J[H[[90m16:12:36[0m] File change detected. Starting incremental compilation...
+
+[[90m16:12:36[0m] Found 0 errors. Watching for file changes.
+
+ℹ️ [development] Logger level: undefined
+❌ [development] Error al iniciar la aplicación [
+  AggregateError [ECONNREFUSED]: 
+      at /media/apokalipto/8f746a2b-4ac6-4d47-a8f8-75319bb2f149/Trabajo/microservices/backend/codetrace-service/node_modules/pg-pool/index.js:45:11
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async createDatabaseIfNotExists (/media/apokalipto/8f746a2b-4ac6-4d47-a8f8-75319bb2f149/Trabajo/microservices/backend/codetrace-service/src/data-source.ts:80:18)
+      at async bootstrap (/media/apokalipto/8f746a2b-4ac6-4d47-a8f8-75319bb2f149/Trabajo/microservices/backend/codetrace-service/src/main.ts:79:5) {
+    code: 'ECONNREFUSED',
+    [errors]: [ [Error], [Error] ]
+  }
+]
