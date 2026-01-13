@@ -29,8 +29,7 @@
  */
 
 
-import { Query, Resolver, Args } from '@nestjs/graphql';
-import { CodetraceQuery } from './codetrace.query';
+import { Query, Resolver, Args } from '@nestjs/graphql'; 
 import { CodetraceDto } from '../dtos/all-dto';
 import { CodetraceService } from '../services/codetrace.service';
 
