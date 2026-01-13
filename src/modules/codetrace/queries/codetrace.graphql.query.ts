@@ -29,9 +29,11 @@
  */
 
 
+
 import { Query, Resolver, Args } from '@nestjs/graphql'; 
 import { CodetraceDto } from '../dtos/all-dto';
 import { CodetraceGraphqlService } from '../services/codetrace.graphql.service';
+import { NotFoundException } from '@nestjs/common';
 
 @Resolver(() => CodetraceDto)
 export class CodetraceGraphqlQuery {
@@ -46,6 +48,10 @@ export class CodetraceGraphqlQuery {
   async findById(
     @Args('id', { type: () => String }) id: string
   ): Promise<CodetraceDto> {
-    return this.service.findById(id);
+    const result = await this.service.findById(id);
+    if (!result) {
+      throw new NotFoundException(`Codetrace con id ${id} no encontrado`);
+    }
+    return result;
   }
 }
