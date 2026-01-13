@@ -31,20 +31,20 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CodetracegraphqlDto } from '../dtos/all-dto';
+import { CodetraceDto } from '../dtos/all-dto';
 
 @Injectable()
-export class CodetracegraphqlGraphqlRepository {
+export class CodetraceGraphqlRepository {
   constructor(
-    @InjectRepository(CodetracegraphqlDto)
-    private readonly repository: Repository<CodetracegraphqlDto>
+    @InjectRepository(CodetraceDto)
+    private readonly repository: Repository<CodetraceDto>
   ) {}
 
-  async findAll(): Promise<CodetracegraphqlDto[]> {
+  async findAll(): Promise<CodetraceDto[]> {
     return this.repository.find();
   }
 
-  async findById(id: string): Promise<CodetracegraphqlDto | null> {
+  async findById(id: string): Promise<CodetraceDto | null> {
     return this.repository.findOneBy({ id });
   }
 }
