@@ -77,8 +77,8 @@ async function bootstrap() {
 
   try {
     await createDatabaseIfNotExists(
-        process.env.DB_NAME || "entalla",
-        process.env.DB_USER || "entalla"
+      process.env.DB_NAME || "entalla",
+      process.env.DB_USERNAME || "entalla"
     );
     if (!AppDataSource.isInitialized) {
       await AppDataSource.initialize();

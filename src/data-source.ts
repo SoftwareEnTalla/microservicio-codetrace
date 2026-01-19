@@ -46,8 +46,8 @@ export const AppDataSource = new DataSource({
   name: "codetrace-service",
   host: process.env.DB_HOST || "localhost",
   port: Number(process.env.DB_PORT) || 5432,
-  username: process.env.DB_USER || "entalla",
-  password: process.env.DB_PASS || "entalla",
+  username: process.env.DB_USERNAME || "entalla",
+  password: process.env.DB_PASSWORD || "entalla",
   database: process.env.DB_NAME || "entalla",
   synchronize: process.env.NODE_ENV !== "production",
   logging: process.env.NODE_ENV !== "production",
@@ -69,9 +69,9 @@ export async function createDatabaseIfNotExists(
   owner: string = "postgres"
 ) {
   const adminPoolConfig: PoolConfig = {
-    user: process.env.DB_USER || "postgres",
+    user: process.env.DB_USERNAME || "postgres",
     host: process.env.DB_HOST || "localhost",
-    password: process.env.DB_PASS || "postgres",
+    password: process.env.DB_PASSWORD || "postgres",
     port: Number(process.env.DB_PORT) || 5432,
     database: "postgres", // Conectamos a la BD por defecto
   };
@@ -125,10 +125,10 @@ export async function createDatabaseIfNotExists(
 
 async function checkPostgreSQLExtensions() {
   const poolConfig: PoolConfig = {
-    user: process.env.DB_USER || "entalla",
+    user: process.env.DB_USERNAME || "entalla",
     host: process.env.DB_HOST || "localhost",
     database: process.env.DB_NAME || "entalla",
-    password: process.env.DB_PASS || "entalla",
+    password: process.env.DB_PASSWORD || "entalla",
     port: Number(process.env.DB_PORT) || 5432,
   };
 
@@ -161,7 +161,7 @@ export async function initializeDatabase() {
       // Primero verificar/crear la BD
       await createDatabaseIfNotExists(
         process.env.DB_NAME || "entalla",
-        process.env.DB_USER || "entalla"
+        process.env.DB_USERNAME || "entalla"
       );
       // Luego el resto de la inicialización
       await checkPostgreSQLExtensions();
