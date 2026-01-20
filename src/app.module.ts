@@ -29,7 +29,7 @@
  */
 
 
-import { DynamicModule, Module, OnModuleInit } from "@nestjs/common";
+import { DynamicModule, Module, OnModuleInit, Optional, Inject } from "@nestjs/common";
 import { DataSource } from "typeorm";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule } from "@nestjs/config";
@@ -184,7 +184,7 @@ export class CodetraceAppModule implements OnModuleInit {
    * @param translocoService Servicio para manejo de idiomas
    */
   constructor(
-    private readonly dataSource: DataSource | undefined,
+    @Optional() @Inject(DataSource) private readonly dataSource?: DataSource,
     private moduleRef: ModuleRef
   ) {
     if (process.env.INCLUDING_DATA_BASE_SYSTEM === 'true') {

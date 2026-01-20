@@ -156,6 +156,9 @@ async function bootstrap() {
         `• API:      ${protocol}://${host}:${port}/${globalPrefix}\n` +
         `• Swagger:  ${protocol}://${host}:${port}/${swaggerPath}\n` +
         `• Entorno:  ${process.env.NODE_ENV || "development"}\n` +
+        '• LANDING_APP: ' + (process.env.LANDING_APP || '(no definido)') + '\n' +
+        '• ADMIN_APP:   ' + (process.env.ADMIN_APP || '(no definido)') + '\n' +
+        '• LOG_API_BASE_URL: ' + (process.env.LOG_API_BASE_URL || '(no definido)') + '\n' +
         `----------------------------------------\n` +
         `📦 Base de datos:\n` +
         (dbOptions
