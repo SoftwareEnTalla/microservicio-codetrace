@@ -32,7 +32,7 @@
 import { NestFactory } from "@nestjs/core";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { CodetraceAppModule } from "./app.module";
-import { AppDataSource, createDatabaseIfNotExists, waitForPostgres } from "./data-source";
+import { AppDataSource, createDatabaseIfNotExists } from "./data-source";
 import { INestApplication, Logger } from "@nestjs/common";
 import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";
 import 'tsconfig-paths/register';
