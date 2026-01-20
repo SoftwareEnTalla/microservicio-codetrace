@@ -87,25 +87,20 @@ import LoggerService, { logger } from "@core/logs/logger";
      * Conexión asíncrona con PostgreSQL y configuración avanzada.
      * Se inicializa primero la conexión a la base de datos.
      */
-    // TypeORM solo si INCLUDING_DATA_BASE_SYSTEM=true
-    ...(process.env.INCLUDING_DATA_BASE_SYSTEM === 'true'
-      ? [
-          TypeOrmModule.forRootAsync({
-            imports: [ConfigModule],
-            useFactory: async () => {
-              const dataSource = await initializeDatabase();
-              return {
-                ...dataSource.options,
-                autoLoadEntities: true,
-                retryAttempts: 5,
-                retryDelay: 3000,
-                synchronize: process.env.NODE_ENV !== "production",
-                logging: process.env.DB_LOGGING === "true",
-              };
-            },
-          }),
-        ]
-      : []),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule], // Requiere ConfigModule para variables de entorno
+      useFactory: async () => {
+        const dataSource = await initializeDatabase(); // Inicializa conexión
+        return {
+          ...dataSource.options, // Configuración base del DataSource
+          autoLoadEntities: true, // Carga automática de entidades
+          retryAttempts: 5, // Intentos de reconexión en caso de fallo
+          retryDelay: 3000, // Tiempo entre intentos (3 segundos)
+          synchronize: process.env.NODE_ENV !== "production", // Sincroniza esquema solo en desarrollo
+          logging: process.env.DB_LOGGING === "true", // Logging configurable
+        };
+      },
+    }),
 
     /**
      * Módulos Codetrace de la aplicación
@@ -116,18 +111,16 @@ import LoggerService, { logger } from "@core/logs/logger";
      */
     LoggingModule,
 
-    // GraphQL solo si GRAPHQL_ENABLED=true
-    ...(process.env.GRAPHQL_ENABLED === 'true'
-      ? [
-          GraphQLModule.forRoot<ApolloDriverConfig>({
-            driver: ApolloDriver,
-            autoSchemaFile: true,
-            buildSchemaOptions: {
-              dateScalarMode: "timestamp",
-            },
-          }),
-        ]
-      : []),
+    // Módulo GraphQLModule para Codetrace
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      //autoSchemaFile: "schema.gql", // Opcional: genera un archivo de esquema
+      autoSchemaFile: true,
+      buildSchemaOptions: {
+        dateScalarMode: "timestamp",
+      },
+      // resolvers: { JSON: GraphQLJSON }, // Añade esta línea
+    }),
   ],
 
   /**
@@ -156,14 +149,10 @@ import LoggerService, { logger } from "@core/logs/logger";
     CommandBus, // Bus de comandos
     EventBus, // Bus de eventos
     // Configuración de Base de datos
-    ...(process.env.INCLUDING_DATA_BASE_SYSTEM === 'true'
-      ? [
-          {
-            provide: DataSource,
-            useValue: AppDataSource,
-          },
-        ]
-      : []),
+    {
+      provide: DataSource, // Token para inyección
+      useValue: AppDataSource, // Instancia singleton del DataSource
+    },
     // Se importan los servicios del módulo
     CodetraceCommandService,
     CodetraceQueryService,
@@ -184,12 +173,11 @@ export class CodetraceAppModule implements OnModuleInit {
    * @param translocoService Servicio para manejo de idiomas
    */
   constructor(
-    private readonly dataSource: DataSource | undefined,
+    private readonly dataSource: DataSource,
     private moduleRef: ModuleRef
+    //private readonly translocoService: TranslocoService
   ) {
-    if (process.env.INCLUDING_DATA_BASE_SYSTEM === 'true') {
-      this.checkDatabaseConnection();
-    }
+    this.checkDatabaseConnection();
     this.setupLanguageChangeHandling();
     this.onModuleInit();
   }
@@ -214,7 +202,6 @@ export class CodetraceAppModule implements OnModuleInit {
    */
   private async checkDatabaseConnection() {
     try {
-      if (!this.dataSource) return;
       await this.dataSource.query("SELECT 1");
       logger.log("✅ Conexión a la base de datos verificada correctamente");
     } catch (error) {

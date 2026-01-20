@@ -5,24 +5,19 @@ services:
       - "3000:3000"
     env_file:
       - .env
-    networks:
-      - entalla-net
+    # No se declara depends_on para permitir funcionamiento con/ sin DB local
 
-  # Producción: habilitar Postgres privado por microservicio
-  # postgres:
-  #   image: postgres:16
-  #   environment:
-  #     POSTGRES_DB: ${DB_NAME}
-  #     POSTGRES_USER: ${DB_USERNAME}
-  #     POSTGRES_PASSWORD: ${DB_PASSWORD}
-  #   volumes:
-  #     - pgdata:/var/lib/postgresql/data
-  #   networks:
-  #     - entalla-net
-
-networks:
-  entalla-net:
-    external: true
+  postgres:
+    image: postgres:14
+    profiles: ["db"]
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
 
 volumes:
   pgdata:

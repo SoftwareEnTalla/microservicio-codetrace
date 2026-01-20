@@ -36,7 +36,6 @@ import path from "path";
 import "reflect-metadata";
 import { CustomPostgresOptions } from "./interfaces/typeorm.interface";
 import { logger } from '@core/logs/logger';
-import * as net from "net";
 
 dotenv.config();
 
@@ -62,44 +61,6 @@ export const AppDataSource = new DataSource({
     application_name: "nestjs-application",
   },
 } as CustomPostgresOptions);
-// Espera a que Postgres esté aceptando conexiones TCP
-export async function waitForPostgres(
-  host: string,
-  port: number,
-  timeoutMs: number = 60000,
-  intervalMs: number = 1000
-) {
-  const start = Date.now();
-  return new Promise<void>((resolve, reject) => {
-    const tryConnect = () => {
-      const socket = new net.Socket();
-      socket.setTimeout(3000);
-      socket.once('connect', () => {
-        socket.destroy();
-        resolve();
-      });
-      socket.once('error', () => {
-        socket.destroy();
-        if (Date.now() - start >= timeoutMs) {
-          reject(new Error(`Timeout esperando Postgres en ${host}:${port}`));
-        } else {
-          setTimeout(tryConnect, intervalMs);
-        }
-      });
-      socket.once('timeout', () => {
-        socket.destroy();
-        if (Date.now() - start >= timeoutMs) {
-          reject(new Error(`Timeout esperando Postgres en ${host}:${port}`));
-        } else {
-          setTimeout(tryConnect, intervalMs);
-        }
-      });
-      socket.connect(port, host);
-    };
-    tryConnect();
-  });
-}
-
 
 
 // Añade esta función después de initializeDatabase()
@@ -197,11 +158,6 @@ export async function initializeDatabase() {
   try {
     logger.info("Data Source Object: ",AppDataSource);
     if (!AppDataSource.isInitialized) {
-      // Esperar a que Postgres esté disponible
-      await waitForPostgres(
-        process.env.DB_HOST || "localhost",
-        Number(process.env.DB_PORT) || 5432
-      );
       // Primero verificar/crear la BD
       await createDatabaseIfNotExists(
         process.env.DB_NAME || "entalla",
