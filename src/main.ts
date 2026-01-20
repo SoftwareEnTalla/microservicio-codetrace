@@ -142,7 +142,7 @@ async function bootstrap() {
       process.env.LOG_READY = "true";
       printRoutes(app);
     });
-    logger.info();
+    logger.info("ℹInstancia de aplicación escuchando por el puerto: " + port);
     // Acceso seguro a las propiedades con type assertion
     const dbOptions = INCLUDE_DB && AppDataSource.isInitialized
       ? (AppDataSource.options as PostgresConnectionOptions)
@@ -157,11 +157,11 @@ async function bootstrap() {
         `• Swagger:  ${protocol}://${host}:${port}/${swaggerPath}\n` +
         `• Entorno:  ${process.env.NODE_ENV || "development"}\n` +
         `----------------------------------------\n` +
-         +
+        `📦 Base de datos:\n` +
         (dbOptions
-          ?  +
-            
-          : ) +
+          ? `• Nombre:   ${dbOptions.database}\n` +
+            `• Servidor: ${dbOptions.host}:${dbOptions.port}\n`
+          : `• Deshabilitada en este entorno (INCLUDING_DATA_BASE_SYSTEM=false)\n`) +
         `========================================`
     );
   } catch (error) {

@@ -81,7 +81,7 @@ export async function waitForPostgres(
       socket.once('error', () => {
         socket.destroy();
         if (Date.now() - start >= timeoutMs) {
-          reject(new Error());
+          reject(new Error(`Timeout esperando Postgres en ${host}:${port}`));
         } else {
           setTimeout(tryConnect, intervalMs);
         }
@@ -89,7 +89,7 @@ export async function waitForPostgres(
       socket.once('timeout', () => {
         socket.destroy();
         if (Date.now() - start >= timeoutMs) {
-          reject(new Error());
+          reject(new Error(`Timeout esperando Postgres en ${host}:${port}`));
         } else {
           setTimeout(tryConnect, intervalMs);
         }
