@@ -48,7 +48,7 @@ export class CodetraceGraphqlQuery {
   ): Promise<CodetraceDto> {
     const result = await this.service.findById(id);
     if (!result) {
-      throw new NotFoundException();
+      throw new NotFoundException("Codetrace con id " + id + " no encontrado");
     }
     return result;
   }

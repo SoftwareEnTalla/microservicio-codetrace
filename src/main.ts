@@ -76,13 +76,16 @@ async function bootstrap() {
   dotenv.config(); 
 
   try {
-    await createDatabaseIfNotExists(
-      process.env.DB_NAME || "entalla",
-      process.env.DB_USERNAME || "entalla"
-    );
-    if (!AppDataSource.isInitialized) {
-      await AppDataSource.initialize();
-      logger.success("Database connection established");
+    const INCLUDE_DB = process.env.INCLUDING_DATA_BASE_SYSTEM === 'true';
+    if (INCLUDE_DB) {
+      await createDatabaseIfNotExists(
+        process.env.DB_NAME || "entalla",
+        process.env.DB_USERNAME || "entalla"
+      );
+      if (!AppDataSource.isInitialized) {
+        await AppDataSource.initialize();
+        logger.success("Database connection established");
+      }
     }
     logger.info(`ℹCreando instancia del módulo CodetraceAppModule...`);
     const app = await NestFactory.create(CodetraceAppModule, {
@@ -139,9 +142,11 @@ async function bootstrap() {
       process.env.LOG_READY = "true";
       printRoutes(app);
     });
-    logger.info(`ℹInstancia de aplicación escuchando por el puerto:port `);
+    logger.info("ℹInstancia de aplicación escuchando por el puerto: " + port);
     // Acceso seguro a las propiedades con type assertion
-    const dbOptions = AppDataSource.options as PostgresConnectionOptions;
+    const dbOptions = INCLUDE_DB && AppDataSource.isInitialized
+      ? (AppDataSource.options as PostgresConnectionOptions)
+      : undefined;
 
     logger.print(
       `\n` +
@@ -153,8 +158,10 @@ async function bootstrap() {
         `• Entorno:  ${process.env.NODE_ENV || "development"}\n` +
         `----------------------------------------\n` +
         `📦 Base de datos:\n` +
-        `• Nombre:   ${dbOptions.database}\n` +
-        `• Servidor: ${dbOptions.host}:${dbOptions.port}\n` +
+        (dbOptions
+          ? `• Nombre:   ${dbOptions.database}\n` +
+            `• Servidor: ${dbOptions.host}:${dbOptions.port}\n`
+          : `• Deshabilitada en este entorno (INCLUDING_DATA_BASE_SYSTEM=false)\n`) +
         `========================================`
     );
   } catch (error) {
