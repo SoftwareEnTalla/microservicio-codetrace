@@ -184,8 +184,8 @@ export class CodetraceAppModule implements OnModuleInit {
    * @param translocoService Servicio para manejo de idiomas
    */
   constructor(
-    @Optional() @Inject(DataSource) private readonly dataSource?: DataSource,
-    private moduleRef: ModuleRef
+    private moduleRef: ModuleRef,
+    @Optional() @Inject(DataSource) private readonly dataSource?: DataSource
   ) {
     if (process.env.INCLUDING_DATA_BASE_SYSTEM === 'true') {
       this.checkDatabaseConnection();

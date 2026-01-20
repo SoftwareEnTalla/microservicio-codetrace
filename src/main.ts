@@ -32,7 +32,7 @@
 import { NestFactory } from "@nestjs/core";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { CodetraceAppModule } from "./app.module";
-import { AppDataSource, createDatabaseIfNotExists } from "./data-source";
+import { AppDataSource, createDatabaseIfNotExists, waitForPostgres } from "./data-source";
 import { INestApplication, Logger } from "@nestjs/common";
 import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";
 import 'tsconfig-paths/register';
@@ -78,6 +78,10 @@ async function bootstrap() {
   try {
     const INCLUDE_DB = process.env.INCLUDING_DATA_BASE_SYSTEM === 'true';
     if (INCLUDE_DB) {
+      await waitForPostgres(
+        process.env.DB_HOST || "localhost",
+        Number(process.env.DB_PORT) || 5432
+      );
       await createDatabaseIfNotExists(
         process.env.DB_NAME || "entalla",
         process.env.DB_USERNAME || "entalla"
