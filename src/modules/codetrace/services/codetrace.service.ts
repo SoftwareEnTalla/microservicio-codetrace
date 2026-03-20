@@ -31,10 +31,10 @@
 
 import { Injectable, Logger, NotFoundException, OnModuleInit } from "@nestjs/common";
 import { FindManyOptions } from "typeorm";
-import { codetrace } from "../entities/codetrace.entity";
+import { odetrace } from "../entities/codetrace.entity";
 import { BaseEntity } from "../entities/base.entity";
-import { codetraceQueryRepository } from "../repositories/codetracequery.repository";
-import { codetraceResponse, codetracesResponse } from "../types/codetrace.types";
+import { odetraceQueryRepository } from "../repositories/codetracequery.repository";
+import { odetraceResponse, odetracesResponse } from "../types/codetrace.types";
 import { Helper } from "src/common/helpers/helpers";
 import { PaginationArgs } from "src/common/dto/args/pagination.args";
 //import { Cacheable } from "../decorators/cache.decorator";
