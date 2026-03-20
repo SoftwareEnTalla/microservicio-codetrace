@@ -28,454 +28,68 @@
  *
  */
 
-
-import { Injectable, Logger, NotFoundException, OnModuleInit } from "@nestjs/common";
-import { FindManyOptions } from "typeorm";
-import { odetrace } from "../entities/codetrace.entity";
-import { BaseEntity } from "../entities/base.entity";
-import { odetraceQueryRepository } from "../repositories/codetracequery.repository";
-import { odetraceResponse, odetracesResponse } from "../types/codetrace.types";
-import { Helper } from "src/common/helpers/helpers";
-import { PaginationArgs } from "src/common/dto/args/pagination.args";
-//import { Cacheable } from "../decorators/cache.decorator";
-
-//Logger
-import { LogExecutionTime } from "src/common/logger/loggers.functions";
-import { LoggerClient } from "src/common/logger/logger.client";
-import { ModuleRef } from "@nestjs/core";
-import { logger } from '@core/logs/logger';
-
-
+import { Injectable } from "@nestjs/common";
+import { Codetrace } from "../entities/codetrace.entity";
+import { CodetraceRepository } from "../repositories/codetrace.repository";
 
 @Injectable()
-export class codetraceQueryService implements OnModuleInit{
-  // Private properties
-  readonly #logger = new Logger(codetraceQueryService.name);
-  private readonly loggerClient = LoggerClient.getInstance();
+export class CodetraceService {
+  constructor(private readonly repository: CodetraceRepository) {}
 
-  constructor(private readonly repository: codetraceQueryRepository,
-  private moduleRef: ModuleRef
-  ) {
-    this.validate();
+  // Métodos delegados
+  async findAll(options?: any): Promise<Codetrace[]> {
+    return this.repository.findAll(options);
   }
 
-  @LogExecutionTime({
-    layer: "service",
-    callback: async (logData, client) => {
-      // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try{
-        logger.info('Información del cliente y datos a enviar:',[logData,client]);
-        return await client.send(logData);
-      }
-      catch(error){
-        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        logger.info('ERROR-LOG: ', error);
-        throw error;
-      }
-    },
-    client: LoggerClient.getInstance()
-      .registerClient(codetraceQueryService.name)
-      .get(codetraceQueryService.name),
-  })
-  onModuleInit() {
-    //Se ejecuta en la inicialización del módulo
+  async findById(id: string): Promise<Codetrace | null> {
+    return this.repository.findById(id);
   }
 
-
-  @LogExecutionTime({
-    layer: "service",
-    callback: async (logData, client) => {
-      // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try{
-        logger.info('Información del cliente y datos a enviar:',[logData,client]);
-        return await client.send(logData);
-      }
-      catch(error){
-        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        logger.info('ERROR-LOG: ', error);
-        throw error;
-      }
-    },
-    client: LoggerClient.getInstance()
-      .registerClient(codetraceQueryService.name)
-      .get(codetraceQueryService.name),
-  })
-  private validate(): void {
-    try {
-      const entityInstance = Object.create(codetrace.prototype);
-      if (!(entityInstance instanceof BaseEntity)) {
-        let sms = `El tipo ${codetrace.name} no extiende de BaseEntity. Asegúrate de que todas las entidades hereden correctamente.`;
-        logger.info(sms);
-        throw new Error(sms);
-      }
-    } catch (error) {
-      // Imprimir error
-      logger.error(error);
-      return Helper.throwCachedError(error);
-    }
+  async findByField(field: string, value: any, page: number, limit: number): Promise<Codetrace[]> {
+    return this.repository.findByField(field, value, page, limit);
   }
 
-  @LogExecutionTime({
-    layer: "service",
-    callback: async (logData, client) => {
-      // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try{
-        logger.info('Información del cliente y datos a enviar:',[logData,client]);
-        return await client.send(logData);
-      }
-      catch(error){
-        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        logger.info('ERROR-LOG: ', error);
-        throw error;
-      }
-    },
-    client: LoggerClient.getInstance()
-      .registerClient(codetraceQueryService.name)
-      .get(codetraceQueryService.name),
-  })
-  async findAll(
-    options?: FindManyOptions<codetrace>,
-    paginationArgs?: PaginationArgs
-  ): Promise<codetracesResponse<codetrace>> {
-    try {
-      const codetraces = await this.repository.findAll(options);
-      // Devolver respuesta
-      logger.info("sms");
-      return {
-        ok: true,
-        message: "Listado de codetraces obtenido con éxito",
-        data: codetraces,
-        pagination: Helper.getPaginator(
-          paginationArgs ? paginationArgs.page : 1,
-          paginationArgs ? paginationArgs.size : 25,
-          codetraces.length
-        ),
-        count: codetraces.length,
-      };
-    } catch (error) {
-      // Imprimir error
-      logger.error(error);
-      // Lanzar error
-      return Helper.throwCachedError(error);
-    }
+  async findWithPagination(options: any, page: number, limit: number): Promise<Codetrace[]> {
+    return this.repository.findWithPagination(options, page, limit);
   }
 
-  @LogExecutionTime({
-    layer: "service",
-    callback: async (logData, client) => {
-      // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try{
-        logger.info('Información del cliente y datos a enviar:',[logData,client]);
-        return await client.send(logData);
-      }
-      catch(error){
-        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        logger.info('ERROR-LOG: ', error);
-        throw error;
-      }
-    },
-    client: LoggerClient.getInstance()
-      .registerClient(codetraceQueryService.name)
-      .get(codetraceQueryService.name),
-  })
-  async findById(id: string): Promise<codetraceResponse<codetrace>> {
-    try {
-      const codetrace = await this.repository.findOne({
-        where: { id },
-        relations: [],
-      });
-      // Respuesta si el codetrace no existe
-      if (!codetrace)
-        throw new NotFoundException(
-          "codetrace no encontrado para el id solicitado"
-        );
-      // Devolver codetrace
-      return {
-        ok: true,
-        message: "codetrace obtenido con éxito",
-        data: codetrace,
-      };
-    } catch (error) {
-      // Imprimir error
-      logger.error(error);
-      // Lanzar error
-      return Helper.throwCachedError(error);
-    }
-  }
-
-
-
-  @LogExecutionTime({
-    layer: "service",
-    callback: async (logData, client) => {
-      // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try{
-        logger.info('Información del cliente y datos a enviar:',[logData,client]);
-        return await client.send(logData);
-      }
-      catch(error){
-        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        logger.info('ERROR-LOG: ', error);
-        throw error;
-      }
-    },
-    client: LoggerClient.getInstance()
-      .registerClient(codetraceQueryService.name)
-      .get(codetraceQueryService.name),
-  })
-  async findByField(
-    field: string,
-    value: any,
-    paginationArgs?: PaginationArgs
-  ): Promise<codetracesResponse<codetrace>> {
-    try {
-      const [entities, lenght] = await this.repository.findAndCount({
-        where: { [field]: value },
-        skip:
-          ((paginationArgs ? paginationArgs.page : 1) - 1) *
-          (paginationArgs ? paginationArgs.size : 25),
-        take: paginationArgs ? paginationArgs.size : 25,
-      });
-
-      // Respuesta si el codetrace no existe
-      if (!entities)
-        throw new NotFoundException(
-          "codetraces no encontrados para la propiedad y valor especificado"
-        );
-      // Devolver codetrace
-      return {
-        ok: true,
-        message: "codetraces obtenidos con éxito.",
-        data: entities,
-        pagination: Helper.getPaginator(
-          paginationArgs ? paginationArgs.page : 1,
-          paginationArgs ? paginationArgs.size : 25,
-          lenght
-        ),
-        count: entities.length,
-      };
-    } catch (error) {
-      // Imprimir error
-      logger.error(error);
-      // Lanzar error
-      return Helper.throwCachedError(error);
-    }
-  }
- 
-
-  @LogExecutionTime({
-    layer: "service",
-    callback: async (logData, client) => {
-      // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try{
-        logger.info('Información del cliente y datos a enviar:',[logData,client]);
-        return await client.send(logData);
-      }
-      catch(error){
-        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        logger.info('ERROR-LOG: ', error);
-        throw error;
-      }
-    },
-    client: LoggerClient.getInstance()
-      .registerClient(codetraceQueryService.name)
-      .get(codetraceQueryService.name),
-  })
-  async findWithPagination(
-    options: FindManyOptions<codetrace>,
-    paginationArgs?: PaginationArgs
-  ): Promise<codetracesResponse<codetrace>> {
-    try {
-      const entities = await this.repository.findWithPagination(
-        options,
-        paginationArgs ? paginationArgs.page : 1,
-        paginationArgs ? paginationArgs.size : 25
-      );
-
-      // Respuesta si el codetrace no existe
-      if (!entities)
-        throw new NotFoundException("Entidades codetraces no encontradas.");
-      // Devolver codetrace
-      return {
-        ok: true,
-        message: "codetrace obtenido con éxito.",
-        data: entities,
-        count: entities.length,
-      };
-    } catch (error) {
-      // Imprimir error
-      logger.error(error);
-      // Lanzar error
-      return Helper.throwCachedError(error);
-    }
-  }
-  
-
-
-  @LogExecutionTime({
-    layer: "service",
-    callback: async (logData, client) => {
-      // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try{
-        logger.info('Información del cliente y datos a enviar:',[logData,client]);
-        return await client.send(logData);
-      }
-      catch(error){
-        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        logger.info('ERROR-LOG: ', error);
-        throw error;
-      }
-    },
-    client: LoggerClient.getInstance()
-      .registerClient(codetraceQueryService.name)
-      .get(codetraceQueryService.name),
-  })
   async count(): Promise<number> {
     return this.repository.count();
   }
 
- 
-
-  @LogExecutionTime({
-    layer: "service",
-    callback: async (logData, client) => {
-      // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try{
-        logger.info('Información del cliente y datos a enviar:',[logData,client]);
-        return await client.send(logData);
-      }
-      catch(error){
-        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        logger.info('ERROR-LOG: ', error);
-        throw error;
-      }
-    },
-    client: LoggerClient.getInstance()
-      .registerClient(codetraceQueryService.name)
-      .get(codetraceQueryService.name),
-  })
-  async findAndCount(
-    where?: Record<string, any>,
-    paginationArgs?: PaginationArgs
-  ): Promise<codetracesResponse<codetrace>> {
-    try {
-      const [entities, lenght] = await this.repository.findAndCount({
-        where: where,
-      });
-
-      // Respuesta si el codetrace no existe
-      if (!entities)
-        throw new NotFoundException(
-          "Entidades codetraces no encontradas para el criterio especificado."
-        );
-      // Devolver codetrace
-      return {
-        ok: true,
-        message: "codetraces obtenidos con éxito.",
-        data: entities,
-        pagination: Helper.getPaginator(
-          paginationArgs ? paginationArgs.page : 1,
-          paginationArgs ? paginationArgs.size : 25,
-          lenght
-        ),
-        count: entities.length,
-      };
-    } catch (error) {
-      // Imprimir error
-      logger.error(error);
-      // Lanzar error
-      return Helper.throwCachedError(error);
-    }
+  async findAndCount(where?: Record<string, any>): Promise<[Codetrace[], number]> {
+    return this.repository.findAndCount(where);
   }
 
-
-
-
-  @LogExecutionTime({
-    layer: "service",
-    callback: async (logData, client) => {
-      // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try{
-        logger.info('Información del cliente y datos a enviar:',[logData,client]);
-        return await client.send(logData);
-      }
-      catch(error){
-        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        logger.info('ERROR-LOG: ', error);
-        throw error;
-      }
-    },
-    client: LoggerClient.getInstance()
-      .registerClient(codetraceQueryService.name)
-      .get(codetraceQueryService.name),
-  })
-  async findOne(where?: Record<string, any>): Promise<codetraceResponse<codetrace>> {
-    try {
-      const entity = await this.repository.findOne({
-        where: where,
-      });
-
-      // Respuesta si el codetrace no existe
-      if (!entity)
-        throw new NotFoundException("Entidad codetrace no encontrada.");
-      // Devolver codetrace
-      return {
-        ok: true,
-        message: "codetrace obtenido con éxito.",
-        data: entity,
-      };
-    } catch (error) {
-      // Imprimir error
-      logger.error(error);
-      // Lanzar error
-      return Helper.throwCachedError(error);
-    }
+  async findOne(where?: Record<string, any>): Promise<Codetrace | null> {
+    return this.repository.findOne(where);
   }
 
+  async findOneOrFail(where?: Record<string, any>): Promise<Codetrace> {
+    return this.repository.findOneOrFail(where);
+  }
 
-  @LogExecutionTime({
-    layer: "service",
-    callback: async (logData, client) => {
-      // Puedes usar el cliente proporcionado o ignorarlo y usar otro
-      try{
-        logger.info('Información del cliente y datos a enviar:',[logData,client]);
-        return await client.send(logData);
-      }
-      catch(error){
-        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        logger.info('ERROR-LOG: ', error);
-        throw error;
-      }
-    },
-    client: LoggerClient.getInstance()
-      .registerClient(codetraceQueryService.name)
-      .get(codetraceQueryService.name),
-  })
-  async findOneOrFail(
-    where?: Record<string, any>
-  ): Promise<codetraceResponse<codetrace> | Error> {
-    try {
-      const entity = await this.repository.findOne({
-        where: where,
-      });
+  async create(entity: Codetrace): Promise<Codetrace> {
+    return this.repository.create(entity);
+  }
 
-      // Respuesta si el codetrace no existe
-      if (!entity)
-        return new NotFoundException("Entidad codetrace no encontrada.");
-      // Devolver codetrace
-      return {
-        ok: true,
-        message: "codetrace obtenido con éxito.",
-        data: entity,
-      };
-    } catch (error) {
-      // Imprimir error
-      logger.error(error);
-      // Lanzar error
-      return Helper.throwCachedError(error);
-    }
+  async bulkCreate(entities: Codetrace[]): Promise<Codetrace[]> {
+    return this.repository.bulkCreate(entities);
+  }
+
+  async update(id: string, partialEntity: Partial<Codetrace>): Promise<Codetrace | null> {
+    return this.repository.update(id, partialEntity);
+  }
+
+  async bulkUpdate(entities: Partial<Codetrace>[]): Promise<Codetrace[]> {
+    return this.repository.bulkUpdate(entities);
+  }
+
+  async delete(id: string): Promise<any> {
+    return this.repository.delete(id);
+  }
+
+  async bulkDelete(ids: string[]): Promise<any> {
+    return this.repository.bulkDelete(ids);
   }
 }
-
-
-
