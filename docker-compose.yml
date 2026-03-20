@@ -9,6 +9,7 @@ services:
       - postgres
     networks:
       - entalla-net
+      - shared-net
 
   postgres:
     image: postgres:16
@@ -21,6 +22,7 @@ services:
       - pgdata:/var/lib/postgresql/data
     networks:
       - entalla-net
+      - shared-net
     profiles:
       - db
     healthcheck:
@@ -31,6 +33,8 @@ services:
 
 networks:
   entalla-net:
+    driver: bridge
+  shared-net:
     external: true
 
 volumes:
