@@ -31,10 +31,10 @@
 
 import { Injectable, Logger, NotFoundException, OnModuleInit } from "@nestjs/common";
 import { FindManyOptions } from "typeorm";
-import { codetrace } from "../entities/codetrace.entity";
+import { Codetrace } from "../entities/codetrace.entity";
 import { BaseEntity } from "../entities/base.entity";
-import { codetraceQueryRepository } from "../repositories/codetracequery.repository";
-import { codetraceResponse, codetracesResponse } from "../types/codetrace.types";
+import { CodetraceQueryRepository } from "../repositories/codetracequery.repository";
+import { CodetraceResponse, CodetracesResponse } from "../types/codetrace.types";
 import { Helper } from "src/common/helpers/helpers";
 import { PaginationArgs } from "src/common/dto/args/pagination.args";
 //import { Cacheable } from "../decorators/cache.decorator";
@@ -48,12 +48,12 @@ import { logger } from '@core/logs/logger';
 
 
 @Injectable()
-export class codetraceQueryService implements OnModuleInit{
+export class CodetraceQueryService implements OnModuleInit{
   // Private properties
-  readonly #logger = new Logger(codetraceQueryService.name);
+  readonly #logger = new Logger(CodetraceQueryService.name);
   private readonly loggerClient = LoggerClient.getInstance();
 
-  constructor(private readonly repository: codetraceQueryRepository,
+  constructor(private readonly repository: CodetraceQueryRepository,
   private moduleRef: ModuleRef
   ) {
     this.validate();
@@ -74,8 +74,8 @@ export class codetraceQueryService implements OnModuleInit{
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceQueryService.name)
-      .get(codetraceQueryService.name),
+      .registerClient(CodetraceQueryService.name)
+      .get(CodetraceQueryService.name),
   })
   onModuleInit() {
     //Se ejecuta en la inicialización del módulo
@@ -97,14 +97,14 @@ export class codetraceQueryService implements OnModuleInit{
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceQueryService.name)
-      .get(codetraceQueryService.name),
+      .registerClient(CodetraceQueryService.name)
+      .get(CodetraceQueryService.name),
   })
   private validate(): void {
     try {
-      const entityInstance = Object.create(codetrace.prototype);
+      const entityInstance = Object.create(Codetrace.prototype);
       if (!(entityInstance instanceof BaseEntity)) {
-        let sms = `El tipo ${codetrace.name} no extiende de BaseEntity. Asegúrate de que todas las entidades hereden correctamente.`;
+        let sms = `El tipo ${Codetrace.name} no extiende de BaseEntity. Asegúrate de que todas las entidades hereden correctamente.`;
         logger.info(sms);
         throw new Error(sms);
       }
@@ -130,13 +130,13 @@ export class codetraceQueryService implements OnModuleInit{
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceQueryService.name)
-      .get(codetraceQueryService.name),
+      .registerClient(CodetraceQueryService.name)
+      .get(CodetraceQueryService.name),
   })
   async findAll(
-    options?: FindManyOptions<codetrace>,
+    options?: FindManyOptions<Codetrace>,
     paginationArgs?: PaginationArgs
-  ): Promise<codetracesResponse<codetrace>> {
+  ): Promise<CodetracesResponse<Codetrace>> {
     try {
       const codetraces = await this.repository.findAll(options);
       // Devolver respuesta
@@ -175,10 +175,10 @@ export class codetraceQueryService implements OnModuleInit{
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceQueryService.name)
-      .get(codetraceQueryService.name),
+      .registerClient(CodetraceQueryService.name)
+      .get(CodetraceQueryService.name),
   })
-  async findById(id: string): Promise<codetraceResponse<codetrace>> {
+  async findById(id: string): Promise<CodetraceResponse<Codetrace>> {
     try {
       const codetrace = await this.repository.findOne({
         where: { id },
@@ -220,14 +220,14 @@ export class codetraceQueryService implements OnModuleInit{
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceQueryService.name)
-      .get(codetraceQueryService.name),
+      .registerClient(CodetraceQueryService.name)
+      .get(CodetraceQueryService.name),
   })
   async findByField(
     field: string,
     value: any,
     paginationArgs?: PaginationArgs
-  ): Promise<codetracesResponse<codetrace>> {
+  ): Promise<CodetracesResponse<Codetrace>> {
     try {
       const [entities, lenght] = await this.repository.findAndCount({
         where: { [field]: value },
@@ -282,9 +282,9 @@ export class codetraceQueryService implements OnModuleInit{
       .get(codetraceQueryService.name),
   })
   async findWithPagination(
-    options: FindManyOptions<codetrace>,
+    options: FindManyOptions<Codetrace>,
     paginationArgs?: PaginationArgs
-  ): Promise<codetracesResponse<codetrace>> {
+  ): Promise<CodetracesResponse<Codetrace>> {
     try {
       const entities = await this.repository.findWithPagination(
         options,
@@ -327,8 +327,8 @@ export class codetraceQueryService implements OnModuleInit{
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceQueryService.name)
-      .get(codetraceQueryService.name),
+      .registerClient(CodetraceQueryService.name)
+      .get(CodetraceQueryService.name),
   })
   async count(): Promise<number> {
     return this.repository.count();
@@ -351,13 +351,13 @@ export class codetraceQueryService implements OnModuleInit{
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceQueryService.name)
-      .get(codetraceQueryService.name),
+      .registerClient(CodetraceQueryService.name)
+      .get(CodetraceQueryService.name),
   })
   async findAndCount(
     where?: Record<string, any>,
     paginationArgs?: PaginationArgs
-  ): Promise<codetracesResponse<codetrace>> {
+  ): Promise<CodetracesResponse<Codetrace>> {
     try {
       const [entities, lenght] = await this.repository.findAndCount({
         where: where,
@@ -406,10 +406,10 @@ export class codetraceQueryService implements OnModuleInit{
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceQueryService.name)
-      .get(codetraceQueryService.name),
+      .registerClient(CodetraceQueryService.name)
+      .get(CodetraceQueryService.name),
   })
-  async findOne(where?: Record<string, any>): Promise<codetraceResponse<codetrace>> {
+  async findOne(where?: Record<string, any>): Promise<CodetraceResponse<Codetrace>> {
     try {
       const entity = await this.repository.findOne({
         where: where,
@@ -448,12 +448,12 @@ export class codetraceQueryService implements OnModuleInit{
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceQueryService.name)
-      .get(codetraceQueryService.name),
+      .registerClient(CodetraceQueryService.name)
+      .get(CodetraceQueryService.name),
   })
   async findOneOrFail(
     where?: Record<string, any>
-  ): Promise<codetraceResponse<codetrace> | Error> {
+  ): Promise<CodetraceResponse<Codetrace> | Error> {
     try {
       const entity = await this.repository.findOne({
         where: where,
