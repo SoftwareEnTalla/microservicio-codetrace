@@ -29,15 +29,15 @@
  */
 
 
-import { UpdateCodetraceDto } from '../dtos/all-dto';
-import { Codetrace } from '../entities/codetrace.entity';
+import { UpdatecodetraceDto } from '../dtos/all-dto';
+import { codetrace } from '../entities/codetrace.entity';
 import { BaseEvent, PayloadEvent } from './base.event'; 
 import { v4 as uuidv4 } from "uuid";
 
-export class CodetraceUpdatedEvent extends BaseEvent {
+export class codetraceUpdatedEvent extends BaseEvent {
   constructor(
     public readonly aggregateId: string,
-    public readonly payload: PayloadEvent<UpdateCodetraceDto|Codetrace>
+    public readonly payload: PayloadEvent<UpdatecodetraceDto|codetrace>
   ) {
     super(aggregateId);
   }
@@ -46,11 +46,11 @@ export class CodetraceUpdatedEvent extends BaseEvent {
          // Método estático para construcción consistente del evento
         static create(
           instanceId: string,
-          instance: UpdateCodetraceDto|Codetrace,
+          instance: UpdatecodetraceDto|codetrace,
           userId: string,
           correlationId?: string
-        ): CodetraceUpdatedEvent {
-          return new CodetraceUpdatedEvent(instanceId, {
+        ): codetraceUpdatedEvent {
+          return new codetraceUpdatedEvent(instanceId, {
             instance: instance,
             metadata: {
               initiatedBy: userId,

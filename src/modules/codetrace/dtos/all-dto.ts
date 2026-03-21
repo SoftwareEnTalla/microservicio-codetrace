@@ -44,11 +44,11 @@ import {
 
 
 @InputType()
-export class BaseCodetraceDto {
+export class BasecodetraceDto {
   @ApiProperty({
     type: () => String,
-    description: 'Nombre de instancia CreateCodetrace',
-    example: 'Nombre de instancia CreateCodetrace',
+    description: 'Nombre de instancia Createcodetrace',
+    example: 'Nombre de instancia Createcodetrace',
     nullable: false,
   })
   @IsString()
@@ -56,12 +56,12 @@ export class BaseCodetraceDto {
   @Field(() => String, { nullable: false })
   name: string = '';
 
-  // Propiedades predeterminadas de la clase CreateCodetraceDto según especificación del sistema
+  // Propiedades predeterminadas de la clase CreatecodetraceDto según especificación del sistema
 
   @ApiProperty({
     type: () => Date,
-    description: 'Fecha de creación de la instancia (CreateCodetrace).',
-    example: 'Fecha de creación de la instancia (CreateCodetrace).',
+    description: 'Fecha de creación de la instancia (Createcodetrace).',
+    example: 'Fecha de creación de la instancia (Createcodetrace).',
     nullable: false,
   })
   @IsDate()
@@ -71,8 +71,8 @@ export class BaseCodetraceDto {
 
   @ApiProperty({
     type: () => Date,
-    description: 'Fecha de actualización de la instancia (CreateCodetrace).',
-    example: 'Fecha de actualización de la instancia (CreateCodetrace).',
+    description: 'Fecha de actualización de la instancia (Createcodetrace).',
+    example: 'Fecha de actualización de la instancia (Createcodetrace).',
     nullable: false,
   })
   @IsDate()
@@ -83,9 +83,9 @@ export class BaseCodetraceDto {
   @ApiProperty({
     type: () => String,
     description:
-      'Usuario que realiza la creación de la instancia (CreateCodetrace).',
+      'Usuario que realiza la creación de la instancia (Createcodetrace).',
     example:
-      'Usuario que realiza la creación de la instancia (CreateCodetrace).',
+      'Usuario que realiza la creación de la instancia (Createcodetrace).',
     nullable: true,
   })
   @IsString()
@@ -95,8 +95,8 @@ export class BaseCodetraceDto {
 
   @ApiProperty({
     type: () => Boolean,
-    description: 'Estado de activación de la instancia (CreateCodetrace).',
-    example: 'Estado de activación de la instancia (CreateCodetrace).',
+    description: 'Estado de activación de la instancia (Createcodetrace).',
+    example: 'Estado de activación de la instancia (Createcodetrace).',
     nullable: false,
   })
   @IsBoolean()
@@ -105,7 +105,7 @@ export class BaseCodetraceDto {
   isActive: boolean = false; // Por defecto, el objeto no está activo
 
   // Constructor
-  constructor(partial: Partial<BaseCodetraceDto>) {
+  constructor(partial: Partial<BasecodetraceDto>) {
     Object.assign(this, partial);
   }
 }
@@ -114,8 +114,8 @@ export class BaseCodetraceDto {
 
 
 @InputType()
-export class CodetraceDto extends BaseCodetraceDto {
-  // Propiedades específicas de la clase CodetraceDto en cuestión
+export class codetraceDto extends BasecodetraceDto {
+  // Propiedades específicas de la clase codetraceDto en cuestión
 
   @ApiProperty({
     type: () => String,
@@ -128,14 +128,14 @@ export class CodetraceDto extends BaseCodetraceDto {
   id?: string;
 
   // Constructor
-  constructor(partial: Partial<CodetraceDto>) {
+  constructor(partial: Partial<codetraceDto>) {
     super(partial);
     Object.assign(this, partial);
   }
 
   // Método estático para construir la instancia
-  static build(data: Partial<CodetraceDto>): CodetraceDto {
-    const instance = new CodetraceDto(data);
+  static build(data: Partial<codetraceDto>): codetraceDto {
+    const instance = new codetraceDto(data);
     instance.creationDate = new Date(); // Actualiza la fecha de creación al momento de la creación
     instance.modificationDate = new Date(); // Actualiza la fecha de modificación al momento de la creación
     return instance;
@@ -146,7 +146,7 @@ export class CodetraceDto extends BaseCodetraceDto {
 
 
 @InputType()
-export class CodetraceValueInput {
+export class codetraceValueInput {
   @ApiProperty({
     type: () => String,
     nullable: false,
@@ -156,11 +156,11 @@ export class CodetraceValueInput {
   fieldName: string = 'id';
 
   @ApiProperty({
-    type: () => CodetraceDto,
+    type: () => codetraceDto,
     nullable: false,
     description: 'Valor del filtro',
   })
-  @Field(() => CodetraceDto, { nullable: false })
+  @Field(() => codetraceDto, { nullable: false })
   fieldValue: any; // Permite cualquier tipo
 } 
 
@@ -168,8 +168,8 @@ export class CodetraceValueInput {
 
 
 @ObjectType()
-export class CodetraceOutPutDto extends BaseCodetraceDto {
-  // Propiedades específicas de la clase CodetraceOutPutDto en cuestión
+export class codetraceOutPutDto extends BasecodetraceDto {
+  // Propiedades específicas de la clase codetraceOutPutDto en cuestión
 
   @ApiProperty({
     type: () => String,
@@ -182,14 +182,14 @@ export class CodetraceOutPutDto extends BaseCodetraceDto {
   id?: string;
 
   // Constructor
-  constructor(partial: Partial<CodetraceOutPutDto>) {
+  constructor(partial: Partial<codetraceOutPutDto>) {
     super(partial);
     Object.assign(this, partial);
   }
 
   // Método estático para construir la instancia
-  static build(data: Partial<CodetraceOutPutDto>): CodetraceOutPutDto {
-    const instance = new CodetraceOutPutDto(data);
+  static build(data: Partial<codetraceOutPutDto>): codetraceOutPutDto {
+    const instance = new codetraceOutPutDto(data);
     instance.creationDate = new Date(); // Actualiza la fecha de creación al momento de la creación
     instance.modificationDate = new Date(); // Actualiza la fecha de modificación al momento de la creación
     return instance;
@@ -199,14 +199,14 @@ export class CodetraceOutPutDto extends BaseCodetraceDto {
 
 
 @InputType()
-export class CreateCodetraceDto extends BaseCodetraceDto {
-  // Propiedades específicas de la clase CreateCodetraceDto en cuestión
+export class CreatecodetraceDto extends BasecodetraceDto {
+  // Propiedades específicas de la clase CreatecodetraceDto en cuestión
 
   @ApiProperty({
     type: () => String,
     description: 'Identificador de instancia a crear',
     example:
-      'Se proporciona un identificador de CreateCodetrace a crear \(opcional\) ',
+      'Se proporciona un identificador de Createcodetrace a crear \(opcional\) ',
   })
   @IsString()
   @IsOptional()
@@ -214,14 +214,14 @@ export class CreateCodetraceDto extends BaseCodetraceDto {
   id?: string;
 
   // Constructor
-  constructor(partial: Partial<CreateCodetraceDto>) {
+  constructor(partial: Partial<CreatecodetraceDto>) {
     super(partial);
     Object.assign(this, partial);
   }
 
   // Método estático para construir la instancia
-  static build(data: Partial<CreateCodetraceDto>): CreateCodetraceDto {
-    const instance = new CreateCodetraceDto(data);
+  static build(data: Partial<CreatecodetraceDto>): CreatecodetraceDto {
+    const instance = new CreatecodetraceDto(data);
     instance.creationDate = new Date(); // Actualiza la fecha de creación al momento de la creación
     instance.modificationDate = new Date(); // Actualiza la fecha de modificación al momento de la creación
     return instance;
@@ -231,7 +231,7 @@ export class CreateCodetraceDto extends BaseCodetraceDto {
 
 
 @InputType()
-export class CreateOrUpdateCodetraceDto {
+export class CreateOrUpdatecodetraceDto {
   @ApiProperty({
     type: () => String,
     description: 'Identificador',
@@ -243,27 +243,27 @@ export class CreateOrUpdateCodetraceDto {
   id?: string;
 
   @ApiProperty({
-    type: () => CreateCodetraceDto,
-    description: 'Instancia CreateCodetrace o UpdateCodetrace',
+    type: () => CreatecodetraceDto,
+    description: 'Instancia Createcodetrace o Updatecodetrace',
     nullable: true,
   })
   @IsOptional()
   @IsObject()
   @ValidateNested()
-  @Field(() => CreateCodetraceDto, { nullable: true })
-  input?: CreateCodetraceDto | UpdateCodetraceDto; // Asegúrate de que esto esté correcto
+  @Field(() => CreatecodetraceDto, { nullable: true })
+  input?: CreatecodetraceDto | UpdatecodetraceDto; // Asegúrate de que esto esté correcto
 }
 
 
 
 @InputType()
-export class DeleteCodetraceDto {
-  // Propiedades específicas de la clase DeleteCodetraceDto en cuestión
+export class DeletecodetraceDto {
+  // Propiedades específicas de la clase DeletecodetraceDto en cuestión
 
   @ApiProperty({
     type: () => String,
     description: 'Identificador de instancia a eliminar',
-    example: 'Se proporciona un identificador de DeleteCodetrace a eliminar',
+    example: 'Se proporciona un identificador de Deletecodetrace a eliminar',
     default: '',
   })
   @IsString()
@@ -275,7 +275,7 @@ export class DeleteCodetraceDto {
     type: () => String,
     description: 'Lista de identificadores de instancias a eliminar',
     example:
-      'Se proporciona una lista de identificadores de DeleteCodetrace a eliminar',
+      'Se proporciona una lista de identificadores de Deletecodetrace a eliminar',
     default: [],
   })
   @IsString()
@@ -287,13 +287,13 @@ export class DeleteCodetraceDto {
 
 
 @InputType()
-export class UpdateCodetraceDto extends BaseCodetraceDto {
-  // Propiedades específicas de la clase UpdateCodetraceDto en cuestión
+export class UpdatecodetraceDto extends BasecodetraceDto {
+  // Propiedades específicas de la clase UpdatecodetraceDto en cuestión
 
   @ApiProperty({
     type: () => String,
     description: 'Identificador de instancia a actualizar',
-    example: 'Se proporciona un identificador de UpdateCodetrace a actualizar',
+    example: 'Se proporciona un identificador de Updatecodetrace a actualizar',
   })
   @IsString()
   @IsNotEmpty()
@@ -301,14 +301,14 @@ export class UpdateCodetraceDto extends BaseCodetraceDto {
   id!: string;
 
   // Constructor
-  constructor(partial: Partial<UpdateCodetraceDto>) {
+  constructor(partial: Partial<UpdatecodetraceDto>) {
     super(partial);
     Object.assign(this, partial);
   }
 
   // Método estático para construir la instancia
-  static build(data: Partial<UpdateCodetraceDto>): UpdateCodetraceDto {
-    const instance = new UpdateCodetraceDto(data);
+  static build(data: Partial<UpdatecodetraceDto>): UpdatecodetraceDto {
+    const instance = new UpdatecodetraceDto(data);
     instance.creationDate = new Date(); // Actualiza la fecha de creación al momento de la creación
     instance.modificationDate = new Date(); // Actualiza la fecha de modificación al momento de la creación
     return instance;

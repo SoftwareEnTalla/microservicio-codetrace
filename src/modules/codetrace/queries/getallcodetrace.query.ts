@@ -31,7 +31,7 @@
 
 import { BaseQuery } from './base.query';
 
-export class GetAllCodetraceQuery extends BaseQuery {
+export class GetAllcodetraceQuery extends BaseQuery {
   constructor(
     public readonly filters: Record<string, any>,
     metadata?: Record<string, any>
