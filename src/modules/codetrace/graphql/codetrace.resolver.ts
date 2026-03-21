@@ -32,20 +32,20 @@
 import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
 
 //Definición de entidades
-import { codetrace } from "../entities/codetrace.entity";
+import { Codetrace } from "../entities/codetrace.entity";
 
 //Definición de comandos
 import {
-  CreatecodetraceCommand,
-  UpdatecodetraceCommand,
-  DeletecodetraceCommand,
+  CreateCodetraceCommand,
+  UpdateCodetraceCommand,
+  DeleteCodetraceCommand,
 } from "../commands/exporting.command";
 
 import { CommandBus } from "@nestjs/cqrs";
-import { codetraceQueryService } from "../services/codetracequery.service";
+import { CodetraceQueryService } from "../services/codetracequery.service";
 
 
-import { codetraceResponse, codetracesResponse } from "../types/codetrace.types";
+import { CodetraceResponse, CodetracesResponse } from "../types/codetrace.types";
 import { FindManyOptions } from "typeorm";
 import { PaginationArgs } from "src/common/dto/args/pagination.args";
 import { fromObject } from "src/utils/functions";
@@ -58,20 +58,20 @@ import { logger } from '@core/logs/logger';
 import { v4 as uuidv4 } from "uuid";
 
 //Definición de tdos
-import { UpdatecodetraceDto, 
-CreateOrUpdatecodetraceDto, 
-codetraceValueInput, 
-codetraceDto, 
-CreatecodetraceDto } from "../dtos/all-dto";
+import { UpdateCodetraceDto, 
+CreateOrUpdateCodetraceDto, 
+CodetraceValueInput, 
+CodetraceDto, 
+CreateCodetraceDto } from "../dtos/all-dto";
  
 
 //@UseGuards(JwtGraphQlAuthGuard)
-@Resolver(() => codetrace)
-export class codetraceResolver {
+@Resolver(() => Codetrace)
+export class CodetraceResolver {
 
-   //Constructor del resolver de codetrace
+   //Constructor del resolver de Codetrace
   constructor(
-    private readonly service: codetraceQueryService,
+    private readonly service: CodetraceQueryService,
     private readonly commandBus: CommandBus
   ) {}
 
@@ -90,16 +90,16 @@ export class codetraceResolver {
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceResolver.name)
+      .registerClient(CodetraceResolver.name)
 
-      .get(codetraceResolver.name),
+      .get(CodetraceResolver.name),
     })
   // Mutaciones
-  @Mutation(() => codetraceResponse<codetrace>)
-  async createcodetrace(
-    @Args("input", { type: () => CreatecodetraceDto }) input: CreatecodetraceDto
-  ): Promise<codetraceResponse<codetrace>> {
-    return this.commandBus.execute(new CreatecodetraceCommand(input));
+  @Mutation(() => CodetraceResponse<Codetrace>)
+  async createCodetrace(
+    @Args("input", { type: () => CreateCodetraceDto }) input: CreateCodetraceDto
+  ): Promise<CodetraceResponse<Codetrace>> {
+    return this.commandBus.execute(new CreateCodetraceCommand(input));
   }
 
 
@@ -118,18 +118,18 @@ export class codetraceResolver {
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceResolver.name)
+      .registerClient(CodetraceResolver.name)
 
-      .get(codetraceResolver.name),
+      .get(CodetraceResolver.name),
     })
-  @Mutation(() => codetraceResponse<codetrace>)
-  async updatecodetrace(
+  @Mutation(() => CodetraceResponse<Codetrace>)
+  async updateCodetrace(
     @Args("id", { type: () => String }) id: string,
-    @Args("input") input: UpdatecodetraceDto
-  ): Promise<codetraceResponse<codetrace>> {
+    @Args("input") input: UpdateCodetraceDto
+  ): Promise<CodetraceResponse<Codetrace>> {
     const payLoad = input;
     return this.commandBus.execute(
-      new UpdatecodetraceCommand(payLoad, {
+      new UpdateCodetraceCommand(payLoad, {
         instance: payLoad,
         metadata: {
           initiatedBy: payLoad.createdBy || 'system',
@@ -155,24 +155,24 @@ export class codetraceResolver {
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceResolver.name)
+      .registerClient(CodetraceResolver.name)
 
-      .get(codetraceResolver.name),
+      .get(CodetraceResolver.name),
     })
-  @Mutation(() => codetraceResponse<codetrace>)
-  async createOrUpdatecodetrace(
-    @Args("data", { type: () => CreateOrUpdatecodetraceDto })
-    data: CreateOrUpdatecodetraceDto
-  ): Promise<codetraceResponse<codetrace>> {
+  @Mutation(() => CodetraceResponse<Codetrace>)
+  async createOrUpdateCodetrace(
+    @Args("data", { type: () => CreateOrUpdateCodetraceDto })
+    data: CreateOrUpdateCodetraceDto
+  ): Promise<CodetraceResponse<Codetrace>> {
     if (data.id) {
-      const existingcodetrace = await this.service.findById(data.id);
-      if (existingcodetrace) {
+      const existingCodetrace = await this.service.findById(data.id);
+      if (existingCodetrace) {
         return this.commandBus.execute(
-          new UpdatecodetraceCommand(data, {
+          new UpdateCodetraceCommand(data, {
             instance: data,
             metadata: {
               initiatedBy:
-                (data.input as CreatecodetraceDto | UpdatecodetraceDto).createdBy ||
+                (data.input as CreateCodetraceDto | UpdateCodetraceDto).createdBy ||
                 'system',
               correlationId: data.id,
             },
@@ -181,11 +181,11 @@ export class codetraceResolver {
       }
     }
     return this.commandBus.execute(
-      new CreatecodetraceCommand(data, {
+      new CreateCodetraceCommand(data, {
         instance: data,
         metadata: {
           initiatedBy:
-            (data.input as CreatecodetraceDto | UpdatecodetraceDto).createdBy ||
+            (data.input as CreateCodetraceDto | UpdateCodetraceDto).createdBy ||
             'system',
           correlationId: data.id || uuidv4(),
         },
@@ -209,15 +209,15 @@ export class codetraceResolver {
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceResolver.name)
+      .registerClient(CodetraceResolver.name)
 
-      .get(codetraceResolver.name),
+      .get(CodetraceResolver.name),
     })
   @Mutation(() => Boolean)
-  async deletecodetrace(
+  async deleteCodetrace(
     @Args("id", { type: () => String }) id: string
   ): Promise<boolean> {
-    return this.commandBus.execute(new DeletecodetraceCommand(id));
+    return this.commandBus.execute(new DeleteCodetraceCommand(id));
   }
 
 
@@ -236,16 +236,16 @@ export class codetraceResolver {
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceResolver.name)
+      .registerClient(CodetraceResolver.name)
 
-      .get(codetraceResolver.name),
+      .get(CodetraceResolver.name),
     })
   // Queries
-  @Query(() => codetracesResponse<codetrace>)
+  @Query(() => CodetracesResponse<Codetrace>)
   async codetraces(
-    options?: FindManyOptions<codetrace>,
+    options?: FindManyOptions<Codetrace>,
     paginationArgs?: PaginationArgs
-  ): Promise<codetracesResponse<codetrace>> {
+  ): Promise<CodetracesResponse<Codetrace>> {
     return this.service.findAll(options, paginationArgs);
   }
 
@@ -265,14 +265,14 @@ export class codetraceResolver {
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceResolver.name)
+      .registerClient(CodetraceResolver.name)
 
-      .get(codetraceResolver.name),
+      .get(CodetraceResolver.name),
     })
-  @Query(() => codetracesResponse<codetrace>)
+  @Query(() => CodetracesResponse<Codetrace>)
   async codetrace(
     @Args("id", { type: () => String }) id: string
-  ): Promise<codetraceResponse<codetrace>> {
+  ): Promise<CodetraceResponse<Codetrace>> {
     return this.service.findById(id);
   }
 
@@ -292,17 +292,17 @@ export class codetraceResolver {
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceResolver.name)
+      .registerClient(CodetraceResolver.name)
 
-      .get(codetraceResolver.name),
+      .get(CodetraceResolver.name),
     })
-  @Query(() => codetracesResponse<codetrace>)
+  @Query(() => CodetracesResponse<Codetrace>)
   async codetracesByField(
     @Args("field", { type: () => String }) field: string,
-    @Args("value", { type: () => codetraceValueInput }) value: codetraceValueInput,
+    @Args("value", { type: () => CodetraceValueInput }) value: CodetraceValueInput,
     @Args("page", { type: () => Number, defaultValue: 1 }) page: number,
     @Args("limit", { type: () => Number, defaultValue: 10 }) limit: number
-  ): Promise<codetracesResponse<codetrace>> {
+  ): Promise<CodetracesResponse<Codetrace>> {
     return this.service.findByField(
       field,
       value,
@@ -326,15 +326,15 @@ export class codetraceResolver {
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceResolver.name)
+      .registerClient(CodetraceResolver.name)
 
-      .get(codetraceResolver.name),
+      .get(CodetraceResolver.name),
     })
-  @Query(() => codetracesResponse<codetrace>)
+  @Query(() => CodetracesResponse<Codetrace>)
   async codetracesWithPagination(
     @Args("page", { type: () => Number, defaultValue: 1 }) page: number,
     @Args("limit", { type: () => Number, defaultValue: 10 }) limit: number
-  ): Promise<codetracesResponse<codetrace>> {
+  ): Promise<CodetracesResponse<Codetrace>> {
     const paginationArgs = fromObject.call(PaginationArgs, {
       page: page,
       limit: limit,
@@ -358,12 +358,12 @@ export class codetraceResolver {
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceResolver.name)
+      .registerClient(CodetraceResolver.name)
 
-      .get(codetraceResolver.name),
+      .get(CodetraceResolver.name),
     })
   @Query(() => Number)
-  async totalcodetraces(): Promise<number> {
+  async totalCodetraces(): Promise<number> {
     return this.service.count();
   }
 
@@ -383,15 +383,15 @@ export class codetraceResolver {
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceResolver.name)
+      .registerClient(CodetraceResolver.name)
 
-      .get(codetraceResolver.name),
+      .get(CodetraceResolver.name),
     })
-  @Query(() => codetracesResponse<codetrace>)
-  async searchcodetraces(
-    @Args("where", { type: () => codetraceDto, nullable: false })
+  @Query(() => CodetracesResponse<Codetrace>)
+  async searchCodetraces(
+    @Args("where", { type: () => CodetraceDto, nullable: false })
     where: Record<string, any>
-  ): Promise<codetracesResponse<codetrace>> {
+  ): Promise<CodetracesResponse<Codetrace>> {
     const codetraces = await this.service.findAndCount(where);
     return codetraces;
   }
@@ -412,15 +412,15 @@ export class codetraceResolver {
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceResolver.name)
+      .registerClient(CodetraceResolver.name)
 
-      .get(codetraceResolver.name),
+      .get(CodetraceResolver.name),
     })
-  @Query(() => codetraceResponse<codetrace>, { nullable: true })
-  async findOnecodetrace(
-    @Args("where", { type: () => codetraceDto, nullable: false })
+  @Query(() => CodetraceResponse<Codetrace>, { nullable: true })
+  async findOneCodetrace(
+    @Args("where", { type: () => CodetraceDto, nullable: false })
     where: Record<string, any>
-  ): Promise<codetraceResponse<codetrace>> {
+  ): Promise<CodetraceResponse<Codetrace>> {
     return this.service.findOne(where);
   }
 
@@ -440,15 +440,15 @@ export class codetraceResolver {
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceResolver.name)
+      .registerClient(CodetraceResolver.name)
 
-      .get(codetraceResolver.name),
+      .get(CodetraceResolver.name),
     })
-  @Query(() => codetraceResponse<codetrace>)
-  async findOnecodetraceOrFail(
-    @Args("where", { type: () => codetraceDto, nullable: false })
+  @Query(() => CodetraceResponse<Codetrace>)
+  async findOneCodetraceOrFail(
+    @Args("where", { type: () => CodetraceDto, nullable: false })
     where: Record<string, any>
-  ): Promise<codetraceResponse<codetrace> | Error> {
+  ): Promise<CodetraceResponse<Codetrace> | Error> {
     return this.service.findOneOrFail(where);
   }
 }

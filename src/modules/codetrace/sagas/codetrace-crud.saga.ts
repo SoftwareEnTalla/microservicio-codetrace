@@ -61,7 +61,7 @@ export class CodetraceCrudSaga {
     return $events.pipe(
       ofType(CodetraceCreatedEvent),
       tap(event => {
-        this.logger.log(`Saga iniciada para creación de codetrace: ${event.aggregateId}`);
+        this.logger.log(`Saga iniciada para creación de Codetrace: ${event.aggregateId}`);
         // Lógica post-creación (ej: enviar notificación)
       }),
       map(event => {
@@ -77,7 +77,7 @@ export class CodetraceCrudSaga {
     return $events.pipe(
       ofType(CodetraceUpdatedEvent),
       tap(event => {
-        this.logger.log(`Saga iniciada para actualización de codetrace: ${event.aggregateId}`);
+        this.logger.log(`Saga iniciada para actualización de Codetrace: ${event.aggregateId}`);
         // Lógica post-actualización (ej: actualizar caché)
       })
     );
@@ -89,7 +89,7 @@ export class CodetraceCrudSaga {
     return $events.pipe(
       ofType(CodetraceDeletedEvent),
       tap(event => {
-        this.logger.log(`Saga iniciada para eliminación de codetrace: ${event.aggregateId}`);
+        this.logger.log(`Saga iniciada para eliminación de Codetrace: ${event.aggregateId}`);
         // Lógica post-eliminación (ej: limpiar relaciones)
       }),
       map(event => {

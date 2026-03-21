@@ -30,24 +30,24 @@
 
 
 import { Module } from "@nestjs/common";
-import { codetraceCommandController } from "../controllers/codetracecommand.controller";
-import { codetraceQueryController } from "../controllers/codetracequery.controller";
-import { codetraceCommandService } from "../services/codetracecommand.service";
-import { codetraceQueryService } from "../services/codetracequery.service";
-import { codetraceCommandRepository } from "../repositories/codetracecommand.repository";
-import { codetraceQueryRepository } from "../repositories/codetracequery.repository";
-import { codetraceRepository } from "../repositories/codetrace.repository";
-import { codetraceResolver } from "../graphql/codetrace.resolver";
-import { codetraceAuthGuard } from "../guards/codetraceauthguard.guard";
+import { CodetraceCommandController } from "../controllers/codetracecommand.controller";
+import { CodetraceQueryController } from "../controllers/codetracequery.controller";
+import { CodetraceCommandService } from "../services/codetracecommand.service";
+import { CodetraceQueryService } from "../services/codetracequery.service";
+import { CodetraceCommandRepository } from "../repositories/codetracecommand.repository";
+import { CodetraceQueryRepository } from "../repositories/codetracequery.repository";
+import { CodetraceRepository } from "../repositories/codetrace.repository";
+import { CodetraceResolver } from "../graphql/codetrace.resolver";
+import { CodetraceAuthGuard } from "../guards/codetraceauthguard.guard";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { codetrace } from "../entities/codetrace.entity";
+import { Codetrace } from "../entities/codetrace.entity";
 import { BaseEntity } from "../entities/base.entity";
 import { CommandBus, EventBus, UnhandledExceptionBus } from "@nestjs/cqrs";
 import { CacheModule } from "@nestjs/cache-manager";
 
 //Interceptors
-import { codetraceInterceptor } from "../interceptors/codetrace.interceptor";
-import { codetraceLoggingInterceptor } from "../interceptors/codetrace.logging.interceptor";
+import { CodetraceInterceptor } from "../interceptors/codetrace.interceptor";
+import { CodetraceLoggingInterceptor } from "../interceptors/codetrace.logging.interceptor";
 
 //Event-Sourcing dependencies
 import { EventStoreService } from "../shared/event-store/event-store.service";
@@ -56,27 +56,27 @@ import { KafkaService } from "../shared/messaging/kafka.service";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([BaseEntity, codetrace]), // Incluir BaseEntity para herencia
+    TypeOrmModule.forFeature([BaseEntity, Codetrace]), // Incluir BaseEntity para herencia
     CacheModule.register(), // Importa el módulo de caché
   ],
-  controllers: [codetraceCommandController, codetraceQueryController],
+  controllers: [CodetraceCommandController, CodetraceQueryController],
   providers: [
     //Services
     EventStoreService,
     KafkaService,
-    codetraceQueryService,
-    codetraceCommandService,
+    CodetraceQueryService,
+    CodetraceCommandService,
     //Repositories
-    codetraceCommandRepository,
-    codetraceQueryRepository,
-    codetraceRepository,      
+    CodetraceCommandRepository,
+    CodetraceQueryRepository,
+    CodetraceRepository,      
     //Resolvers
-    codetraceResolver,
+    CodetraceResolver,
     //Guards
-    codetraceAuthGuard,
+    CodetraceAuthGuard,
     //Interceptors
-    codetraceInterceptor,
-    codetraceLoggingInterceptor,
+    CodetraceInterceptor,
+    CodetraceLoggingInterceptor,
     //Publishers
     KafkaEventPublisher,
     //Configurations
@@ -100,19 +100,19 @@ import { KafkaService } from "../shared/messaging/kafka.service";
     //Services
     EventStoreService,
     KafkaService,
-    codetraceQueryService,
-    codetraceCommandService,
+    CodetraceQueryService,
+    CodetraceCommandService,
     //Repositories
-    codetraceCommandRepository,
-    codetraceQueryRepository,
-    codetraceRepository,      
+    CodetraceCommandRepository,
+    CodetraceQueryRepository,
+    CodetraceRepository,      
     //Resolvers
-    codetraceResolver,
+    CodetraceResolver,
     //Guards
-    codetraceAuthGuard,
+    CodetraceAuthGuard,
     //Interceptors
-    codetraceInterceptor,
-    codetraceLoggingInterceptor,
+    CodetraceInterceptor,
+    CodetraceLoggingInterceptor,
     //Publishers
     KafkaEventPublisher,
     //Others dependencies
@@ -121,5 +121,5 @@ import { KafkaService } from "../shared/messaging/kafka.service";
     EventBus, // Bus de eventos
   ],
 })
-export class codetraceModule {}
+export class CodetraceModule {}
 

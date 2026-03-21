@@ -27,105 +27,42 @@
  *
  *
  */
-import { Injectable, NotFoundException, Optional, Inject } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import {
-  DeleteResult,
+
+    import { Injectable } from '@nestjs/common';
+  import { InjectRepository } from '@nestjs/typeorm';
+  import {
+  FindManyOptions,
+  FindOptionsWhere,
+  In,
+  MoreThanOrEqual,
   Repository,
+  DeleteResult,
   UpdateResult,
 } from 'typeorm';
+ 
+  import { BaseEntity } from '../entities/base.entity';
+  import { Codetrace } from '../entities/codetrace.entity';
+  import { Cacheable } from '../decorators/cache.decorator';
+  import { generateCacheKey } from 'src/utils/functions';
 
-
-import { BaseEntity } from '../entities/base.entity';
-import { codetrace } from '../entities/codetrace.entity';
-import { codetraceQueryRepository } from './codetracequery.repository';
-import { generateCacheKey } from 'src/utils/functions';
-import { Cacheable } from '../decorators/cache.decorator';
-import {codetraceRepository} from './codetrace.repository';
-
-//Logger
+  //Logger
 import { LogExecutionTime } from 'src/common/logger/loggers.functions';
 import { LoggerClient } from 'src/common/logger/logger.client';
 import { logger } from '@core/logs/logger';
 
-//Events and EventHandlers
-import { IEventHandler } from '@nestjs/cqrs';
-import { codetraceCreatedEvent } from '../events/codetracecreated.event';
-import { codetraceUpdatedEvent } from '../events/codetraceupdated.event';
-import { codetraceDeletedEvent } from '../events/codetracedeleted.event';
-
-//Enfoque Event Sourcing
-import { CommandBus } from '@nestjs/cqrs';
-import { EventStoreService } from '../shared/event-store/event-store.service';
-import { KafkaEventPublisher } from '../shared/adapters/kafka-event-publisher';
-import { BaseEvent } from '../events/base.event';
-
-//Event Sourcing Config
-import { EventSourcingHelper } from '../shared/decorators/event-sourcing.helper';
-import { EventSourcingConfigOptions } from '../shared/decorators/event-sourcing.decorator';
-
-
-@Injectable()
-export class codetraceRepository implements IEventHandler<BaseEvent>{
-
-  //Constructor del repositorio de datos: codetraceRepository
-  constructor(
-    @InjectRepository(codetrace)
-    private readonly repository: Repository<codetrace>,
-    private readonly codetraceRepository: codetraceQueryRepository,
-    private readonly commandBus: CommandBus,
-    private readonly eventStore: EventStoreService,
-    private readonly eventPublisher: KafkaEventPublisher,
-    @Optional() @Inject('EVENT_SOURCING_CONFIG') 
-    private readonly eventSourcingConfig: EventSourcingConfigOptions = EventSourcingHelper.getDefaultConfig()
-  ) {
-    this.validate();
-  }
-
-  @LogExecutionTime({
-    layer: 'repository',
-    callback: async (logData, client) => {
-      try{
-        logger.info('Información del cliente y datos a enviar:',[logData,client]);
-        return await client.send(logData);
-      }
-      catch(error){
-        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        logger.info('ERROR-LOG: ', error);
-        throw error;
-      }
-    },
-    client: LoggerClient.getInstance()
-      .registerClient(codetraceRepository.name)
-      .get(codetraceRepository.name),
-  })
-  private validate(): void {
-    const entityInstance = Object.create(codetrace.prototype);
-
-    if (!(entityInstance instanceof BaseEntity)) {
-      throw new Error(
-        `El tipo ${codetrace.name} no extiende de BaseEntity. Asegúrate de que todas las entidades hereden correctamente.`
-      );
+  @Injectable()
+  export class CodetraceRepository {
+    constructor(
+      @InjectRepository(Codetrace)
+      private readonly repository: Repository<Codetrace>
+    ) {
+      this.validate();
     }
-  }
 
-  // Helper para determinar si usar Event Sourcing
-  private shouldPublishEvent(): boolean {
-    return EventSourcingHelper.shouldPublishEvents(this.eventSourcingConfig);
-  }
-
-  private shouldUseProjections(): boolean {
-    return EventSourcingHelper.shouldUseProjections(this.eventSourcingConfig);
-  }
-
-
-  // ----------------------------
-  // MÉTODOS DE PROYECCIÓN (Event Handlers) para enfoque Event Sourcing
-  // ----------------------------
-
-  @LogExecutionTime({
+    @LogExecutionTime({
     layer: 'repository',
     callback: async (logData, client) => {
+      // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
         logger.info('Información del cliente y datos a enviar:',[logData,client]);
         return await client.send(logData);
@@ -137,31 +74,49 @@ export class codetraceRepository implements IEventHandler<BaseEvent>{
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceRepository.name)
-      .get(codetraceRepository.name),
+      .registerClient(CodetraceRepository.name)
+      .get(CodetraceRepository.name),
   })
-  async handle(event: any) {
-    // Solo manejar eventos si las proyecciones están habilitadas
-    if (!this.shouldUseProjections()) {
-      logger.debug('Projections are disabled, skipping event handling');
-      return false;
+    private validate(): void {
+      const entityInstance = Object.create(Codetrace.prototype);
+
+      if (!(entityInstance instanceof BaseEntity)) {
+        throw new Error(
+          `El tipo ${Codetrace.name} no extiende de BaseEntity. Asegúrate de que todas las entidades hereden correctamente.`
+        );
+      }
     }
+
     
-    logger.info('Ready to handle codetrace event on repository:', event);
-    switch (event.constructor.name) {
-      case 'codetraceCreatedEvent':
-        return await this.oncodetraceCreated(event);
-      case 'codetraceUpdatedEvent':
-        return await this.oncodetraceUpdated(event);
-      case 'codetraceDeletedEvent':
-        return await this.oncodetraceDeleted(event);
+    //Funciones de Query-Repositories
+    @LogExecutionTime({
+    layer: 'repository',
+    callback: async (logData, client) => {
+      // Puedes usar el cliente proporcionado o ignorarlo y usar otro
+      try{
+        logger.info('Información del cliente y datos a enviar:',[logData,client]);
+        return await client.send(logData);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
+        throw error;
+      }
+    },
+    client: LoggerClient.getInstance()
+      .registerClient(CodetraceRepository.name)
+      .get(CodetraceRepository.name),
+    })
+    async findAll(options?: FindManyOptions<Codetrace>): Promise<Codetrace[]> {
+      logger.info('Ready to findAll Codetrace on repository:',options);
+      return this.repository.find(options);
     }
-    return false;
-  }
 
-  @LogExecutionTime({
+
+    @LogExecutionTime({
     layer: 'repository',
     callback: async (logData, client) => {
+      // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
         logger.info('Información del cliente y datos a enviar:',[logData,client]);
         return await client.send(logData);
@@ -173,29 +128,20 @@ export class codetraceRepository implements IEventHandler<BaseEvent>{
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceRepository.name)
-      .get(codetraceRepository.name),
-  })
-  @Cacheable({
-    key: (args) => generateCacheKey<codetrace>('createcodetrace', args[0], args[1]),
-    ttl: 60,
-  })
-  private async oncodetraceCreated(event: codetraceCreatedEvent) {
-    logger.info('Ready to handle oncodetraceCreated event on repository:', event);
-    const entity = new codetrace();
-    entity.id = event.aggregateId;
-    Object.assign(entity, event.payload.instance);
-    // Asegurar que el tipo discriminador esté establecido
-    if (!entity.type) {
-      entity.type = 'codetrace';
+      .registerClient(CodetraceRepository.name)
+      .get(CodetraceRepository.name),
+    })
+    async findById(id: string): Promise<Codetrace | null> {
+      const tmp: FindOptionsWhere<Codetrace> = { id } as FindOptionsWhere<Codetrace>;
+      logger.info('Ready to findById Codetrace on repository:',tmp);
+      return this.repository.findOneBy(tmp);
     }
-    logger.info('Ready to save entity from event\'s payload:', entity);
-    return await this.repository.save(entity);
-  }
 
-  @LogExecutionTime({
+
+    @LogExecutionTime({
     layer: 'repository',
     callback: async (logData, client) => {
+      // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
         logger.info('Información del cliente y datos a enviar:',[logData,client]);
         return await client.send(logData);
@@ -207,98 +153,59 @@ export class codetraceRepository implements IEventHandler<BaseEvent>{
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceRepository.name)
-      .get(codetraceRepository.name),
-  })
-  @Cacheable({
-    key: (args) => generateCacheKey<codetrace>('updatecodetrace', args[0], args[1]),
-    ttl: 60,
-  })
-  private async oncodetraceUpdated(event: codetraceUpdatedEvent) {
-    logger.info('Ready to handle oncodetraceUpdated event on repository:', event);
-    return await this.repository.update(
-      event.aggregateId,
-      event.payload.instance
-    );
-  }
-
-  @LogExecutionTime({
-    layer: 'repository',
-    callback: async (logData, client) => {
-      try{
-        logger.info('Información del cliente y datos a enviar:',[logData,client]);
-        return await client.send(logData);
-      }
-      catch(error){
-        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        logger.info('ERROR-LOG: ', error);
-        throw error;
-      }
-    },
-    client: LoggerClient.getInstance()
-      .registerClient(codetraceRepository.name)
-      .get(codetraceRepository.name),
-  })
-  @Cacheable({
-    key: (args) => generateCacheKey<codetrace>('deletecodetrace', args[0], args[1]),
-    ttl: 60,
-  })
-  private async oncodetraceDeleted(event: codetraceDeletedEvent) {
-    logger.info('Ready to handle oncodetraceDeleted event on repository:', event);
-    return await this.repository.delete(event.aggregateId);
-  }
-
-
-  // ----------------------------
-  // MÉTODOS CRUD TRADICIONALES (Compatibilidad)
-  // ----------------------------
- 
-  @LogExecutionTime({
-    layer: 'repository',
-    callback: async (logData, client) => {
-      try{
-        logger.info('Información del cliente y datos a enviar:',[logData,client]);
-        return await client.send(logData);
-      }
-      catch(error){
-        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
-        logger.info('ERROR-LOG: ', error);
-        throw error;
-      }
-    },
-    client: LoggerClient.getInstance()
-      .registerClient(codetraceRepository.name)
-      .get(codetraceRepository.name),
-  })
-  @Cacheable({ key: (args) => generateCacheKey<codetrace>('createcodetrace',args[0], args[1]), ttl: 60 })
-  async create(entity: codetrace): Promise<codetrace> {
-    logger.info('Ready to create codetrace on repository:', entity);
-    
-    // Asegurar que el tipo discriminador esté establecido antes de guardar
-    if (!entity.type) {
-      entity.type = 'codetrace';
+      .registerClient(CodetraceRepository.name)
+      .get(CodetraceRepository.name),
+    })
+    async findByField(
+      field: string,
+      value: any,
+      page: number,
+      limit: number
+    ): Promise<Codetrace[]> {
+      let options={
+        where: { [field]: value },
+        skip: (page - 1) * limit,
+        take: limit,
+      };
+      logger.info('Ready to findByField Codetrace on repository:',options);
+      const [entities] = await this.repository.findAndCount(options);
+      return entities;
     }
-    
-    const result = await this.repository.save(entity);
-    logger.info('New instance of codetrace was created with id:'+ result.id+' on repository:', result);
-    
-    // Publicar evento solo si Event Sourcing está habilitado
-    if (this.shouldPublishEvent()) {
-      this.eventPublisher.publish(new codetraceCreatedEvent(result.id, {
-        instance: result,
-        metadata: {
-          initiatedBy: result.creator,
-          correlationId: result.id,
-        },
-      }));
+
+
+    @LogExecutionTime({
+    layer: 'repository',
+    callback: async (logData, client) => {
+      // Puedes usar el cliente proporcionado o ignorarlo y usar otro
+      try{
+        logger.info('Información del cliente y datos a enviar:',[logData,client]);
+        return await client.send(logData);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
+        throw error;
+      }
+    },
+    client: LoggerClient.getInstance()
+      .registerClient(CodetraceRepository.name)
+      .get(CodetraceRepository.name),
+    })
+    async findWithPagination(
+      options: FindManyOptions<Codetrace>,
+      page: number,
+      limit: number
+    ): Promise<Codetrace[]> {
+      const skip = (page - 1) * limit;
+      options={ ...options, skip, take: limit };
+      logger.info('Ready to findByField Codetrace on repository:',options);
+      return this.repository.find(options);
     }
-    return result;
-  }
 
-
-  @LogExecutionTime({
+    @LogExecutionTime({
     layer: 'repository',
     callback: async (logData, client) => {
+      // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
         logger.info('Información del cliente y datos a enviar:',[logData,client]);
         return await client.send(logData);
@@ -310,40 +217,22 @@ export class codetraceRepository implements IEventHandler<BaseEvent>{
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceRepository.name)
-      .get(codetraceRepository.name),
-  })
-  @Cacheable({ key: (args) => generateCacheKey<codetrace[]>('createcodetraces',args[0], args[1]), ttl: 60 })
-  async bulkCreate(entities: codetrace[]): Promise<codetrace[]> {
-    logger.info('Ready to create codetrace on repository:', entities);
-    
-    // Asegurar que el tipo discriminador esté establecido para todas las entidades
-    entities.forEach(entity => {
-      if (!entity.type) {
-        entity.type = 'codetrace';
-      }
-    });
-    
-    const result = await this.repository.save(entities);
-    logger.info('New '+entities.length+' instances of codetrace was created on repository:', result);
-    
-    // Publicar eventos solo si Event Sourcing está habilitado
-    if (this.shouldPublishEvent()) {
-      this.eventPublisher.publishAll(result.map((el)=>new codetraceCreatedEvent(el.id, {
-        instance: el,
-        metadata: {
-          initiatedBy: el.creator,
-          correlationId: el.id,
-        },
-      })));
+      .registerClient(CodetraceRepository.name)
+      .get(CodetraceRepository.name),
+    })
+    async count(): Promise<number> {
+      logger.info('Ready to count Codetrace on repository...');
+      let result= this.repository.count();
+      logger.info('Was counted  instances of Codetrace on repository:');
+      return result;
     }
-    return result;
-  }
 
-  
-  @LogExecutionTime({
+
+
+    @LogExecutionTime({
     layer: 'repository',
     callback: async (logData, client) => {
+      // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
         logger.info('Información del cliente y datos a enviar:',[logData,client]);
         return await client.send(logData);
@@ -355,37 +244,20 @@ export class codetraceRepository implements IEventHandler<BaseEvent>{
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceRepository.name)
-      .get(codetraceRepository.name),
-  })
-  @Cacheable({ key: (args) => generateCacheKey<codetrace>('updatecodetrace',args[0], args[1]), ttl: 60 })
-  async update(
-    id: string,
-    partialEntity: Partial<codetrace>
-  ): Promise<codetrace | null> {
-    logger.info('Ready to update codetrace on repository:', partialEntity);
-    let result = await this.repository.update(id, partialEntity);
-    logger.info('update codetrace on repository was successfully :', partialEntity);
-    let instance=await this.codetraceRepository.findById(id);
-    logger.info('Updated instance of codetrace with id: ${id} was finded on repository:', instance);
-    
-    if(instance && this.shouldPublishEvent()) {
-      logger.info('Ready to publish or fire event codetraceUpdatedEvent on repository:', instance);
-      this.eventPublisher.publish(new codetraceUpdatedEvent(instance.id, {
-          instance: instance,
-          metadata: {
-            initiatedBy: instance.createdBy || 'system',
-            correlationId: id,
-          },
-        }));
-    }   
-    return instance;
-  }
+      .registerClient(CodetraceRepository.name)
+      .get(CodetraceRepository.name),
+    })
+    async findAndCount(where?: Record<string, any>): Promise<[Codetrace[], number]> {
+      logger.info('Ready to findByField Codetrace on repository:',where);
+      let result = await this.repository.findAndCount(where);
+      return result;
+    }
 
 
-  @LogExecutionTime({
+    @LogExecutionTime({
     layer: 'repository',
     callback: async (logData, client) => {
+      // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
         logger.info('Información del cliente y datos a enviar:',[logData,client]);
         return await client.send(logData);
@@ -397,39 +269,179 @@ export class codetraceRepository implements IEventHandler<BaseEvent>{
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceRepository.name)
-      .get(codetraceRepository.name),
-  })
-  @Cacheable({ key: (args) => generateCacheKey<codetrace[]>('updatecodetraces',args[0], args[1]), ttl: 60 })
-  async bulkUpdate(entities: Partial<codetrace>[]): Promise<codetrace[]> {
-    const updatedEntities: codetrace[] = [];
-    logger.info('Ready to update '+entities.length+' entities on repository:', entities);
-    
-    for (const entity of entities) {
-      if (entity.id) {
-        const updatedEntity = await this.update(entity.id, entity);
-        if (updatedEntity) {
-          updatedEntities.push(updatedEntity);
-          if (this.shouldPublishEvent()) {
-            this.eventPublisher.publish(new codetraceUpdatedEvent(updatedEntity.id, {
-                instance: updatedEntity,
-                metadata: {
-                  initiatedBy: updatedEntity.createdBy || 'system',
-                  correlationId: entity.id,
-                },
-              }));
+      .registerClient(CodetraceRepository.name)
+      .get(CodetraceRepository.name),
+    })
+    async findOne(where?: Record<string, any>): Promise<Codetrace | null> {
+      const tmp: FindOptionsWhere<Codetrace> = where as FindOptionsWhere<Codetrace>;
+      logger.info('Ready to findOneBy Codetrace on repository with conditions:', tmp);
+      // Si 'where' es undefined o null, puedes manejarlo según tu lógica
+      if (!where) {
+        logger.warn('No conditions provided for finding Codetrace.');
+        return null; // O maneja el caso como prefieras
+      }
+      logger.info('Ready to findOneBy Codetrace on repository:',tmp);
+      return this.repository.findOneBy(tmp);
+    }
+
+
+    @LogExecutionTime({
+    layer: 'repository',
+    callback: async (logData, client) => {
+      // Puedes usar el cliente proporcionado o ignorarlo y usar otro
+      try{
+        logger.info('Información del cliente y datos a enviar:',[logData,client]);
+        return await client.send(logData);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
+        throw error;
+      }
+    },
+    client: LoggerClient.getInstance()
+      .registerClient(CodetraceRepository.name)
+      .get(CodetraceRepository.name),
+    })
+    async findOneOrFail(where?: Record<string, any>): Promise<Codetrace> {
+      logger.info('Ready to findOneOrFail Codetrace on repository:',where);
+      const entity = await this.repository.findOne({
+        where: where,
+      });
+      if (!entity) {
+        throw new Error('Entity not found');
+      }
+      return entity;
+    }
+
+
+    @LogExecutionTime({
+    layer: 'repository',
+    callback: async (logData, client) => {
+      // Puedes usar el cliente proporcionado o ignorarlo y usar otro
+      try{
+        logger.info('Información del cliente y datos a enviar:',[logData,client]);
+        return await client.send(logData);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
+        throw error;
+      }
+    },
+    client: LoggerClient.getInstance()
+      .registerClient(CodetraceRepository.name)
+      .get(CodetraceRepository.name),
+    })
+    //Funciones de Command-Repositories
+    @Cacheable({ key: (args) => generateCacheKey<Codetrace>('createCodetrace',args[0], args[1]), ttl: 60 })
+    async create(entity: Codetrace): Promise<Codetrace> {
+        logger.info('Ready to create Codetrace on repository:', entity);
+        const result = await this.repository.save(entity);
+        logger.info('New instance of Codetrace was created with id:'+ result.id+' on repository:', result);         
+        return result;
+    }
+
+
+    @LogExecutionTime({
+    layer: 'repository',
+    callback: async (logData, client) => {
+      // Puedes usar el cliente proporcionado o ignorarlo y usar otro
+      try{
+        logger.info('Información del cliente y datos a enviar:',[logData,client]);
+        return await client.send(logData);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
+        throw error;
+      }
+    },
+    client: LoggerClient.getInstance()
+      .registerClient(CodetraceRepository.name)
+      .get(CodetraceRepository.name),
+    })
+    @Cacheable({ key: (args) => generateCacheKey<Codetrace[]>('createCodetraces',args[0], args[1]), ttl: 60 })
+    async bulkCreate(entities: Codetrace[]): Promise<Codetrace[]> {
+      logger.info('Ready to create Codetrace on repository:', entities);
+      const result = await this.repository.save(entities);
+      logger.info('New '+entities.length+' instances of Codetrace was created on repository:', result);      
+      return result;
+    }
+
+
+
+    @LogExecutionTime({
+    layer: 'repository',
+    callback: async (logData, client) => {
+      // Puedes usar el cliente proporcionado o ignorarlo y usar otro
+      try{
+        logger.info('Información del cliente y datos a enviar:',[logData,client]);
+        return await client.send(logData);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
+        throw error;
+      }
+    },
+    client: LoggerClient.getInstance()
+      .registerClient(CodetraceRepository.name)
+      .get(CodetraceRepository.name),
+    })
+    @Cacheable({ key: (args) => generateCacheKey<Codetrace>('updateCodetrace',args[0], args[1]), ttl: 60 })
+    async update(
+        id: string,
+        partialEntity: Partial<Codetrace>
+      ): Promise<Codetrace | null> {
+        logger.info('Ready to update Codetrace on repository:', partialEntity);
+        let result = await this.repository.update(id, partialEntity);
+        logger.info('update Codetrace on repository was successfully :', partialEntity);
+        let instance=await this.repository.findOneBy({ id: id });
+        logger.info('Updated instance of Codetrace with id:  was finded on repository:', instance);
+        return this.repository.findOneBy({ id: id });
+    }
+
+
+    @LogExecutionTime({
+    layer: 'repository',
+    callback: async (logData, client) => {
+      // Puedes usar el cliente proporcionado o ignorarlo y usar otro
+      try{
+        logger.info('Información del cliente y datos a enviar:',[logData,client]);
+        return await client.send(logData);
+      }
+      catch(error){
+        logger.info('Ha ocurrido un error al enviar la traza de log: ', logData);
+        logger.info('ERROR-LOG: ', error);
+        throw error;
+      }
+    },
+    client: LoggerClient.getInstance()
+      .registerClient(CodetraceRepository.name)
+      .get(CodetraceRepository.name),
+    })
+    @Cacheable({ key: (args) => generateCacheKey<Codetrace[]>('updateCodetraces',args[0], args[1]), ttl: 60 })
+    async bulkUpdate(entities: Partial<Codetrace>[]): Promise<Codetrace[]> {
+        const updatedEntities: Codetrace[] = [];
+        logger.info('Ready to update '+entities.length+' entities on repository:', entities);
+        for (const entity of entities) {
+          if (entity.id) {
+            const updatedEntity = await this.update(entity.id, entity);
+            if (updatedEntity) {
+              updatedEntities.push(updatedEntity);
+            }
           }
         }
-      }
+        logger.info('Already updated '+updatedEntities.length+' entities on repository:', updatedEntities);
+        return updatedEntities;
     }
-    logger.info('Already updated '+updatedEntities.length+' entities on repository:', updatedEntities);
-    return updatedEntities;
-  }
 
 
-  @LogExecutionTime({
+    @LogExecutionTime({
     layer: 'repository',
     callback: async (logData, client) => {
+      // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
         logger.info('Información del cliente y datos a enviar:',[logData,client]);
         return await client.send(logData);
@@ -441,36 +453,21 @@ export class codetraceRepository implements IEventHandler<BaseEvent>{
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceRepository.name)
-      .get(codetraceRepository.name),
-  })
-  @Cacheable({ key: (args) => generateCacheKey<string>('deletecodetrace',args[0]), ttl: 60 })
-  async delete(id: string): Promise<DeleteResult> {
-     logger.info('Ready to delete entity with id: ${id} on repository:', id);
-     const entity = await this.codetraceRepository.findOne({ id });
-     if(!entity){
-      throw new NotFoundException(`No se encontro el id: ${id}`);
-     }
-     const result = await this.repository.delete({ id });
-     logger.info('Entity deleted with id: ${id} on repository:', result);
-     
-     if (this.shouldPublishEvent()) {
-       logger.info('Ready to publish/fire codetraceDeletedEvent on repository:', result);
-       this.eventPublisher.publish(new codetraceDeletedEvent(id, {
-        instance: entity,
-        metadata: {
-          initiatedBy: entity.createdBy || 'system',
-          correlationId: entity.id,
-        },
-      }));
-     }
-     return result;
-  }
+      .registerClient(CodetraceRepository.name)
+      .get(CodetraceRepository.name),
+    })
+    @Cacheable({ key: (args) => generateCacheKey<string>('deleteCodetrace',args[0]), ttl: 60 })
+    async delete(id: string): Promise<DeleteResult> {
+        logger.info('Ready to delete  entity with id:  on repository:', id);
+        const result = await this.repository.delete({ id });
+        logger.info('Entity deleted with id:  on repository:', result);
+        return result;
+    }
 
-
-  @LogExecutionTime({
+    @LogExecutionTime({
     layer: 'repository',
     callback: async (logData, client) => {
+      // Puedes usar el cliente proporcionado o ignorarlo y usar otro
       try{
         logger.info('Información del cliente y datos a enviar:',[logData,client]);
         return await client.send(logData);
@@ -482,33 +479,15 @@ export class codetraceRepository implements IEventHandler<BaseEvent>{
       }
     },
     client: LoggerClient.getInstance()
-      .registerClient(codetraceRepository.name)
-      .get(codetraceRepository.name),
-  })
-  @Cacheable({ key: (args) => generateCacheKey<string[]>('deletecodetraces',args[0]), ttl: 60 })
-  async bulkDelete(ids: string[]): Promise<DeleteResult> {
-    logger.info('Ready to delete '+ids.length+' entities on repository:', ids);
-    const result = await this.repository.delete(ids);
-    logger.info('Already deleted '+ids.length+' entities on repository:', result);
-    
-    if (this.shouldPublishEvent()) {
-      logger.info('Ready to publish/fire codetraceDeletedEvent on repository:', result);
-      this.eventPublisher.publishAll(ids.map(async (id) => {
-          const entity = await this.codetraceRepository.findOne({ id });
-          if(!entity){
-            throw new NotFoundException(`No se encontro el id: ${id}`);
-          }
-          return new codetraceDeletedEvent(id, {
-            instance: entity,
-            metadata: {
-              initiatedBy: entity.createdBy || 'system',
-              correlationId: entity.id,
-            },
-          });
-        }));
+      .registerClient(CodetraceRepository.name)
+      .get(CodetraceRepository.name),
+    })
+    @Cacheable({ key: (args) => generateCacheKey<string[]>('deleteCodetraces',args[0]), ttl: 60 })
+    async bulkDelete(ids: string[]): Promise<DeleteResult> {
+        logger.info('Ready to delete '+ids.length+' entities on repository:', ids);
+        const result = await this.repository.delete(ids);
+        logger.info('Already deleted '+ids.length+' entities on repository:', result);
+        return result;
     }
-    return result;
   }
-}
-
-
+  

@@ -32,7 +32,7 @@
 import { AggregateRoot } from '@nestjs/cqrs';
 import { BaseEntity } from '../entities/base.entity';
 
-export class codetraceAggregate extends AggregateRoot {
+export class CodetraceAggregate extends AggregateRoot {
   private state!: BaseEntity;
 
   constructor() {

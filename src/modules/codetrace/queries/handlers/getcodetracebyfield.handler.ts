@@ -30,11 +30,11 @@
 
 
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
-import { GetcodetraceByFieldQuery } from '../getcodetracebyfield.query';
+import { GetCodetraceByFieldQuery } from '../getcodetracebyfield.query';
 
-@QueryHandler(GetcodetraceByFieldQuery)
-export class GetcodetraceByFieldHandler implements IQueryHandler<GetcodetraceByFieldQuery> {
-  async execute(query: GetcodetraceByFieldQuery) {
+@QueryHandler(GetCodetraceByFieldQuery)
+export class GetCodetraceByFieldHandler implements IQueryHandler<GetCodetraceByFieldQuery> {
+  async execute(query: GetCodetraceByFieldQuery) {
     // Implementar lógica de la query
   }
 }

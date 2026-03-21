@@ -30,26 +30,26 @@
 
 
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { DeletecodetraceCommand } from "../deletecodetrace.command";
+import { DeleteCodetraceCommand } from "../deletecodetrace.command";
 import { KafkaEventPublisher } from "../../shared/adapters/kafka-event-publisher";
 import { KafkaEventSubscriber } from "../../shared/adapters/kafka-event-subscriber";
 import { EventStoreService } from "../../shared/event-store/event-store.service";
-import { codetraceCreatedEvent } from "../../events/codetracecreated.event";
+import { CodetraceCreatedEvent } from "../../events/codetracecreated.event";
 import { v4 as uuidv4 } from "uuid";
 
-@CommandHandler(DeletecodetraceCommand)
-export class DeletecodetraceHandler
-  implements ICommandHandler<DeletecodetraceCommand>
+@CommandHandler(DeleteCodetraceCommand)
+export class DeleteCodetraceHandler
+  implements ICommandHandler<DeleteCodetraceCommand>
 {
   constructor(
     private readonly eventPublisher: KafkaEventPublisher,
     private readonly eventSubscriber: KafkaEventSubscriber,
     private readonly eventStore: EventStoreService
   ) {}
-  async execute(command: DeletecodetraceCommand) {
+  async execute(command: DeleteCodetraceCommand) {
     command.id = command.id || uuidv4(); // Generar ID si no existe
     // Implementar lógica del comando
-    const event = new codetraceCreatedEvent(command.id, command.metadata || command.metadata || {
+    const event = new CodetraceCreatedEvent(command.id, command.metadata || command.metadata || {
         instance: {},
         metadata: {
           initiatedBy: 'system',
