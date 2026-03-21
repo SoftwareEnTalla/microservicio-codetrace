@@ -202,9 +202,11 @@ export class CodetraceCommandController {
   })
   async update(
     @Param("id") id: string,
-    @Body() partialEntity: UpdateCodetraceDto
+    @Body() body: any
   ): Promise<CodetraceResponse<Codetrace>> {
     try {
+      // Permitir body plano o anidado en 'data'
+      const partialEntity = body?.data ? body.data : body;
       // ✅ Validación de coincidencia de IDs
       if (id !== partialEntity.id) {
         throw new BadRequestException(
