@@ -8,6 +8,12 @@ services:
     networks:
       - entalla-net
       - shared-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api-docs"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 10s
 
 networks:
   entalla-net:
