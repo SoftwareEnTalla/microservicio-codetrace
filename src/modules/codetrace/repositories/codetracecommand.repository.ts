@@ -49,10 +49,11 @@ import { LoggerClient } from 'src/common/logger/logger.client';
 import { logger } from '@core/logs/logger';
 
 //Events and EventHandlers
-import { IEventHandler } from '@nestjs/cqrs';
+import { IEventHandler, EventsHandler } from '@nestjs/cqrs';
 import { CodetraceCreatedEvent } from '../events/codetracecreated.event';
 import { CodetraceUpdatedEvent } from '../events/codetraceupdated.event';
 import { CodetraceDeletedEvent } from '../events/codetracedeleted.event';
+
 
 //Enfoque Event Sourcing
 import { CommandBus } from '@nestjs/cqrs';
@@ -65,6 +66,7 @@ import { EventSourcingHelper } from '../shared/decorators/event-sourcing.helper'
 import { EventSourcingConfigOptions } from '../shared/decorators/event-sourcing.decorator';
 
 
+@EventsHandler(CodetraceCreatedEvent, CodetraceUpdatedEvent, CodetraceDeletedEvent)
 @Injectable()
 export class CodetraceCommandRepository implements IEventHandler<BaseEvent>{
 
@@ -155,6 +157,7 @@ export class CodetraceCommandRepository implements IEventHandler<BaseEvent>{
         return await this.onCodetraceUpdated(event);
       case 'CodetraceDeletedEvent':
         return await this.onCodetraceDeleted(event);
+
     }
     return false;
   }
@@ -247,6 +250,7 @@ export class CodetraceCommandRepository implements IEventHandler<BaseEvent>{
     logger.info('Ready to handle onCodetraceDeleted event on repository:', event);
     return await this.repository.delete(event.aggregateId);
   }
+
 
 
   // ----------------------------

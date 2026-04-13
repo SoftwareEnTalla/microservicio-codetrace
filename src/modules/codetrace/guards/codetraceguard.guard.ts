@@ -35,7 +35,7 @@ import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
 
 @Injectable()
-export class codetraceGuard implements CanActivate {
+export class CodetraceGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {

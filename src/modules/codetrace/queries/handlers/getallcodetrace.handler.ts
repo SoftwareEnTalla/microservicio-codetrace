@@ -31,10 +31,13 @@
 
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 import { GetAllCodetraceQuery } from '../getallcodetrace.query';
+import { CodetraceQueryService } from '../../services/codetracequery.service';
 
 @QueryHandler(GetAllCodetraceQuery)
 export class GetAllCodetraceHandler implements IQueryHandler<GetAllCodetraceQuery> {
+  constructor(private readonly queryService: CodetraceQueryService) {}
+
   async execute(query: GetAllCodetraceQuery) {
-    // Implementar lógica de la query
+    return this.queryService.findAll(query.filters);
   }
 }

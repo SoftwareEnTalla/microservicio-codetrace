@@ -35,11 +35,12 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule } from "@nestjs/config";
 import { CodetraceCommandController } from "./modules/codetrace/controllers/codetracecommand.controller";
 import { CodetraceModule } from "./modules/codetrace/modules/codetrace.module";
-import { CommandBus, EventBus, UnhandledExceptionBus } from "@nestjs/cqrs";
+import { CqrsModule } from "@nestjs/cqrs";
 import { AppDataSource, initializeDatabase } from "./data-source";
 import { CodetraceQueryController } from "./modules/codetrace/controllers/codetracequery.controller";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
+import GraphQLJSON from "graphql-type-json";
 import { CodetraceCommandService } from "./modules/codetrace/services/codetracecommand.service";
 import { CodetraceQueryService } from "./modules/codetrace/services/codetracequery.service";
 import { CacheModule } from "@nestjs/cache-manager";
@@ -48,7 +49,6 @@ import { ModuleRef } from "@nestjs/core";
 import { ServiceRegistry } from "@core/service-registry";
 import LoggerService, { logger } from "@core/logs/logger";
 
-//import GraphQLJSON from "graphql-type-json";
 
 /*
 //TODO unused for while dependencies
@@ -110,7 +110,9 @@ import LoggerService, { logger } from "@core/logs/logger";
     /**
      * Módulos Codetrace de la aplicación
      */
+    CqrsModule,
     CodetraceModule,
+        
     /**
      * Módulo Logger de la aplicación
      */
@@ -125,6 +127,7 @@ import LoggerService, { logger } from "@core/logs/logger";
             buildSchemaOptions: {
               dateScalarMode: "timestamp",
             },
+            resolvers: { JSON: GraphQLJSON },
           }),
         ]
       : []),
@@ -151,10 +154,6 @@ import LoggerService, { logger } from "@core/logs/logger";
    * Registro de servicios globales y configuración de inyección de dependencias.
    */
   providers: [
-    // Sistema CQRS
-    UnhandledExceptionBus, // Manejador global de excepciones
-    CommandBus, // Bus de comandos
-    EventBus, // Bus de eventos
     // Configuración de Base de datos
     ...(process.env.INCLUDING_DATA_BASE_SYSTEM === 'true'
       ? [
@@ -199,6 +198,7 @@ export class CodetraceAppModule implements OnModuleInit {
     ServiceRegistry.getInstance().registryAll([
       CodetraceCommandService,
       CodetraceQueryService,
+    
     ]);
     const loggerService = ServiceRegistry.getInstance().get(
       "LoggerService"

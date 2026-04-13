@@ -28,13 +28,16 @@
  *
  */
 
-import { Column, Entity, OneToOne, JoinColumn, ChildEntity } from 'typeorm';
+import { Column, Entity, OneToOne, JoinColumn, ChildEntity, ManyToOne, OneToMany, ManyToMany, JoinTable, Index, Check, Unique } from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { CreateCodetraceDto, UpdateCodetraceDto, DeleteCodetraceDto } from '../dtos/all-dto';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsBoolean, IsDate, IsInt, IsNotEmpty, IsNumber, IsObject, IsOptional, IsString, IsUUID } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Field, ObjectType } from "@nestjs/graphql";
+import { Field, Float, Int, ObjectType } from "@nestjs/graphql";
+import GraphQLJSON from 'graphql-type-json';
 import { plainToInstance } from 'class-transformer';
+
+
 
 @ChildEntity('codetrace')
 @ObjectType()
@@ -60,6 +63,12 @@ export class Codetrace extends BaseEntity {
   @Column({ type: 'varchar', length: 255, nullable: false, default: "Sin descripción", comment: 'Este es un campo para describir la instancia Codetrace' })
   private description!: string;
 
+
+
+  protected executeDslLifecycle(): void {
+
+  }
+
   // Relación con BaseEntity (opcional, si aplica)
   // @OneToOne(() => BaseEntity, { cascade: true })
   // @JoinColumn()
@@ -84,11 +93,13 @@ export class Codetrace extends BaseEntity {
   // Métodos abstractos implementados
   async create(data: any): Promise<BaseEntity> {
     Object.assign(this, data);
+    this.executeDslLifecycle();
     this.modificationDate = new Date();
     return this;
   }
   async update(data: any): Promise<BaseEntity> {
     Object.assign(this, data);
+    this.executeDslLifecycle();
     this.modificationDate = new Date();
     return this;
   }

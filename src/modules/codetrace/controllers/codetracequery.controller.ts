@@ -36,14 +36,16 @@ import {
   Param,
   NotFoundException,
   Logger,
+  UseGuards,
 } from "@nestjs/common";
 import { CodetraceQueryService } from "../services/codetracequery.service";
 import { FindManyOptions } from "typeorm";
-import { ApiTags, ApiOperation, ApiResponse, ApiQuery, ApiParam } from "@nestjs/swagger";
+import { ApiTags, ApiOperation, ApiResponse, ApiQuery, ApiParam, ApiBearerAuth, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { LogExecutionTime } from "src/common/logger/loggers.functions";
 import { CodetraceResponse, CodetracesResponse } from "../types/codetrace.types";
 import { LoggerClient } from "src/common/logger/logger.client";
 import { Codetrace } from "../entities/codetrace.entity";
+import { CodetraceAuthGuard } from "../guards/codetraceauthguard.guard";
 import { PaginationArgs } from "src/common/dto/args/pagination.args";
 import { OrderBy, valueOfOrderBy } from "src/common/types/common.types";
 import { Helper } from "src/common/helpers/helpers";
@@ -52,6 +54,9 @@ import { CodetraceDto } from "../dtos/all-dto";
 import { logger } from '@core/logs/logger';
 
 @ApiTags("Codetrace Query")
+@UseGuards(CodetraceAuthGuard)
+@ApiBearerAuth()
+@ApiUnauthorizedResponse({ description: "Autenticación requerida." })
 @Controller("codetraces/query")
 export class CodetraceQueryController {
   #logger = new Logger(CodetraceQueryController.name);

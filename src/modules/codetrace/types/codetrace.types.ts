@@ -39,6 +39,8 @@ export class CodetraceResponse<T extends Codetrace> extends GQResponseBase {
   @ApiProperty({ type: Codetrace,nullable:false,description:"Datos de respuesta de Codetrace" })
   @Field(() => Codetrace, { description: "Instancia de Codetrace", nullable: true })
   data?: T;
+
+
 }
 
 @ObjectType({ description: "Respuesta de codetraces" })
@@ -51,6 +53,8 @@ export class CodetracesResponse<T extends Codetrace> extends GQResponseBase {
   @Field(() => Number, { description: "Cantidad de Codetrace", nullable: false,defaultValue:0 })
   count: number = 0;
 }
+
+
 
 
 

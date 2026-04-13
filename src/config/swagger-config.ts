@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SoftwarEnTalla
+ * Copyright (c) 2026 SoftwarEnTalla
  * Licencia: MIT
  * Contacto: softwarentalla@gmail.com
  * CEOs: 
@@ -30,6 +30,7 @@
 
 
 import { CodetraceModule } from "@modules/codetrace/modules/codetrace.module";
+
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { logger } from '@core/logs/logger';
 
@@ -43,6 +44,7 @@ export function setupSwagger(
   version: string = "1.0"
 ): string {
 try{
+  const localPort = String(process.env.PORT || "3000");
       const swaggerConfig = new DocumentBuilder()
         .setTitle(title)
         .setDescription(description)
@@ -68,11 +70,11 @@ try{
         // Servidores (para diferentes entornos)
         .addServer("https://api.production.com", "Production")
         .addServer("https://api.staging.com", "Staging")
-        .addServer("http://localhost:3000", "Local Development")
+        .addServer("http://localhost:" + localPort, "Local Development")
         .build();
 
       const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig, {
-        include: [CodetraceModule /*, AuthModule, ReportsModule*/], // Lista todos los módulos
+        include: [CodetraceModule, /*, AuthModule, ReportsModule*/], // Lista todos los módulos
         deepScanRoutes: true, // Escanea en profundidad
         ignoreGlobalPrefix: false, // Considera el prefijo global (api/)
         extraModels: [], // Añade esto

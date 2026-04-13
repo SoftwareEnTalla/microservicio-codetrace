@@ -30,5 +30,7 @@
 export * from "./codetracedeleted.event"; 
 export * from "./codetracecreated.event";
 export * from "./codetraceupdated.event";
+
+export * from "./event-registry";
 export * from "./base.event";
 export * from "./codetrace-failed.event";

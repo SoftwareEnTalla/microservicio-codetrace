@@ -28,15 +28,19 @@
  *
  */
 
-import { InputType, Field, ObjectType } from '@nestjs/graphql';
+import { InputType, Field, Float, Int, ObjectType } from '@nestjs/graphql';
+import GraphQLJSON from 'graphql-type-json';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsBoolean,
   IsDate,
+  IsInt,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   IsObject,
+  IsUUID,
   ValidateNested,
 } from 'class-validator';
 
@@ -103,6 +107,8 @@ export class BaseCodetraceDto {
   @IsNotEmpty()
   @Field(() => Boolean, { nullable: false })
   isActive: boolean = false; // Por defecto, el objeto no está activo
+
+
 
   // Constructor
   constructor(partial: Partial<BaseCodetraceDto>) {
@@ -314,4 +320,6 @@ export class UpdateCodetraceDto extends BaseCodetraceDto {
     return instance;
   }
 } 
+
+
 
