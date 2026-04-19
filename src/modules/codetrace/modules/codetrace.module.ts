@@ -52,6 +52,7 @@ import { CodetraceLoggingInterceptor } from "../interceptors/codetrace.logging.i
 //Event-Sourcing dependencies
 import { EventStoreService } from "../shared/event-store/event-store.service";
 import { KafkaEventPublisher } from "../shared/adapters/kafka-event-publisher";
+import { ExecutionTraceConsumer } from "../shared/adapters/execution-trace.consumer";
 import { KafkaService } from "../shared/messaging/kafka.service";
 
 @Module({
@@ -79,6 +80,8 @@ import { KafkaService } from "../shared/messaging/kafka.service";
     CodetraceLoggingInterceptor,
     //Publishers
     KafkaEventPublisher,
+    //Consumers
+    ExecutionTraceConsumer,
     //Configurations
     {
       provide: 'EVENT_SOURCING_CONFIG',

@@ -60,7 +60,7 @@ export class Codetrace extends BaseEntity {
   @IsString()
   @IsNotEmpty()
   @Field(() => String, { description: "Descripción de la instancia de Codetrace", nullable: false })
-  @Column({ type: 'varchar', length: 255, nullable: false, default: "Sin descripción", comment: 'Este es un campo para describir la instancia Codetrace' })
+  @Column({ type: 'text', nullable: false, default: "Sin descripción", comment: 'Este es un campo para describir la instancia Codetrace' })
   private description!: string;
 
 

@@ -44,6 +44,7 @@ import GraphQLJSON from "graphql-type-json";
 import { CodetraceCommandService } from "./modules/codetrace/services/codetracecommand.service";
 import { CodetraceQueryService } from "./modules/codetrace/services/codetracequery.service";
 import { CacheModule } from "@nestjs/cache-manager";
+import { redisStore } from "cache-manager-redis-store";
 import { LoggingModule } from "./modules/codetrace/modules/logger.module";
 import { ModuleRef } from "@nestjs/core";
 import { ServiceRegistry } from "@core/service-registry";
@@ -65,8 +66,26 @@ import LoggerService, { logger } from "@core/logs/logger";
 
 @Module({
   imports: [
-    // Se importa/registra el módulo de caché
-    CacheModule.register(),
+    // Se importa/registra el módulo de caché con Redis como store
+    CacheModule.registerAsync({
+      isGlobal: true,
+      useFactory: async () => {
+        const redisHost = process.env.REDIS_HOST || "localhost";
+        const redisPort = parseInt(process.env.REDIS_PORT || "6379", 10);
+        const redisTtl = parseInt(process.env.REDIS_TTL || "3600", 10);
+        try {
+          const store = await redisStore({
+            socket: { host: redisHost, port: redisPort },
+            ttl: redisTtl,
+          });
+          logger.log(`Cache Redis conectado a ${redisHost}:${redisPort}`);
+          return { store: store as any, ttl: redisTtl };
+        } catch (error) {
+          logger.warn(`Redis no disponible (${redisHost}:${redisPort}), usando cache en memoria`);
+          return { ttl: redisTtl };
+        }
+      },
+    }),
 
     /**
      * ConfigModule - Configuración global de variables de entorno
