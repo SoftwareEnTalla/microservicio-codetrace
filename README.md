@@ -1,6 +1,6 @@
 # CODETRACE Microservice
 
-**Creation Date**: 2026-04-13
+**Creation Date**: 2026-04-21
 
 **Author**: Ing. Persy Morell Guerra e Ing. Dailyn García Dominguez (SoftwarEnTalla CEO)
 
