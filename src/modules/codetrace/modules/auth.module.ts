@@ -30,13 +30,11 @@
 
 
 import { Module } from "@nestjs/common";
-import { CodetraceCommandController } from "../controllers/codetracecommand.controller";
 import { CodetraceLoggingInterceptor } from "../interceptors/codetrace.logging.interceptor";
 import { CommandBus, EventBus, UnhandledExceptionBus } from "@nestjs/cqrs";
 import { CodetraceAuthGuard } from "../guards/codetraceauthguard.guard";
 
 @Module({
-  controllers: [CodetraceCommandController],
   providers: [
     CodetraceAuthGuard,
     CodetraceLoggingInterceptor,

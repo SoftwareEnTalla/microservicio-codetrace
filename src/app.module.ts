@@ -61,13 +61,19 @@ import { HeaderResolver, AcceptLanguageResolver } from "nestjs-i18n";
 import { TranslocoWrapperService } from "./core/services/transloco-wrapper.service";
 import { TranslocoModule } from "@ngneat/transloco";
 import LoggerService, { logger } from "@core/logs/logger";
-import { AuthCodetraceModule } from "./modules/codetrace/modules/auth.module";
-import { KafkaModule } from "./modules/codetrace/modules/kafka.module";
+
+
 
 */
 
+import { AuthCodetraceModule } from "./modules/codetrace/modules/auth.module";
+import { KafkaModule as KafkaCodetraceModule } from "./modules/codetrace/modules/kafka.module";
+import { HorizontalModule } from "@common/horizontal";
+import { CatalogClientModule } from "./modules/catalog-client/catalog-client.module";
+
 @Module({
   imports: [
+    CatalogClientModule,
     // Se importa/registra el módulo de caché con Redis como store
     CacheModule.registerAsync({
       isGlobal: true,
@@ -132,13 +138,14 @@ import { KafkaModule } from "./modules/codetrace/modules/kafka.module";
      * Módulos Codetrace de la aplicación
      */
     CqrsModule,
+    HorizontalModule,
     CodetraceModule,
         
     /**
      * Módulo Logger de la aplicación
      */
         AuthCodetraceModule,
-    KafkaModule,
+    KafkaCodetraceModule,
     LoggingModule,
 
     // GraphQL solo si GRAPHQL_ENABLED=true
