@@ -32,6 +32,7 @@
 import { Module } from "@nestjs/common";
 import { CodetraceCommandController } from "../controllers/codetracecommand.controller";
 import { CodetraceQueryController } from "../controllers/codetracequery.controller";
+import { EventsObservabilityController } from "../controllers/eventsobservability.controller";
 import { CodetraceCommandService } from "../services/codetracecommand.service";
 import { CodetraceQueryService } from "../services/codetracequery.service";
 import { CodetraceCommandRepository } from "../repositories/codetracecommand.repository";
@@ -60,7 +61,7 @@ import { KafkaService } from "../shared/messaging/kafka.service";
     TypeOrmModule.forFeature([BaseEntity, Codetrace]), // Incluir BaseEntity para herencia
     CacheModule.register(), // Importa el módulo de caché
   ],
-  controllers: [CodetraceCommandController, CodetraceQueryController],
+  controllers: [CodetraceCommandController, CodetraceQueryController, EventsObservabilityController],
   providers: [
     //Services
     EventStoreService,

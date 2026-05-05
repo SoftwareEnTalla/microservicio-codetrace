@@ -48,60 +48,12 @@ import { Request } from 'express';
  * acciones pueden hacerlo sin token de Authorization incluyendo el header
  * X-Trace-Source con el nombre del microservicio.
  */
-const TRACE_WHITELIST_PATTERNS: RegExp[] = [
-  // Autenticación y login
-  /authenticat/i,
-  /login/i,
-  /logout/i,
-  /sign[_-]?in/i,
-  /sign[_-]?up/i,
-  /sign[_-]?out/i,
-  // Registro de usuario
-  /register/i,
-  /create.*user/i,
-  /user.*create/i,
-  /signup/i,
-  // Activación de cuenta
-  /activat/i,
-  /verify/i,
-  /confirm/i,
-  /pin/i,
-  /mfa/i,
-  /totp/i,
-  // Recuperación de contraseña
-  /password.*reset/i,
-  /reset.*password/i,
-  /forgot.*password/i,
-  /recover/i,
-  /change.*password/i,
-  // Trazas de validación de startup de microservicios
-  /\.validate$/i,
-  /onModuleInit/i,
-];
-
-/**
- * Header que identifica trazas enviadas por microservicios internos.
- * Cuando este header está presente con un valor válido, la traza
- * se acepta sin token de Authorization.
- */
 const TRACE_SOURCE_HEADER = 'x-trace-source';
-
-/**
- * Lista de microservicios confiables que pueden enviar trazas sin auth.
- * Estos servicios se identifican vía header X-Trace-Source.
- */
-const TRUSTED_TRACE_SOURCES: string[] = [
-  'security-service',
-  'customer-service',
-  'client-service',
-  'merchant-service',
-  'payment-service',
-  'invoice-service',
-  'orders-service',
-  'product-service',
-  'salesmanager-service',
-  'catalog-service',
-  'codetrace-service',
+const TRACE_PUBLIC_PATH_HEADER = 'x-trace-public-path';
+const SECURITY_PUBLIC_TRACE_PATHS: RegExp[] = [
+  /^\/api\/logins\/command(?:$|[/?])/i,
+  /^\/api\/users\/command\/signup(?:$|[/?])/i,
+  /^\/api\/.*(?:forgot|recover|reset|activate|verify|confirm|pin|mfa|totp|password)(?:$|[/?-])/i,
 ];
 
 @Injectable()
@@ -118,15 +70,13 @@ export class CodetraceAuthGuard implements CanActivate {
       return true;
     }
 
-    // 2. Si viene de un microservicio confiable (header X-Trace-Source)
+    // 2. Security puede emitir trazas públicas sin token solo para rutas públicas explícitas.
     const traceSource = request.headers[TRACE_SOURCE_HEADER] as string;
-    if (traceSource && TRUSTED_TRACE_SOURCES.includes(traceSource.toLowerCase())) {
-      return true;
-    }
-
-    // 3. Si el body contiene datos de traza que coinciden con la whitelist
-    const body = request.body;
-    if (body && this.isWhitelistedTrace(body)) {
+    const tracePublicPath = request.headers[TRACE_PUBLIC_PATH_HEADER] as string;
+    if (
+      traceSource?.toLowerCase() === 'security-service' &&
+      SECURITY_PUBLIC_TRACE_PATHS.some((pattern) => pattern.test(tracePublicPath || ''))
+    ) {
       return true;
     }
 
@@ -135,17 +85,5 @@ export class CodetraceAuthGuard implements CanActivate {
 
   private validateToken(token: string): boolean {
     return !!token; // delegado a JwtAuthGuard global (APP_GUARD)
-  }
-
-  /**
-   * Verifica si la traza corresponde a una acción de la whitelist
-   * basándose en el campo name o description del body.
-   */
-  private isWhitelistedTrace(body: any): boolean {
-    const nameToCheck = body?.name || '';
-    const descToCheck = body?.description || '';
-    const textToCheck = `${nameToCheck} ${descToCheck}`;
-
-    return TRACE_WHITELIST_PATTERNS.some(pattern => pattern.test(textToCheck));
   }
 }
