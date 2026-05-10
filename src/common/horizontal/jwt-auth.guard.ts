@@ -27,11 +27,36 @@ import { IS_PUBLIC_KEY } from './public.decorator';
 const PUBLIC_PATH_PREFIXES = ['/health', '/metrics', '/api-docs', '/api/health', '/api/metrics'];
 const TRACE_SOURCE_HEADER = 'x-trace-source';
 const TRACE_PUBLIC_PATH_HEADER = 'x-trace-public-path';
+const TRACE_INTERNAL_SERVICES = new Set([
+  'catalog-service',
+  'client-service',
+  'codetrace-service',
+  'crm-service',
+  'customer-service',
+  'hrms-service',
+  'integrator-service',
+  'invoice-service',
+  'merchant-service',
+  'orders-service',
+  'organization-service',
+  'payment-service',
+  'product-service',
+  'salesmanager-service',
+  'security-service',
+]);
 const SECURITY_PUBLIC_TRACE_PATHS: RegExp[] = [
   /^\/api\/logins\/command(?:$|[/?])/i,
   /^\/api\/users\/command\/signup(?:$|[/?])/i,
   /^\/api\/.*(?:forgot|recover|reset|activate|verify|confirm|pin|mfa|totp|password)(?:$|[/?-])/i,
 ];
+
+function isInternalTraceCommand(url: string, traceSourceHeader: string | undefined): boolean {
+  return (
+    !!traceSourceHeader &&
+    TRACE_INTERNAL_SERVICES.has(traceSourceHeader.toLowerCase()) &&
+    (url === '/api/codetraces/command' || url.startsWith('/api/codetraces/command?'))
+  );
+}
 
 function isAllowedSecurityPublicTrace(path: string | undefined): boolean {
   if (!path) {
@@ -72,12 +97,26 @@ export class JwtAuthGuard implements CanActivate {
 
     const traceSourceHeader = request.headers[TRACE_SOURCE_HEADER] as string | undefined;
     const tracePublicPathHeader = request.headers[TRACE_PUBLIC_PATH_HEADER] as string | undefined;
+    const internalTraceToken = (process.env.LOG_API_AUTH_TOKEN || '').trim();
     if (
       !token &&
       traceSourceHeader?.toLowerCase() === 'security-service' &&
       isAllowedSecurityPublicTrace(tracePublicPathHeader) &&
       (url === '/api/codetraces/command' || url.startsWith('/api/codetraces/command?'))
     ) {
+      return true;
+    }
+
+    if (
+      token &&
+      internalTraceToken &&
+      token === internalTraceToken &&
+      isInternalTraceCommand(url, traceSourceHeader)
+    ) {
+      (request as any).user = {
+        service: traceSourceHeader,
+        scope: 'internal-trace',
+      };
       return true;
     }
 
