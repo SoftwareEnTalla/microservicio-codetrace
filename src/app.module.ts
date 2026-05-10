@@ -70,6 +70,7 @@ import { AuthCodetraceModule } from "./modules/codetrace/modules/auth.module";
 import { KafkaModule as KafkaCodetraceModule } from "./modules/codetrace/modules/kafka.module";
 import { HorizontalModule } from "@common/horizontal";
 import { CatalogClientModule } from "./modules/catalog-client/catalog-client.module";
+import { FunctionalTraceabilityModule } from "./modules/functional-traceability/functional-traceability.module";
 
 @Module({
   imports: [
@@ -140,6 +141,7 @@ import { CatalogClientModule } from "./modules/catalog-client/catalog-client.mod
     CqrsModule,
     HorizontalModule,
     CodetraceModule,
+    FunctionalTraceabilityModule,
         
     /**
      * Módulo Logger de la aplicación
