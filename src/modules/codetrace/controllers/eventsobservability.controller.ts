@@ -1,5 +1,7 @@
-import { Controller, Get } from "@nestjs/common";
+import { Controller, Get, MessageEvent, Sse } from "@nestjs/common";
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { Observable, from, interval, of } from "rxjs";
+import { catchError, map, startWith, switchMap } from "rxjs/operators";
 import {
   EVENT_DEFINITIONS,
   EVENT_DLQ_TOPICS,
@@ -95,6 +97,28 @@ export class EventsObservabilityController {
       subscriptions: this.buildSubscriptions(),
       history: this.buildHistory(topics),
     };
+  }
+
+  @Sse("stream")
+  @ApiOperation({ summary: "Stream SSE del estado operativo de eventos Kafka" })
+  streamOverview(): Observable<MessageEvent> {
+    return interval(5000).pipe(
+      startWith(0),
+      switchMap(() =>
+        from(this.getOverview()).pipe(
+          map((data) => ({ data })),
+          catchError((error) =>
+            of({
+              data: {
+                available: false,
+                generatedAt: new Date().toISOString(),
+                error: error instanceof Error ? error.message : 'stream-error',
+              },
+            }),
+          ),
+        ),
+      ),
+    );
   }
 
   private async buildTopicSnapshot(admin: any, topic: string, consumerOffsets: Map<number, number>): Promise<TopicSnapshot> {

@@ -6,9 +6,15 @@ type TraceJourneyRow = {
   id: string;
   sourceService: string;
   journey: string;
+  severity?: string | null;
+  layerType?: string | null;
+  functionalKind?: string | null;
   name: string;
   description: string;
   createdAt: string | null;
+  traceUuid?: string | null;
+  refUuid?: string | null;
+  metadata?: Record<string, unknown> | null;
   aggregateType?: string;
   aggregateRef?: string | null;
   resourceLabel?: string;
@@ -39,13 +45,13 @@ export class FunctionalTraceabilityService {
     const [totals] = await dataSource.query(
       `SELECT
          COUNT(*)::int AS "totalTraces",
-         COUNT(*) FILTER (WHERE ${classifier} <> 'TECHNICAL_ONLY')::int AS "businessTaggedTraces"
+         COUNT(*) FILTER (WHERE COALESCE("functionalKind", 'TECHNICAL') <> 'TECHNICAL')::int AS "businessTaggedTraces"
        FROM codetrace_base_entity
        WHERE COALESCE("isActive", true) = true AND type = 'codetrace'`,
     );
 
     const journeys = await dataSource.query(
-      `SELECT ${classifier} AS journey, COUNT(*)::int AS value
+      `SELECT COALESCE("functionalKind", ${classifier}) AS journey, COUNT(*)::int AS value
        FROM codetrace_base_entity
        WHERE COALESCE("isActive", true) = true AND type = 'codetrace'
        GROUP BY 1
@@ -54,10 +60,16 @@ export class FunctionalTraceabilityService {
 
     const aggregates = this.buildAggregateSummary(await dataSource.query(
       `SELECT id,
-              COALESCE(NULLIF("createdBy", ''), 'unknown') AS "sourceService",
-              ${classifier} AS journey,
+              COALESCE(NULLIF("sourceService", ''), NULLIF("createdBy", ''), 'unknown') AS "sourceService",
+              COALESCE("functionalKind", ${classifier}) AS journey,
+              "severity",
+              "layerType",
+              "functionalKind",
               name,
               description,
+              "traceUuid",
+              "refUuid",
+              metadata,
               "creationDate" AS "createdAt"
        FROM codetrace_base_entity
        WHERE COALESCE("isActive", true) = true AND type = 'codetrace'`,
@@ -74,10 +86,16 @@ export class FunctionalTraceabilityService {
 
     const recentJourneys = await dataSource.query(
       `SELECT id,
-              COALESCE(NULLIF("createdBy", ''), 'unknown') AS "sourceService",
-              ${classifier} AS journey,
+              COALESCE(NULLIF("sourceService", ''), NULLIF("createdBy", ''), 'unknown') AS "sourceService",
+              COALESCE("functionalKind", ${classifier}) AS journey,
+              "severity",
+              "layerType",
+              "functionalKind",
               name,
               description,
+              "traceUuid",
+              "refUuid",
+              metadata,
               "creationDate" AS "createdAt"
        FROM codetrace_base_entity
        WHERE COALESCE("isActive", true) = true AND type = 'codetrace'
@@ -144,6 +162,9 @@ export class FunctionalTraceabilityService {
     const aggregateType = this.inferAggregateType(row);
     return {
       ...row,
+      severity: row.severity || 'INFO',
+      layerType: row.layerType || 'SERVICE',
+      functionalKind: row.functionalKind || row.journey || 'TECHNICAL',
       aggregateType,
       aggregateRef: this.extractAggregateRef(row),
       resourceLabel: this.resourceLabelForAggregate(aggregateType),
@@ -151,8 +172,8 @@ export class FunctionalTraceabilityService {
     };
   }
 
-  private inferAggregateType(row: Pick<TraceJourneyRow, 'sourceService' | 'name' | 'description'>): string {
-    const text = `${row.sourceService ?? ''} ${row.name ?? ''} ${row.description ?? ''}`.toLowerCase();
+  private inferAggregateType(row: Pick<TraceJourneyRow, 'sourceService' | 'name' | 'description' | 'metadata'>): string {
+    const text = this.buildSearchText(row).toLowerCase();
     if (/(wallet|cashback|referral|payout|settlement|accounting|netincome|platformamount)/.test(text)) return 'PAYMENT_ACCOUNTING';
     if (/(invoice|receipt|fiscal)/.test(text)) return 'INVOICE';
     if (/(order|shipment|tracking|reservation|stock)/.test(text)) return 'ORDER';
@@ -165,10 +186,49 @@ export class FunctionalTraceabilityService {
     return 'TECHNICAL';
   }
 
-  private extractAggregateRef(row: Pick<TraceJourneyRow, 'name' | 'description'>): string | null {
-    const text = `${row.name ?? ''} ${row.description ?? ''}`;
+  private extractAggregateRef(row: Pick<TraceJourneyRow, 'name' | 'description' | 'traceUuid' | 'refUuid' | 'metadata'>): string | null {
+    const explicitRef = this.pickUuidCandidate([
+      row.refUuid,
+      this.readMetadataString(row.metadata, 'refUuid'),
+      this.readMetadataString(row.metadata, 'refuuid'),
+      this.readMetadataString(row.metadata, 'aggregateRef'),
+      this.readMetadataString(row.metadata, 'aggregateRefUuid'),
+      row.traceUuid,
+      this.readMetadataString(row.metadata, 'traceUuid'),
+      this.readMetadataString(row.metadata, 'uuid'),
+    ]);
+
+    if (explicitRef) {
+      return explicitRef;
+    }
+
+    const text = this.buildSearchText(row);
     const match = text.match(/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/i);
     return match?.[0] ?? null;
+  }
+
+  private buildSearchText(row: Partial<Pick<TraceJourneyRow, 'sourceService' | 'name' | 'description' | 'metadata'>>): string {
+    const metadata = row.metadata ? JSON.stringify(row.metadata) : '';
+    return `${row.sourceService ?? ''} ${row.name ?? ''} ${row.description ?? ''} ${metadata}`;
+  }
+
+  private readMetadataString(metadata: Record<string, unknown> | null | undefined, key: string): string | null {
+    const value = metadata?.[key];
+    return typeof value === 'string' && value.trim() ? value.trim() : null;
+  }
+
+  private pickUuidCandidate(candidates: Array<string | null | undefined>): string | null {
+    for (const candidate of candidates) {
+      if (candidate && this.isUuid(candidate)) {
+        return candidate;
+      }
+    }
+
+    return null;
+  }
+
+  private isUuid(value: string): boolean {
+    return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
   }
 
   private resourceLabelForAggregate(aggregateType: string): string {

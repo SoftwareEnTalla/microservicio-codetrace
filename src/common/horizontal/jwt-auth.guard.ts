@@ -90,10 +90,13 @@ export class JwtAuthGuard implements CanActivate {
     }
 
     const authHeader = request.headers['authorization'] || request.headers['Authorization' as any];
+    const queryToken = typeof request.query?.access_token === 'string'
+      ? request.query.access_token.trim()
+      : undefined;
     const token =
       typeof authHeader === 'string' && authHeader.toLowerCase().startsWith('bearer ')
         ? authHeader.substring(7).trim()
-        : undefined;
+        : queryToken;
 
     const traceSourceHeader = request.headers[TRACE_SOURCE_HEADER] as string | undefined;
     const tracePublicPathHeader = request.headers[TRACE_PUBLIC_PATH_HEADER] as string | undefined;

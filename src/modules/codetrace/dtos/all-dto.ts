@@ -108,6 +108,175 @@ export class BaseCodetraceDto {
   @Field(() => Boolean, { nullable: false })
   isActive: boolean = false; // Por defecto, el objeto no está activo
 
+  @ApiProperty({
+    type: () => String,
+    description: 'Severidad canónica de la traza.',
+    example: 'INFO',
+    nullable: true,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, { nullable: true })
+  severity?: string;
+
+  @ApiProperty({
+    type: () => String,
+    description: 'Capa técnica canónica de la traza.',
+    example: 'SERVICE',
+    nullable: true,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, { nullable: true })
+  layerType?: string;
+
+  @ApiProperty({
+    type: () => String,
+    description: 'Tipo funcional canónico de la traza.',
+    example: 'BUSINESS',
+    nullable: true,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, { nullable: true })
+  functionalKind?: string;
+
+  @ApiProperty({
+    type: () => String,
+    description: 'Estado de ejecución de la traza.',
+    example: 'success',
+    nullable: true,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, { nullable: true })
+  executionStatus?: string;
+
+  @ApiProperty({
+    type: () => String,
+    description: 'Servicio origen de la traza.',
+    example: 'orders-service',
+    nullable: true,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, { nullable: true })
+  sourceService?: string;
+
+  @ApiProperty({
+    type: () => String,
+    description: 'Clase que emitió la traza.',
+    example: 'OrdersLifecycleService',
+    nullable: true,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, { nullable: true })
+  className?: string;
+
+  @ApiProperty({
+    type: () => String,
+    description: 'Función que emitió la traza.',
+    example: 'OrdersLifecycleService.createOrder',
+    nullable: true,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, { nullable: true })
+  functionName?: string;
+
+  @ApiProperty({
+    type: () => String,
+    description: 'UUID propio de la traza.',
+    example: '5db5cb80-64f2-4a1f-8446-d270e4d16a2b',
+    nullable: true,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, { nullable: true })
+  traceUuid?: string;
+
+  @ApiProperty({
+    type: () => String,
+    description: 'UUID correlacionado con el agregado o flujo.',
+    example: 'e048f355-72f8-40d1-b4dd-58f2df0a65b2',
+    nullable: true,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, { nullable: true })
+  refUuid?: string;
+
+  @ApiProperty({
+    type: () => Date,
+    description: 'Instante de inicio de la ejecución trazada.',
+    nullable: true,
+  })
+  @IsOptional()
+  @Field(() => Date, { nullable: true })
+  startedAt?: Date;
+
+  @ApiProperty({
+    type: () => Date,
+    description: 'Instante de fin de la ejecución trazada.',
+    nullable: true,
+  })
+  @IsOptional()
+  @Field(() => Date, { nullable: true })
+  endedAt?: Date;
+
+  @ApiProperty({
+    type: () => Number,
+    description: 'Duración medida de la ejecución.',
+    nullable: true,
+  })
+  @IsNumber()
+  @IsOptional()
+  @Field(() => Float, { nullable: true })
+  durationMs?: number;
+
+  @ApiProperty({
+    type: () => String,
+    description: 'Unidad original reportada para la duración.',
+    example: 'ms',
+    nullable: true,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, { nullable: true })
+  durationUnit?: string;
+
+  @ApiProperty({
+    type: () => String,
+    description: 'Canal de entrega de la traza.',
+    example: 'kafka',
+    nullable: true,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, { nullable: true })
+  deliveredVia?: string;
+
+  @ApiProperty({
+    type: () => String,
+    description: 'Mensaje de error resumido, si aplica.',
+    nullable: true,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, { nullable: true })
+  errorMessage?: string;
+
+  @ApiProperty({
+    type: () => GraphQLJSON,
+    description: 'Contexto técnico expandido de la traza.',
+    nullable: true,
+  })
+  @IsOptional()
+  @IsObject()
+  @Field(() => GraphQLJSON, { nullable: true })
+  metadata?: Record<string, unknown>;
+
 
 
   // Constructor
